@@ -196,6 +196,21 @@ npm run lint
 3. **Provision database** – Ensure the PostgreSQL instance is accessible from Vercel.
 4. **Deploy** – Push to the main branch or trigger a deploy in Vercel. The build will use the provided env vars. During form submission the app will run a `SELECT 1` query to confirm database connectivity.
 
+### PostgreSQL Provisioning (MyDevil or External)
+
+1. **Provision PostgreSQL 14+** – Create a database and user in the MyDevil panel or use an external provider.
+2. **Configure environment variables** – In the MyDevil config interface set:
+   - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` (or `DATABASE_URL`)
+   - `MOCK_DB=false` to ensure the real database is used in production
+3. **Run migrations** – Apply all SQL migrations:
+   ```bash
+   npm run migrate
+   ```
+4. **Verify health** – Confirm the API reports a healthy database:
+   ```bash
+   curl https://your-domain/api/health
+   ```
+
 ### CI/CD Pipeline
 
 1. **Run tests and linting**
@@ -209,8 +224,7 @@ npm run lint
    \`\`\`
 3. **Apply database migrations**
    \`\`\`bash
-   psql "$DATABASE_URL" -f migrations/001_create_form_submissions.sql
-   psql "$DATABASE_URL" -f migrations/002_create_analytics_tables.sql
+   npm run migrate
    \`\`\`
 4. **Restart Passenger on FreeBSD**
    \`\`\`bash
@@ -219,12 +233,10 @@ npm run lint
 
 ### Database Migrations
 
-Run all migration scripts against your PostgreSQL database:
+Run the migration script after configuring your database connection:
 
 \`\`\`bash
-for file in migrations/*.sql; do
-  psql "$DATABASE_URL" -f "$file"
-done
+npm run migrate
 \`\`\`
 
 ### Health Checks
