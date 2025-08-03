@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-
-// This would typically come from your database
-// For demo purposes, we'll use the same in-memory storage
-let analyticsEvents: any[] = []
+import db from "@/lib/db"
+import { requireAuth } from "@/lib/analytics-auth"
 
 interface MetricsSummary {
   totalViews: number
@@ -179,26 +177,33 @@ function calculateMetrics(events: any[], timeRange = "7d"): MetricsSummary {
 }
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireAuth(request)
+  if (unauthorized) return unauthorized
   try {
     const { searchParams } = new URL(request.url)
     const timeRange = searchParams.get("timeRange") || "7d"
     const formType = searchParams.get("formType")
 
-    // In production, you would fetch events from your database
-    // For demo, we'll generate some mock data if no events exist
-    if (analyticsEvents.length === 0) {
-      // Generate mock data for demonstration
-      const mockEvents = generateMockAnalyticsData()
-      analyticsEvents = mockEvents
-    }
+    const now = Date.now()
+    const timeRangeMs =
+      {
+        "24h": 24 * 60 * 60 * 1000,
+        "7d": 7 * 24 * 60 * 60 * 1000,
+        "30d": 30 * 24 * 60 * 60 * 1000,
+        "90d": 90 * 24 * 60 * 60 * 1000,
+      }[timeRange] || 7 * 24 * 60 * 60 * 1000
 
-    let eventsToAnalyze = analyticsEvents
-
+    const params: any[] = [now - timeRangeMs]
+    let query =
+      'SELECT form_type AS "formType", event_type AS "eventType", field_name AS "fieldName", error_message AS "errorMessage", timestamp, session_id AS "sessionId", user_agent AS "userAgent", language, form_version AS "formVersion", ip_hash AS "ipHash", received_at AS "receivedAt" FROM analytics_events WHERE timestamp >= $1'
     if (formType && formType !== "all") {
-      eventsToAnalyze = analyticsEvents.filter((event) => event.formType === formType)
+      query += ` AND form_type = $2`
+      params.push(formType)
     }
 
-    const metrics = calculateMetrics(eventsToAnalyze, timeRange)
+    const { rows } = await db.query(query, params)
+
+    const metrics = calculateMetrics(rows, timeRange)
 
     return NextResponse.json({
       success: true,
@@ -207,120 +212,7 @@ export async function GET(request: NextRequest) {
       formType: formType || "all",
       generatedAt: new Date().toISOString(),
     })
-  } catch (error) {
-    console.error("Metrics calculation error:", error)
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
-}
-
-// Generate mock data for demonstration
-function generateMockAnalyticsData() {
-  const events = []
-  const formTypes = ["virtual-office", "coworking", "meeting-room", "advertising", "special-deals"]
-  const fieldNames = ["firstName", "lastName", "email", "phone", "companyName"]
-  const now = Date.now()
-
-  // Generate events for the last 30 days
-  for (let day = 0; day < 30; day++) {
-    const dayStart = now - day * 24 * 60 * 60 * 1000
-
-    formTypes.forEach((formType) => {
-      // Generate views
-      const viewCount = Math.floor(Math.random() * 20) + 5
-      for (let i = 0; i < viewCount; i++) {
-        events.push({
-          formType,
-          eventType: "view",
-          timestamp: dayStart + Math.random() * 24 * 60 * 60 * 1000,
-          sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          userAgent: "Mozilla/5.0 (Mock Browser)",
-          language: "en",
-          ipHash: Math.random().toString(36).substr(2, 16),
-          receivedAt: new Date().toISOString(),
-        })
-      }
-
-      // Generate starts (subset of views)
-      const startCount = Math.floor(viewCount * (0.2 + Math.random() * 0.4))
-      for (let i = 0; i < startCount; i++) {
-        const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-        const startTime = dayStart + Math.random() * 24 * 60 * 60 * 1000
-
-        events.push({
-          formType,
-          eventType: "start",
-          timestamp: startTime,
-          sessionId,
-          userAgent: "Mozilla/5.0 (Mock Browser)",
-          language: "en",
-          ipHash: Math.random().toString(36).substr(2, 16),
-          receivedAt: new Date().toISOString(),
-        })
-
-        // Generate field interactions
-        fieldNames.forEach((fieldName) => {
-          if (Math.random() > 0.3) {
-            // 70% chance of interacting with each field
-            events.push({
-              formType,
-              eventType: "field_focus",
-              fieldName,
-              timestamp: startTime + Math.random() * 300000, // Within 5 minutes
-              sessionId,
-              userAgent: "Mozilla/5.0 (Mock Browser)",
-              language: "en",
-              ipHash: Math.random().toString(36).substr(2, 16),
-              receivedAt: new Date().toISOString(),
-            })
-
-            // Chance of field error
-            if (Math.random() > 0.85) {
-              // 15% chance of error
-              events.push({
-                formType,
-                eventType: "field_error",
-                fieldName,
-                errorMessage: "Validation error",
-                timestamp: startTime + Math.random() * 300000,
-                sessionId,
-                userAgent: "Mozilla/5.0 (Mock Browser)",
-                language: "en",
-                ipHash: Math.random().toString(36).substr(2, 16),
-                receivedAt: new Date().toISOString(),
-              })
-            }
-          }
-        })
-
-        // Generate completions (subset of starts)
-        if (Math.random() > 0.4) {
-          // 60% completion rate
-          events.push({
-            formType,
-            eventType: "submission_success",
-            timestamp: startTime + 60000 + Math.random() * 600000, // 1-11 minutes later
-            sessionId,
-            userAgent: "Mozilla/5.0 (Mock Browser)",
-            language: "en",
-            ipHash: Math.random().toString(36).substr(2, 16),
-            receivedAt: new Date().toISOString(),
-          })
-        } else {
-          // Generate abandonment
-          events.push({
-            formType,
-            eventType: "abandonment",
-            timestamp: startTime + 30000 + Math.random() * 300000, // 30s-5min later
-            sessionId,
-            userAgent: "Mozilla/5.0 (Mock Browser)",
-            language: "en",
-            ipHash: Math.random().toString(36).substr(2, 16),
-            receivedAt: new Date().toISOString(),
-          })
-        }
-      }
-    })
-  }
-
-  return events.sort((a, b) => b.timestamp - a.timestamp)
 }

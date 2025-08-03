@@ -1,8 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-
-// Rate limiting storage (in production, use Redis or similar)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+import db from "@/lib/db"
+import { requireAuth } from "@/lib/analytics-auth"
 
 // Analytics event schema
 const analyticsEventSchema = z.object({
@@ -27,21 +26,27 @@ const analyticsEventSchema = z.object({
   formVersion: z.string().optional(),
 })
 
-// Simple rate limiting
-function checkRateLimit(identifier: string, limit = 100, windowMs = 60000): boolean {
+// Rate limiting backed by database storage
+async function checkRateLimit(identifier: string, limit = 100, windowMs = 60000): Promise<boolean> {
   const now = Date.now()
-  const userLimit = rateLimitMap.get(identifier)
+  const { rows } = await db.query<{ count: number; reset_time: number }>(
+    "SELECT count, reset_time FROM rate_limits WHERE identifier = $1",
+    [identifier],
+  )
 
-  if (!userLimit || now > userLimit.resetTime) {
-    rateLimitMap.set(identifier, { count: 1, resetTime: now + windowMs })
+  if (rows.length === 0 || now > Number(rows[0].reset_time)) {
+    await db.query(
+      "INSERT INTO rate_limits (identifier, count, reset_time) VALUES ($1, 1, $2) ON CONFLICT (identifier) DO UPDATE SET count = 1, reset_time = $2",
+      [identifier, now + windowMs],
+    )
     return true
   }
 
-  if (userLimit.count >= limit) {
+  if (rows[0].count >= limit) {
     return false
   }
 
-  userLimit.count++
+  await db.query("UPDATE rate_limits SET count = count + 1 WHERE identifier = $1", [identifier])
   return true
 }
 
@@ -72,16 +77,15 @@ function getClientIP(request: NextRequest): string {
   return "127.0.0.1"
 }
 
-// In-memory storage for demo (use proper database in production)
-const analyticsEvents: any[] = []
-
 export async function POST(request: NextRequest) {
+  const unauthorized = requireAuth(request)
+  if (unauthorized) return unauthorized
   try {
     const clientIP = getClientIP(request)
     const hashedIP = await hashIP(clientIP)
 
     // Rate limiting
-    if (!checkRateLimit(hashedIP)) {
+    if (!(await checkRateLimit(hashedIP))) {
       return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
     }
 
@@ -100,64 +104,72 @@ export async function POST(request: NextRequest) {
     const sanitizedEvent = {
       ...event,
       ipHash: hashedIP,
-      receivedAt: new Date().toISOString(),
-      userAgent: event.userAgent.substring(0, 200), // Limit user agent length
-      // Remove any potentially sensitive data
+      userAgent: event.userAgent.substring(0, 200),
       sessionId: event.sessionId.replace(/[^a-zA-Z0-9_-]/g, ""),
     }
 
-    // Store the event (in production, use proper database)
-    analyticsEvents.push(sanitizedEvent)
-
-    // Keep only last 10000 events in memory
-    if (analyticsEvents.length > 10000) {
-      analyticsEvents.splice(0, analyticsEvents.length - 10000)
-    }
-
-    // Log for debugging (remove in production)
-    console.log("Analytics event received:", {
-      formType: event.formType,
-      eventType: event.eventType,
-      fieldName: event.fieldName,
-      timestamp: new Date(event.timestamp).toISOString(),
-    })
+    await db.query(
+      `INSERT INTO analytics_events (form_type, event_type, field_name, error_message, timestamp, session_id, user_agent, language, form_version, ip_hash, received_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())`,
+      [
+        sanitizedEvent.formType,
+        sanitizedEvent.eventType,
+        sanitizedEvent.fieldName ?? null,
+        sanitizedEvent.errorMessage ?? null,
+        sanitizedEvent.timestamp,
+        sanitizedEvent.sessionId,
+        sanitizedEvent.userAgent,
+        sanitizedEvent.language,
+        sanitizedEvent.formVersion ?? null,
+        sanitizedEvent.ipHash,
+      ],
+    )
 
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("Analytics tracking error:", error)
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 
 // GET endpoint for retrieving analytics data (admin only)
 export async function GET(request: NextRequest) {
+  const unauthorized = requireAuth(request)
+  if (unauthorized) return unauthorized
   try {
-    // In production, add proper authentication here
     const { searchParams } = new URL(request.url)
     const formType = searchParams.get("formType")
     const eventType = searchParams.get("eventType")
     const limit = Number.parseInt(searchParams.get("limit") || "100")
 
-    let filteredEvents = analyticsEvents
+    const conditions: string[] = []
+    const params: any[] = []
 
     if (formType) {
-      filteredEvents = filteredEvents.filter((event) => event.formType === formType)
+      conditions.push(`form_type = $${params.length + 1}`)
+      params.push(formType)
     }
 
     if (eventType) {
-      filteredEvents = filteredEvents.filter((event) => event.eventType === eventType)
+      conditions.push(`event_type = $${params.length + 1}`)
+      params.push(eventType)
     }
 
-    // Sort by timestamp (newest first) and limit
-    const results = filteredEvents.sort((a, b) => b.timestamp - a.timestamp).slice(0, limit)
+    let query =
+      'SELECT form_type AS "formType", event_type AS "eventType", field_name AS "fieldName", error_message AS "errorMessage", timestamp, session_id AS "sessionId", user_agent AS "userAgent", language, form_version AS "formVersion", ip_hash AS "ipHash", received_at AS "receivedAt" FROM analytics_events'
+    if (conditions.length) {
+      query += ` WHERE ${conditions.join(" AND ")}`
+    }
+    query += ` ORDER BY timestamp DESC LIMIT $${params.length + 1}`
+    params.push(limit)
+
+    const { rows } = await db.query(query, params)
 
     return NextResponse.json({
-      events: results,
-      total: filteredEvents.length,
-      filtered: results.length,
+      events: rows,
+      total: rows.length,
+      filtered: rows.length,
     })
-  } catch (error) {
-    console.error("Analytics retrieval error:", error)
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
