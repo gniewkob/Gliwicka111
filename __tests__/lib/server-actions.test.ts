@@ -15,7 +15,7 @@ vi.mock("@/lib/email/smtp-client", () => ({
   },
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/database/connection-pool", () => ({
   db: {
     query: vi.fn().mockResolvedValue({ rows: [], rowCount: 1 }),
   },
