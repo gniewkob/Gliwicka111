@@ -6,7 +6,7 @@ type Queryable = {
 
 let pool: (Pool | Queryable) | null = null
 
-function createPool(): Pool | Queryable {
+async function createPool(): Promise<Pool | Queryable> {
   const {
     DB_HOST,
     DB_PORT,
@@ -18,7 +18,7 @@ function createPool(): Pool | Queryable {
 
   if (MOCK_DB === "true" || !DB_HOST) {
     return {
-      query: async () => ({ rows: [], rowCount: 0 }),
+      query: async () => ({ rows: [], rowCount: 0 })
     }
   }
 
@@ -28,7 +28,7 @@ function createPool(): Pool | Queryable {
     database: DB_NAME,
     user: DB_USER,
     password: DB_PASSWORD,
-    max: 20,
+    max: 20
   })
 
   instance.on("error", (err) => {
@@ -36,15 +36,22 @@ function createPool(): Pool | Queryable {
     throw err
   })
 
+  try {
+    await instance.query("SELECT 1")
+  } catch (error) {
+    console.error("Database connection test failed", error)
+    throw error
+  }
+
   return instance
 }
 
-export function getPool(): Pool | Queryable {
+export async function getPool(): Promise<Pool | Queryable> {
   if (!pool) {
-    pool = createPool()
+    pool = await createPool()
   }
   return pool
 }
 
-export const db = getPool()
+export const db = await getPool()
 export default db
