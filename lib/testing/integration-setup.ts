@@ -1,9 +1,9 @@
 import { vi, beforeAll, afterAll, beforeEach, afterEach } from "vitest"
 import "@testing-library/jest-dom"
 import { cleanup } from "@testing-library/react"
-import { createConnection, type Connection } from "mysql2/promise"
+import { Client } from "pg"
 
-let connection: Connection
+let client: Client
 
 // Mock environment variables for integration tests
 process.env.NODE_ENV = "test"
@@ -38,24 +38,26 @@ vi.mock("@/lib/email/smtp-client", () => ({
 // Database setup for integration tests
 beforeAll(async () => {
   // Create test database connection
-  connection = await createConnection({
+  client = new Client({
     host: process.env.DB_HOST || "localhost",
-    port: Number.parseInt(process.env.DB_PORT || "3306"),
+    port: Number.parseInt(process.env.DB_PORT || "5432"),
     user: process.env.DB_USER || "test_user",
     password: process.env.DB_PASSWORD || "test_password",
     database: process.env.DB_NAME || "test_db",
   })
 
+  await client.connect()
+
   // Run database migrations
-  await runMigrations(connection)
+  await runMigrations(client)
 })
 
 beforeEach(async () => {
   // Clean database before each test
-  await cleanDatabase(connection)
+  await cleanDatabase(client)
 
   // Seed test data
-  await seedTestData(connection)
+  await seedTestData(client)
 
   vi.clearAllMocks()
 })
@@ -65,48 +67,48 @@ afterEach(() => {
 })
 
 afterAll(async () => {
-  if (connection) {
-    await connection.end()
+  if (client) {
+    await client.end()
   }
 })
 
-async function runMigrations(conn: Connection) {
+async function runMigrations(conn: Client) {
   // Create tables for testing
-  await conn.execute(`
+  await conn.query(`
     CREATE TABLE IF NOT EXISTS form_submissions (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+      id SERIAL PRIMARY KEY,
       form_type VARCHAR(50) NOT NULL,
-      data JSON NOT NULL,
+      data JSONB NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       processed_at TIMESTAMP NULL,
-      status ENUM('pending', 'processed', 'failed') DEFAULT 'pending'
+      status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'processed', 'failed'))
     )
   `)
 
-  await conn.execute(`
+  await conn.query(`
     CREATE TABLE IF NOT EXISTS analytics_events (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+      id SERIAL PRIMARY KEY,
       form_type VARCHAR(50) NOT NULL,
       event_type VARCHAR(50) NOT NULL,
       session_id VARCHAR(100) NOT NULL,
       timestamp BIGINT NOT NULL,
-      data JSON,
+      data JSONB,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `)
 }
 
-async function cleanDatabase(conn: Connection) {
-  await conn.execute("DELETE FROM form_submissions")
-  await conn.execute("DELETE FROM analytics_events")
+async function cleanDatabase(conn: Client) {
+  await conn.query("TRUNCATE TABLE form_submissions RESTART IDENTITY CASCADE")
+  await conn.query("TRUNCATE TABLE analytics_events RESTART IDENTITY CASCADE")
 }
 
-async function seedTestData(conn: Connection) {
+async function seedTestData(conn: Client) {
   // Insert test form submission
-  await conn.execute(
+  await conn.query(
     `
-    INSERT INTO form_submissions (form_type, data, status) 
-    VALUES (?, ?, ?)
+    INSERT INTO form_submissions (form_type, data, status)
+    VALUES ($1, $2, $3)
   `,
     [
       "virtual-office",
