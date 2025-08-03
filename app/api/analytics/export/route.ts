@@ -1,16 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
-
-// This would typically come from your database
-const analyticsEvents: any[] = []
+import db from "@/lib/db"
+import { requireAuth } from "@/lib/analytics-auth"
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireAuth(request)
+  if (unauthorized) return unauthorized
   try {
     const { searchParams } = new URL(request.url)
     const format = searchParams.get("format") || "json"
     const timeRange = searchParams.get("timeRange") || "30d"
     const formType = searchParams.get("formType")
 
-    // Filter events by time range
     const now = Date.now()
     const timeRangeMs =
       {
@@ -20,25 +20,26 @@ export async function GET(request: NextRequest) {
         "90d": 90 * 24 * 60 * 60 * 1000,
       }[timeRange] || 30 * 24 * 60 * 60 * 1000
 
-    let filteredEvents = analyticsEvents.filter((event) => now - event.timestamp <= timeRangeMs)
-
+    const params: any[] = [now - timeRangeMs]
+    let query =
+      'SELECT form_type AS "formType", event_type AS "eventType", field_name AS "fieldName", timestamp, language FROM analytics_events WHERE timestamp >= $1'
     if (formType && formType !== "all") {
-      filteredEvents = filteredEvents.filter((event) => event.formType === formType)
+      query += ` AND form_type = $2`
+      params.push(formType)
     }
 
-    // Remove sensitive data before export
-    const sanitizedEvents = filteredEvents.map((event) => ({
+    const { rows } = await db.query(query, params)
+
+    const sanitizedEvents = rows.map((event) => ({
       formType: event.formType,
       eventType: event.eventType,
       fieldName: event.fieldName,
       timestamp: event.timestamp,
       date: new Date(event.timestamp).toISOString(),
       language: event.language,
-      // Note: We don't export sessionId, ipHash, or userAgent for privacy
     }))
 
     if (format === "csv") {
-      // Generate CSV
       const csvHeaders = ["formType", "eventType", "fieldName", "timestamp", "date", "language"]
       const csvRows = sanitizedEvents.map((event) =>
         csvHeaders.map((header) => event[header as keyof typeof event] || "").join(","),
@@ -53,7 +54,6 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Default to JSON export
     return NextResponse.json(
       {
         success: true,
@@ -72,8 +72,7 @@ export async function GET(request: NextRequest) {
         },
       },
     )
-  } catch (error) {
-    console.error("Export error:", error)
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

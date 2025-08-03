@@ -93,6 +93,7 @@ class AnalyticsClient {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_ANALYTICS_TOKEN || "dev-token"}`,
         },
         body: JSON.stringify(event),
       })
