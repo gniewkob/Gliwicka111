@@ -83,17 +83,25 @@ class AnalyticsClient {
     return this.consentSettings?.analytics === true
   }
 
+  private getCsrfToken(): string | null {
+    if (typeof document === 'undefined') return null
+    const match = document.cookie.match(/csrf-token=([^;]+)/)
+    return match ? decodeURIComponent(match[1]) : null
+  }
+
   private async sendEvent(event: AnalyticsEvent): Promise<void> {
     if (!this.hasAnalyticsConsent()) {
       return
     }
 
     try {
+      const csrfToken = this.getCsrfToken()
       const response = await fetch("/api/analytics/track", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_ANALYTICS_TOKEN || "dev-token"}`,
+          ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
         },
         body: JSON.stringify(event),
       })
