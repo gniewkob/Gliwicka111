@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://gliwicka111.pl/</loc>
+    <lastmod>2024-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://gliwicka111.pl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://gliwicka111.pl/" />
+  </url>
+  <url>
+    <loc>https://gliwicka111.pl/properties</loc>
+    <lastmod>2024-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://gliwicka111.pl/properties" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://gliwicka111.pl/properties" />
+  </url>
+  <url>
+    <loc>https://gliwicka111.pl/about</loc>
+    <lastmod>2024-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://gliwicka111.pl/about" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://gliwicka111.pl/about" />
+  </url>
+  <url>
+    <loc>https://gliwicka111.pl/contact</loc>
+    <lastmod>2024-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://gliwicka111.pl/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://gliwicka111.pl/contact" />
+  </url>
+  <url>
+    <loc>https://gliwicka111.pl/privacy</loc>
+    <lastmod>2024-08-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://gliwicka111.pl/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://gliwicka111.pl/privacy" />
+  </url>
+  <url>
+    <loc>https://gliwicka111.pl/terms</loc>
+    <lastmod>2024-08-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://gliwicka111.pl/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://gliwicka111.pl/terms" />
+  </url>
+</urlset>
