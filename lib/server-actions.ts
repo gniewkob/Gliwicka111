@@ -8,7 +8,7 @@ import {
   advertisingFormSchema,
   specialDealsFormSchema,
 } from "./validation-schemas";
-import { db } from "./db";
+import { db } from "./database/connection-pool";
 import { emailClient } from "./email/smtp-client";
 
 // Email service configuration
