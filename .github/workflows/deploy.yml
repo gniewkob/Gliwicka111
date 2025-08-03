@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.MYDEVIL_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "./"
-          target: "/home/vetternkraft/apps/Gliwicka111"
+          target: "/home/vetternkraft/domains/gliwicka111.pl/public_nodejs"
