@@ -1,21 +1,20 @@
-import "@testing-library/jest-dom"
-import { beforeAll, afterEach, afterAll } from "vitest"
-import { cleanup } from "@testing-library/react"
-import { server } from "./mocks/server"
-import { jest } from "vitest"
+import "@testing-library/jest-dom";
+import { beforeAll, afterEach, afterAll, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import { server } from "./mocks/server";
 
 // Establish API mocking before all tests
-beforeAll(() => server.listen())
+beforeAll(() => server.listen());
 
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests
 afterEach(() => {
-  server.resetHandlers()
-  cleanup()
-})
+  server.resetHandlers();
+  cleanup();
+});
 
 // Clean up after the tests are finished
-afterAll(() => server.close())
+afterAll(() => server.close());
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -23,7 +22,7 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -31,7 +30,7 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};
 
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
@@ -46,13 +45,13 @@ Object.defineProperty(window, "matchMedia", {
     removeEventListener: () => {},
     dispatchEvent: () => {},
   }),
-})
+});
 
 // Mock scrollTo
 Object.defineProperty(window, "scrollTo", {
   writable: true,
   value: () => {},
-})
+});
 
 // Mock localStorage
 const localStorageMock = {
@@ -60,23 +59,23 @@ const localStorageMock = {
   setItem: (key: string, value: string) => {},
   removeItem: (key: string) => {},
   clear: () => {},
-}
+};
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
-})
+});
 
 // Mock sessionStorage
 Object.defineProperty(window, "sessionStorage", {
   value: localStorageMock,
-})
+});
 
 // Mock fetch
-global.fetch = jest.fn()
+global.fetch = vi.fn();
 
 // Mock console methods in tests
 global.console = {
   ...console,
-  log: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-}
+  log: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+};
