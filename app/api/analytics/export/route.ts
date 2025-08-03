@@ -1,11 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { db } from "@/lib/database/connection-pool"
 import { requireAuth } from "@/lib/analytics-auth"
 
 export async function GET(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
   try {
+    const { db } = await import("@/lib/database/connection-pool")
+    try {
+      await db.query("SELECT 1")
+    } catch {
+      return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
+    }
     const { searchParams } = new URL(request.url)
     const format = searchParams.get("format") || "json"
     const timeRange = searchParams.get("timeRange") || "30d"
