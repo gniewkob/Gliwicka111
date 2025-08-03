@@ -1,10 +1,10 @@
-import { Pool } from "pg"
+import { Pool } from "pg";
 
 type Queryable = {
-  query: (...args: any[]) => Promise<any>
-}
+  query: (...args: any[]) => Promise<any>;
+};
 
-let pool: (Pool | Queryable) | null = null
+let pool: (Pool | Queryable) | null = null;
 
 async function createPool(): Promise<Pool | Queryable> {
   const {
@@ -14,44 +14,51 @@ async function createPool(): Promise<Pool | Queryable> {
     DB_USER,
     DB_PASSWORD,
     MOCK_DB,
-  } = process.env
+    DATABASE_URL,
+  } = process.env;
 
-  if (MOCK_DB === "true" || !DB_HOST) {
+  if (MOCK_DB === "true" || (!DB_HOST && !DATABASE_URL)) {
     return {
-      query: async () => ({ rows: [], rowCount: 0 })
-    }
+      query: async () => ({ rows: [], rowCount: 0 }),
+    };
   }
 
-  const instance = new Pool({
-    host: DB_HOST,
-    port: DB_PORT ? Number.parseInt(DB_PORT, 10) : undefined,
-    database: DB_NAME,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    max: 20
-  })
+  const instance = DATABASE_URL
+    ? new Pool({
+        connectionString: DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+        max: 20,
+      })
+    : new Pool({
+        host: DB_HOST,
+        port: DB_PORT ? Number.parseInt(DB_PORT, 10) : undefined,
+        database: DB_NAME,
+        user: DB_USER,
+        password: DB_PASSWORD,
+        max: 20,
+      });
 
   instance.on("error", (err) => {
-    console.error("Database connection error", err)
-    throw err
-  })
+    console.error("Database connection error", err);
+    throw err;
+  });
 
   try {
-    await instance.query("SELECT 1")
+    await instance.query("SELECT 1");
   } catch (error) {
-    console.error("Database connection test failed", error)
-    throw error
+    console.error("Database connection test failed", error);
+    throw error;
   }
 
-  return instance
+  return instance;
 }
 
 export async function getPool(): Promise<Pool | Queryable> {
   if (!pool) {
-    pool = await createPool()
+    pool = await createPool();
   }
-  return pool
+  return pool;
 }
 
-export const db = await getPool()
-export default db
+export const db = await getPool();
+export default db;
