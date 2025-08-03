@@ -41,6 +41,7 @@ Gliwicka 111 is a comprehensive business center website offering virtual office 
 - **React Hook Form 7.51** - Performant form library
 - **Zod 3.22** - TypeScript-first schema validation
 - **@hookform/resolvers** - Form validation integration
+- **Database Connectivity Check** - Each form submission runs a `SELECT 1` query to verify that the database connection is alive before saving data
 
 ### Analytics & Privacy
 - **Custom Analytics Client** - Privacy-first tracking system
@@ -128,23 +129,36 @@ gliwicka-contact-forms/
    \`\`\`
 
 3. **Environment Variables Setup**
-   
-   Create a `.env.local` file in the root directory:
-   \`\`\`env
-   # Email Configuration
-   SMTP_FROM=noreply@gliwicka111.pl
-   ADMIN_EMAIL=admin@gliwicka111.pl
-   SMTP_HOST=smtp.gmail.com
-   SMTP_PORT=587
-   SMTP_USER=your-smtp-username
-   SMTP_PASS=your-smtp-password
-   
-   # Security
-   IP_SALT=your-random-salt-string-for-ip-hashing
-   
-   # Analytics (Optional)
-   NEXT_PUBLIC_GA_ID=your-google-analytics-id
-   \`\`\`
+
+    Create a `.env.local` file in the root directory:
+    ```env
+    # Database
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_NAME=gliwicka111
+    DB_USER=postgres
+    DB_PASSWORD=your-db-password
+    DATABASE_URL=postgres://postgres:your-db-password@localhost:5432/gliwicka111
+
+    # Email Configuration
+    SMTP_FROM=noreply@gliwicka111.pl
+    ADMIN_EMAIL=admin@gliwicka111.pl
+    SMTP_HOST=smtp.gmail.com
+    SMTP_PORT=587
+    SMTP_USER=your-smtp-username
+    SMTP_PASS=your-smtp-password
+
+    # Security
+    IP_SALT=your-random-salt-string-for-ip-hashing
+
+    # Analytics (Optional)
+    NEXT_PUBLIC_ANALYTICS_TOKEN=public-analytics-token
+    ANALYTICS_AUTH_TOKEN=analytics-auth-token
+    ANALYTICS_BASIC_USER=analytics-user
+    ANALYTICS_BASIC_PASS=analytics-pass
+    ```
+
+    These variables are required both locally and in Vercel. The application issues a `SELECT 1` query on each form submission to ensure the database specified above is reachable.
 
 4. **Start development server**
    \`\`\`bash
@@ -170,6 +184,17 @@ npm run lint
 \`\`\`
 
 ## 📦 Deployment & Operations
+
+### Vercel Deployment
+
+1. **Create project** – Import this repository in the Vercel dashboard.
+2. **Configure environment variables** – Add the values from `.env.example`:
+   - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` (or `DATABASE_URL`)
+   - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_EMAIL`
+   - `IP_SALT`
+   - Optional analytics tokens (`NEXT_PUBLIC_ANALYTICS_TOKEN`, `ANALYTICS_AUTH_TOKEN`, `ANALYTICS_BASIC_USER`, `ANALYTICS_BASIC_PASS`)
+3. **Provision database** – Ensure the PostgreSQL instance is accessible from Vercel.
+4. **Deploy** – Push to the main branch or trigger a deploy in Vercel. The build will use the provided env vars. During form submission the app will run a `SELECT 1` query to confirm database connectivity.
 
 ### CI/CD Pipeline
 
@@ -222,6 +247,7 @@ Configuration is managed through environment variables (see `.env.example`):
 | --- | --- |
 | `DATABASE_URL` | PostgreSQL connection string |
 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Individual database settings for local/CI use |
+| `MOCK_DB` | Set to `true` to bypass real database calls (testing) |
 | `SMTP_HOST` | SMTP server host |
 | `SMTP_PORT` | SMTP server port |
 | `SMTP_USER` | SMTP username |
