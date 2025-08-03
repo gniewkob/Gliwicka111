@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: "node",
+    environment: "jsdom",
     setupFiles: ["./lib/testing/integration-setup.ts"],
     include: ["**/*.integration.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     exclude: ["**/node_modules/**", "**/dist/**", "**/.next/**", "**/e2e/**"],

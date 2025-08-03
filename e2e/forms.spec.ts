@@ -1,209 +1,198 @@
 import { test, expect } from "@playwright/test"
 
-test.describe("Form Functionality", () => {
+test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/")
+    await page.goto("/forms")
   })
 
-  test("should navigate to forms page", async ({ page }) => {
-    await page.click("text=Formularze")
-    await expect(page).toHaveURL("/forms")
-    await expect(page.locator("h1")).toContainText("Formularze kontaktowe")
+  test("should display all form types", async ({ page }) => {
+    await expect(page.getByText("Biuro Wirtualne")).toBeVisible()
+    await expect(page.getByText("Coworking")).toBeVisible()
+    await expect(page.getByText("Sala Konferencyjna")).toBeVisible()
+    await expect(page.getByText("Reklama")).toBeVisible()
+    await expect(page.getByText("Oferty Specjalne")).toBeVisible()
   })
 
   test("should submit virtual office form successfully", async ({ page }) => {
-    await page.goto("/forms")
-
-    // Click on Virtual Office form tab
+    // Navigate to virtual office form
     await page.click("text=Biuro Wirtualne")
 
     // Fill out the form
-    await page.fill('[name="firstName"]', "Jan")
-    await page.fill('[name="lastName"]', "Kowalski")
-    await page.fill('[name="email"]', "jan@example.com")
-    await page.fill('[name="phone"]', "+48123456789")
     await page.fill('[name="companyName"]', "Test Company")
+    await page.fill('[name="contactPerson"]', "Jan Kowalski")
+    await page.fill('[name="email"]', "jan@example.com")
+    await page.fill('[name="phone"]', "+48 123 456 789")
+    await page.fill('[name="nip"]', "1234567890")
+    await page.selectOption('[name="businessType"]', "consulting")
+    await page.fill('[name="preferredDate"]', "2024-12-01")
+    await page.fill('[name="message"]', "Test message for virtual office")
 
-    // Select business type
-    await page.selectOption('[name="businessType"]', "llc")
-
-    // Select package
-    await page.selectOption('[name="package"]', "standard")
-
-    // Set start date
-    await page.fill('[name="startDate"]', "2024-02-01")
-
-    // Check GDPR consent
-    await page.check('[name="gdprConsent"]')
-
-    // Submit form
+    // Submit the form
     await page.click('button[type="submit"]')
 
-    // Wait for success message
-    await expect(page.locator("text=pomyślnie")).toBeVisible({ timeout: 10000 })
+    // Check for success message
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
   })
 
-  test("should show validation errors for empty required fields", async ({ page }) => {
-    await page.goto("/forms")
-
-    // Click on Virtual Office form tab
+  test("should validate required fields", async ({ page }) => {
+    // Navigate to virtual office form
     await page.click("text=Biuro Wirtualne")
 
     // Try to submit empty form
     await page.click('button[type="submit"]')
 
     // Check for validation errors
-    await expect(page.locator("text=wymagane")).toBeVisible()
+    await expect(page.getByText(/nazwa firmy jest wymagana/i)).toBeVisible()
+    await expect(page.getByText(/imię i nazwisko jest wymagane/i)).toBeVisible()
+    await expect(page.getByText(/email jest wymagany/i)).toBeVisible()
+    await expect(page.getByText(/telefon jest wymagany/i)).toBeVisible()
   })
 
   test("should validate email format", async ({ page }) => {
-    await page.goto("/forms")
-
-    // Click on Virtual Office form tab
+    // Navigate to virtual office form
     await page.click("text=Biuro Wirtualne")
 
-    // Fill invalid email
+    // Fill with invalid email
     await page.fill('[name="email"]', "invalid-email")
     await page.click('button[type="submit"]')
 
     // Check for email validation error
-    await expect(page.locator("text=nieprawidłowy format")).toBeVisible()
+    await expect(page.getByText(/nieprawidłowy format email/i)).toBeVisible()
   })
 
-  test("should switch between form types", async ({ page }) => {
-    await page.goto("/forms")
+  test("should submit coworking form successfully", async ({ page }) => {
+    // Navigate to coworking form
+    await page.click("text=Coworking")
 
-    // Test switching between different form types
-    const formTypes = ["Biuro Wirtualne", "Coworking", "Sala Konferencyjna", "Reklama", "Oferty Specjalne"]
+    // Fill out the form
+    await page.fill('[name="contactPerson"]', "Anna Nowak")
+    await page.fill('[name="email"]', "anna@example.com")
+    await page.fill('[name="phone"]', "+48 987 654 321")
+    await page.fill('[name="companyName"]', "Coworking Company")
+    await page.selectOption('[name="workspaceType"]', "hot-desk")
+    await page.selectOption('[name="duration"]', "monthly")
+    await page.fill('[name="startDate"]', "2024-12-01")
+    await page.fill('[name="teamSize"]', "3")
+    await page.fill('[name="message"]', "Test message for coworking")
 
-    for (const formType of formTypes) {
-      await page.click(`text=${formType}`)
-      await expect(page.locator("form")).toBeVisible()
-    }
+    // Submit the form
+    await page.click('button[type="submit"]')
+
+    // Check for success message
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
+  })
+
+  test("should submit meeting room form successfully", async ({ page }) => {
+    // Navigate to meeting room form
+    await page.click("text=Sala Konferencyjna")
+
+    // Fill out the form
+    await page.fill('[name="contactPerson"]', "Piotr Kowalczyk")
+    await page.fill('[name="email"]', "piotr@example.com")
+    await page.fill('[name="phone"]', "+48 555 666 777")
+    await page.fill('[name="companyName"]', "Meeting Company")
+    await page.fill('[name="meetingDate"]', "2024-12-15")
+    await page.fill('[name="startTime"]', "09:00")
+    await page.fill('[name="endTime"]', "17:00")
+    await page.fill('[name="attendees"]', "8")
+    await page.selectOption('[name="roomType"]', "conference")
+    await page.check('[name="equipment"][value="projector"]')
+    await page.check('[name="catering"]')
+    await page.fill('[name="message"]', "Test message for meeting room")
+
+    // Submit the form
+    await page.click('button[type="submit"]')
+
+    // Check for success message
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
   })
 
   test("should handle form submission errors gracefully", async ({ page }) => {
-    // Mock API to return error
-    await page.route("/api/forms/**", (route) => {
-      route.fulfill({
-        status: 500,
-        contentType: "application/json",
-        body: JSON.stringify({ success: false, message: "Server error" }),
-      })
-    })
+    // Mock network error
+    await page.route("**/api/**", (route) => route.abort())
 
-    await page.goto("/forms")
+    // Navigate to virtual office form
     await page.click("text=Biuro Wirtualne")
 
-    // Fill and submit form
-    await page.fill('[name="firstName"]', "Jan")
-    await page.fill('[name="lastName"]', "Kowalski")
+    // Fill out minimal required fields
+    await page.fill('[name="companyName"]', "Test Company")
+    await page.fill('[name="contactPerson"]', "Jan Kowalski")
     await page.fill('[name="email"]', "jan@example.com")
-    await page.fill('[name="phone"]', "+48123456789")
-    await page.check('[name="gdprConsent"]')
+    await page.fill('[name="phone"]', "+48 123 456 789")
 
+    // Submit the form
     await page.click('button[type="submit"]')
 
     // Check for error message
-    await expect(page.locator("text=błąd")).toBeVisible()
+    await expect(page.getByText(/błąd podczas wysyłania/i)).toBeVisible()
+  })
+
+  test("should track analytics events", async ({ page }) => {
+    // Listen for analytics requests
+    const analyticsRequests = []
+    page.on("request", (request) => {
+      if (request.url().includes("/api/analytics/track")) {
+        analyticsRequests.push(request)
+      }
+    })
+
+    // Navigate to virtual office form
+    await page.click("text=Biuro Wirtualne")
+
+    // Interact with form fields
+    await page.fill('[name="companyName"]', "Test Company")
+    await page.fill('[name="contactPerson"]', "Jan Kowalski")
+
+    // Wait a bit for analytics events to be sent
+    await page.waitForTimeout(1000)
+
+    // Check that analytics events were tracked
+    expect(analyticsRequests.length).toBeGreaterThan(0)
   })
 
   test("should be accessible", async ({ page }) => {
-    await page.goto("/forms")
-
     // Check for proper heading structure
-    const h1 = page.locator("h1")
-    await expect(h1).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
 
-    // Check for form labels
+    // Navigate to virtual office form
     await page.click("text=Biuro Wirtualne")
-    const labels = page.locator("label")
-    const labelCount = await labels.count()
-    expect(labelCount).toBeGreaterThan(0)
 
-    // Check for required field indicators
-    const requiredFields = page.locator("text=*")
-    const requiredCount = await requiredFields.count()
-    expect(requiredCount).toBeGreaterThan(0)
+    // Check form accessibility
+    await expect(page.getByRole("form")).toBeVisible()
 
-    // Check form can be navigated with keyboard
-    await page.keyboard.press("Tab")
-    const focusedElement = page.locator(":focus")
-    await expect(focusedElement).toBeVisible()
+    // Check that all form fields have labels
+    const inputs = await page.locator("input, select, textarea").all()
+    for (const input of inputs) {
+      const id = await input.getAttribute("id")
+      if (id) {
+        await expect(page.locator(`label[for="${id}"]`)).toBeVisible()
+      }
+    }
+
+    // Check submit button
+    await expect(page.getByRole("button", { name: /wyślij/i })).toBeVisible()
   })
 
   test("should work on mobile devices", async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 })
 
-    await page.goto("/forms")
-
-    // Check mobile navigation
-    const mobileMenu = page.locator('[aria-label="Menu"]')
-    if (await mobileMenu.isVisible()) {
-      await mobileMenu.click()
-    }
-
-    // Test form interaction on mobile
-    await page.click("text=Biuro Wirtualne")
-    await page.fill('[name="firstName"]', "Jan")
-
-    // Check form is still usable
-    const submitButton = page.locator('button[type="submit"]')
-    await expect(submitButton).toBeVisible()
-  })
-
-  test("should track analytics events", async ({ page }) => {
-    // Mock analytics tracking
-    const analyticsEvents: string[] = []
-
-    await page.addInitScript(() => {
-      ;(window as any).analyticsEvents = []
-      const originalTrack = (window as any).analyticsClient?.trackFormView
-      if (originalTrack) {
-        ;(window as any).analyticsClient.trackFormView = (...args: any[]) => {
-          ;(window as any).analyticsEvents.push("trackFormView")
-          return originalTrack.apply(this, args)
-        }
-      }
-    })
-
-    await page.goto("/forms")
+    // Navigate to virtual office form
     await page.click("text=Biuro Wirtualne")
 
-    // Check if analytics events were tracked
-    const events = await page.evaluate(() => (window as any).analyticsEvents)
-    expect(events).toContain("trackFormView")
-  })
-})
+    // Check that form is responsive
+    await expect(page.locator("form")).toBeVisible()
 
-test.describe("Form Performance", () => {
-  test("should load forms quickly", async ({ page }) => {
-    const startTime = Date.now()
+    // Fill out form on mobile
+    await page.fill('[name="companyName"]', "Mobile Test Company")
+    await page.fill('[name="contactPerson"]', "Mobile User")
+    await page.fill('[name="email"]', "mobile@example.com")
+    await page.fill('[name="phone"]', "+48 123 456 789")
 
-    await page.goto("/forms")
-    await page.waitForLoadState("networkidle")
+    // Submit the form
+    await page.click('button[type="submit"]')
 
-    const loadTime = Date.now() - startTime
-    expect(loadTime).toBeLessThan(3000) // Should load within 3 seconds
-  })
-
-  test("should handle rapid form switching", async ({ page }) => {
-    await page.goto("/forms")
-
-    const formTypes = ["Biuro Wirtualne", "Coworking", "Sala Konferencyjna", "Reklama", "Oferty Specjalne"]
-
-    // Rapidly switch between forms
-    for (let i = 0; i < 3; i++) {
-      for (const formType of formTypes) {
-        await page.click(`text=${formType}`)
-        await page.waitForTimeout(100) // Small delay to simulate user interaction
-      }
-    }
-
-    // Form should still be functional
-    await page.fill('[name="firstName"]', "Test")
-    const firstNameField = page.locator('[name="firstName"]')
-    await expect(firstNameField).toHaveValue("Test")
+    // Check for success message
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
   })
 })

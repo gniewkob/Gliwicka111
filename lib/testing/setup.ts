@@ -1,116 +1,82 @@
 import "@testing-library/jest-dom"
-import { vi, beforeEach } from "vitest"
+import { beforeAll, afterEach, afterAll } from "vitest"
+import { cleanup } from "@testing-library/react"
+import { server } from "./mocks/server"
+import { jest } from "vitest"
 
-// Mock Next.js router
-vi.mock("next/router", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-    pathname: "/",
-    route: "/",
-    query: {},
-    asPath: "/",
-    events: {
-      on: vi.fn(),
-      off: vi.fn(),
-      emit: vi.fn(),
-    },
-  }),
-}))
+// Establish API mocking before all tests
+beforeAll(() => server.listen())
 
-// Mock Next.js navigation
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-  }),
-  usePathname: () => "/",
-  useSearchParams: () => new URLSearchParams(),
-}))
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests
+afterEach(() => {
+  server.resetHandlers()
+  cleanup()
+})
 
-// Mock Next.js image
-vi.mock("next/image", () => ({
-  default: ({ src, alt, ...props }: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src || "/placeholder.svg"} alt={alt} {...props} />
-  },
-}))
+// Clean up after the tests are finished
+afterAll(() => server.close())
 
 // Mock IntersectionObserver
-global.IntersectionObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
+global.IntersectionObserver = class IntersectionObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  unobserve() {}
+}
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
+global.ResizeObserver = class ResizeObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  unobserve() {}
+}
 
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
+  value: (query: string) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => {},
+  }),
+})
+
+// Mock scrollTo
+Object.defineProperty(window, "scrollTo", {
+  writable: true,
+  value: () => {},
 })
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
+  getItem: (key: string) => null,
+  setItem: (key: string, value: string) => {},
+  removeItem: (key: string) => {},
+  clear: () => {},
 }
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
 })
 
 // Mock sessionStorage
-const sessionStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-}
 Object.defineProperty(window, "sessionStorage", {
-  value: sessionStorageMock,
+  value: localStorageMock,
 })
 
 // Mock fetch
-global.fetch = vi.fn()
+global.fetch = jest.fn()
 
-// Mock console methods to reduce noise in tests
+// Mock console methods in tests
 global.console = {
   ...console,
-  log: vi.fn(),
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
+  log: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
 }
-
-// Setup test environment
-beforeEach(() => {
-  vi.clearAllMocks()
-  localStorageMock.clear()
-  sessionStorageMock.clear()
-})
