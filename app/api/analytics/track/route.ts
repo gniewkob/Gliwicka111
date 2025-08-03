@@ -164,10 +164,21 @@ export async function GET(request: NextRequest) {
 
     const { rows } = await db.query(query, params)
 
+    const sanitizedEvents = rows.map((event) => ({
+      formType: event.formType,
+      eventType: event.eventType,
+      fieldName: event.fieldName,
+      errorMessage: event.errorMessage,
+      timestamp: event.timestamp,
+      language: event.language,
+      formVersion: event.formVersion,
+      receivedAt: event.receivedAt,
+    }))
+
     return NextResponse.json({
-      events: rows,
-      total: rows.length,
-      filtered: rows.length,
+      events: sanitizedEvents,
+      total: sanitizedEvents.length,
+      filtered: sanitizedEvents.length,
     })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
