@@ -2,7 +2,7 @@
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/gniewkobs-projects/v0-gliwicka-111-website)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/JPuq0yRem6K)
-[![Next.js](https://img.shields.io/badge/Next.js-15.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
@@ -27,7 +27,7 @@ Gliwicka 111 is a comprehensive business center website offering virtual office 
 ## 🛠 Technology Stack
 
 ### Core Framework
-- **Next.js 15.4** - React framework with App Router
+- **Next.js 14** - React framework with App Router
 - **TypeScript 5.0** - Type-safe development
 - **React 18** - Latest React features with concurrent rendering
 
@@ -106,7 +106,9 @@ gliwicka-contact-forms/
 
 ### Prerequisites
 
-- **Node.js** 18.0 or higher
+- **Node.js 18+**
+- **PostgreSQL 14+**
+- **Phusion Passenger** on **FreeBSD** for production deployment
 - **npm** or **yarn** package manager
 - **Git** for version control
 
@@ -166,6 +168,73 @@ npm run start
 # Run linting
 npm run lint
 \`\`\`
+
+## 📦 Deployment & Operations
+
+### CI/CD Pipeline
+
+1. **Run tests and linting**
+   \`\`\`bash
+   npm run lint
+   npm test
+   \`\`\`
+2. **Build the application**
+   \`\`\`bash
+   npm run build
+   \`\`\`
+3. **Apply database migrations**
+   \`\`\`bash
+   psql "$DATABASE_URL" -f migrations/001_create_form_submissions.sql
+   psql "$DATABASE_URL" -f migrations/002_create_analytics_tables.sql
+   \`\`\`
+4. **Restart Passenger on FreeBSD**
+   \`\`\`bash
+   passenger-config restart-app /usr/local/www/gliwicka-111
+   \`\`\`
+
+### Database Migrations
+
+Run all migration scripts against your PostgreSQL database:
+
+\`\`\`bash
+for file in migrations/*.sql; do
+  psql "$DATABASE_URL" -f "$file"
+done
+\`\`\`
+
+### Health Checks
+
+The application exposes a health endpoint for monitoring:
+
+\`\`\`bash
+curl https://your-domain/api/health
+\`\`\`
+
+### Logging
+
+Server logs are written to `stdout` and captured by Passenger. Ensure logs are monitored and rotated on the FreeBSD host.
+
+### Environment Variables
+
+Configuration is managed through environment variables (see `.env.example`):
+
+| Variable | Description |
+| --- | --- |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Individual database settings for local/CI use |
+| `SMTP_HOST` | SMTP server host |
+| `SMTP_PORT` | SMTP server port |
+| `SMTP_USER` | SMTP username |
+| `SMTP_PASS` | SMTP password |
+| `SMTP_FROM` | Default "from" email address |
+| `ADMIN_EMAIL` | Administrator notification address |
+| `IP_SALT` | Salt used for IP hashing |
+| `NEXT_PUBLIC_ANALYTICS_TOKEN` | Public token for analytics client |
+| `ANALYTICS_AUTH_TOKEN` | Token for securing analytics endpoints |
+| `ANALYTICS_BASIC_USER` | Basic auth user for analytics endpoints |
+| `ANALYTICS_BASIC_PASS` | Basic auth password for analytics endpoints |
+| `NODE_ENV` | Node.js environment (`development`, `production`, etc.) |
+| `CI` | Set to `true` in CI environments |
 
 ## 📋 Features & Services
 
