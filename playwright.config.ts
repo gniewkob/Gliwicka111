@@ -43,5 +43,13 @@ export default defineConfig({
     command: "npm run build && npm run start",
     port: 3000,
     reuseExistingServer: !process.env.CI,
+    env: {
+      DB_HOST: "localhost",
+      DB_PORT: "5432",
+      DB_NAME: "test_db",
+      DB_USER: "test_user",
+      DB_PASSWORD: "test_password",
+      MOCK_DB: "true",
+    },
   },
 })

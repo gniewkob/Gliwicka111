@@ -1,9 +1,26 @@
 import { Pool } from "pg"
 
-let pool: Pool | null = null
+type Queryable = {
+  query: (...args: any[]) => Promise<any>
+}
 
-function createPool(): Pool {
-  const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD } = process.env
+let pool: (Pool | Queryable) | null = null
+
+function createPool(): Pool | Queryable {
+  const {
+    DB_HOST,
+    DB_PORT,
+    DB_NAME,
+    DB_USER,
+    DB_PASSWORD,
+    MOCK_DB,
+  } = process.env
+
+  if (MOCK_DB === "true" || !DB_HOST) {
+    return {
+      query: async () => ({ rows: [], rowCount: 0 }),
+    }
+  }
 
   const instance = new Pool({
     host: DB_HOST,
@@ -22,7 +39,7 @@ function createPool(): Pool {
   return instance
 }
 
-export function getPool(): Pool {
+export function getPool(): Pool | Queryable {
   if (!pool) {
     pool = createPool()
   }
