@@ -19,6 +19,7 @@ interface AnalyticsEvent {
   userAgent: string
   language: string
   formVersion?: string
+  metadata?: Record<string, any>
 }
 
 interface ConsentSettings {
@@ -33,11 +34,13 @@ class AnalyticsClient {
   private consentSettings: ConsentSettings | null = null
   private eventQueue: AnalyticsEvent[] = []
   private isInitialized = false
+  private formStartTimes: Map<string, number> = new Map()
 
   constructor() {
     this.sessionId = this.generateSessionId()
     this.loadConsentSettings()
     this.initializeAnalytics()
+    this.setupConsentListener()
   }
 
   private generateSessionId(): string {
@@ -54,6 +57,18 @@ class AnalyticsClient {
           console.warn("Failed to parse consent settings:", error)
         }
       }
+    }
+  }
+
+  private setupConsentListener(): void {
+    if (typeof window !== "undefined") {
+      window.addEventListener("consentUpdated", (event: any) => {
+        this.consentSettings = {
+          ...event.detail,
+          timestamp: Date.now(),
+        }
+        this.processEventQueue()
+      })
     }
   }
 
@@ -97,10 +112,21 @@ class AnalyticsClient {
       eventType,
       timestamp: Date.now(),
       sessionId: this.sessionId,
-      userAgent: typeof window !== "undefined" ? window.navigator.userAgent : "",
+      userAgent: typeof window !== "undefined" ? this.anonymizeUserAgent(window.navigator.userAgent) : "",
       language: typeof window !== "undefined" ? window.navigator.language : "en",
-      formVersion: "1.0.0",
+      formVersion: "2.0.0",
     }
+  }
+
+  private anonymizeUserAgent(userAgent: string): string {
+    // Extract only browser and OS info, remove detailed version numbers
+    const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/[\d.]+/)
+    const osMatch = userAgent.match(/(Windows|Mac|Linux|Android|iOS)/)
+
+    const browser = browserMatch ? browserMatch[1] : "Unknown"
+    const os = osMatch ? osMatch[1] : "Unknown"
+
+    return `${browser}_${os}`
   }
 
   private processEventQueue(): void {
@@ -127,11 +153,18 @@ class AnalyticsClient {
 
   // Public API methods
   trackFormView(formType: string): void {
-    const event = this.createBaseEvent(formType, "view")
+    const event = {
+      ...this.createBaseEvent(formType, "view"),
+      metadata: {
+        referrer: typeof window !== "undefined" ? document.referrer : "",
+        url: typeof window !== "undefined" ? window.location.pathname : "",
+      },
+    }
     this.queueOrSendEvent(event)
   }
 
   trackFormStart(formType: string): void {
+    this.formStartTimes.set(formType, Date.now())
     const event = this.createBaseEvent(formType, "start")
     this.queueOrSendEvent(event)
   }
@@ -156,7 +189,7 @@ class AnalyticsClient {
     const event = {
       ...this.createBaseEvent(formType, "field_error"),
       fieldName,
-      errorMessage,
+      errorMessage: this.sanitizeErrorMessage(errorMessage),
     }
     this.queueOrSendEvent(event)
   }
@@ -167,21 +200,62 @@ class AnalyticsClient {
   }
 
   trackSubmissionSuccess(formType: string): void {
-    const event = this.createBaseEvent(formType, "submission_success")
+    const startTime = this.formStartTimes.get(formType)
+    const completionTime = startTime ? Date.now() - startTime : null
+
+    const event = {
+      ...this.createBaseEvent(formType, "submission_success"),
+      metadata: {
+        completionTime,
+      },
+    }
     this.queueOrSendEvent(event)
+    this.formStartTimes.delete(formType)
   }
 
   trackSubmissionError(formType: string, errorMessage: string): void {
     const event = {
       ...this.createBaseEvent(formType, "submission_error"),
-      errorMessage,
+      errorMessage: this.sanitizeErrorMessage(errorMessage),
     }
     this.queueOrSendEvent(event)
   }
 
-  trackAbandonment(formType: string): void {
-    const event = this.createBaseEvent(formType, "abandonment")
+  trackAbandonment(formType: string, fieldsCompleted: string[] = []): void {
+    const startTime = this.formStartTimes.get(formType)
+    const timeSpent = startTime ? Date.now() - startTime : null
+
+    const event = {
+      ...this.createBaseEvent(formType, "abandonment"),
+      metadata: {
+        timeSpent,
+        fieldsCompleted: fieldsCompleted.length,
+        completionPercentage: this.calculateCompletionPercentage(formType, fieldsCompleted),
+      },
+    }
     this.queueOrSendEvent(event)
+    this.formStartTimes.delete(formType)
+  }
+
+  private sanitizeErrorMessage(errorMessage: string): string {
+    // Remove any potential personal data from error messages
+    return errorMessage
+      .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, "[EMAIL]")
+      .replace(/\b\d{3}[\s-]?\d{3}[\s-]?\d{3}\b/g, "[PHONE]")
+      .replace(/\b\d{10}\b/g, "[NIP]")
+  }
+
+  private calculateCompletionPercentage(formType: string, fieldsCompleted: string[]): number {
+    const totalFields = {
+      "virtual-office": 8,
+      coworking: 9,
+      "meeting-room": 11,
+      advertising: 10,
+      "special-deals": 8,
+    }
+
+    const total = totalFields[formType as keyof typeof totalFields] || 8
+    return Math.round((fieldsCompleted.length / total) * 100)
   }
 
   updateConsent(settings: ConsentSettings): void {
@@ -203,6 +277,17 @@ class AnalyticsClient {
 
   hasConsent(): boolean {
     return this.hasAnalyticsConsent()
+  }
+
+  // Method to clear all stored data (for GDPR compliance)
+  clearAllData(): void {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("analytics-consent")
+      sessionStorage.clear()
+    }
+    this.eventQueue = []
+    this.formStartTimes.clear()
+    this.consentSettings = null
   }
 }
 

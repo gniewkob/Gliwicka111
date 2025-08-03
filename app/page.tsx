@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Building2,
   MapPin,
@@ -19,11 +19,17 @@ import {
   ArrowRight,
   Clock,
   Award,
+  Shield,
+  Zap,
+  Target,
+  TrendingUp,
+  ChevronDown,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ConsentBanner } from "@/components/analytics/consent-banner"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -48,6 +54,11 @@ const translations = {
       cta: "Zobacz naszą ofertę",
       contact: "Skontaktuj się",
       trustBadge: "Obsługujemy przedsiębiorców od 2024",
+      stats: {
+        clients: "150+ zadowolonych klientów",
+        spaces: "5 różnych przestrzeni",
+        support: "24/7 wsparcie techniczne",
+      },
     },
     offer: {
       title: "Nasza oferta",
@@ -62,8 +73,10 @@ const translations = {
         benefits: [
           "Adres do rejestracji firmy",
           "Odbiór i przekazywanie korespondencji",
-          "Powiadomienia SMS/email",
+          "Powiadomienia SMS/email w czasie rzeczywistym",
           "Możliwość spotkań w recepcji",
+          "Skanowanie dokumentów na żądanie",
+          "Profesjonalna obsługa telefoniczna",
         ],
         targetCustomer: "Idealne dla freelancerów, firm online i startupów",
         useCase: "Firma IT z Katowic używa naszego adresu do rejestracji i odbioru dokumentów urzędowych",
@@ -71,17 +84,34 @@ const translations = {
           basic: {
             name: "Podstawowy",
             price: "99 zł/miesiąc",
-            features: ["Adres biznesowy", "Odbiór poczty", "Powiadomienia"],
+            originalPrice: "129 zł",
+            features: ["Adres biznesowy", "Odbiór poczty", "Powiadomienia SMS/email", "Recepcja 8-18"],
+            popular: false,
           },
           standard: {
             name: "Standard",
             price: "149 zł/miesiąc",
-            features: ["Wszystko z podstawowego", "Przekazywanie połączeń", "2h sali/miesiąc"],
+            originalPrice: "199 zł",
+            features: [
+              "Wszystko z podstawowego",
+              "Przekazywanie połączeń",
+              "2h sali konferencyjnej/miesiąc",
+              "Skanowanie dokumentów",
+            ],
+            popular: true,
           },
           premium: {
             name: "Premium",
             price: "249 zł/miesiąc",
-            features: ["Wszystko ze standard", "Dedykowany telefon", "5h sali/miesiąc"],
+            originalPrice: "329 zł",
+            features: [
+              "Wszystko ze standard",
+              "Dedykowany numer telefonu",
+              "5h sali konferencyjnej/miesiąc",
+              "Obsługa sekretarska",
+              "Magazynowanie dokumentów",
+            ],
+            popular: false,
           },
         },
       },
@@ -90,10 +120,12 @@ const translations = {
         subtitle: "Elastyczne przestrzenie od 25 zł/dzień",
         description: "Nowoczesne stanowiska pracy w inspirującym środowisku",
         benefits: [
-          "Szybki internet i Wi-Fi",
+          "Szybki internet 1Gb/s i Wi-Fi",
           "Dostęp do sal konferencyjnych",
-          "Kawa i herbata bez limitu",
-          "Społeczność przedsiębiorców",
+          "Kawa, herbata i przekąski bez limitu",
+          "Społeczność 150+ przedsiębiorców",
+          "Drukarki i skanery",
+          "Dostęp 24/7 z kartą",
         ],
         targetCustomer: "Dla freelancerów, małych zespołów i firm w rozwoju",
         useCase: "Zespół marketingowy wynajmuje dedicated desk na 6 miesięcy podczas realizacji dużego projektu",
@@ -101,17 +133,35 @@ const translations = {
           hotDesk: {
             name: "Hot Desk",
             price: "25 zł/dzień",
-            features: ["Elastyczne miejsce", "Wi-Fi", "Kawa/herbata", "Sala konferencyjna"],
+            monthlyPrice: "450 zł/miesiąc",
+            features: ["Elastyczne miejsce", "Wi-Fi 1Gb/s", "Kawa/herbata", "Sala konferencyjna", "Drukarki"],
+            popular: false,
           },
           dedicatedDesk: {
             name: "Dedicated Desk",
             price: "350 zł/miesiąc",
-            features: ["Stałe miejsce", "Szafka", "Wszystko z Hot Desk", "Personalizacja"],
+            originalPrice: "450 zł",
+            features: [
+              "Stałe miejsce pracy",
+              "Szafka na dokumenty",
+              "Wszystko z Hot Desk",
+              "Personalizacja przestrzeni",
+              "Monitor na życzenie",
+            ],
+            popular: true,
           },
           privateOffice: {
             name: "Prywatne biuro",
             price: "800 zł/miesiąc",
-            features: ["Zamknięte biuro", "Do 4 osób", "Własne wyposażenie", "Recepcja"],
+            originalPrice: "1000 zł",
+            features: [
+              "Zamknięte biuro do 4 osób",
+              "Własne wyposażenie",
+              "Wszystko z Dedicated Desk",
+              "Recepcja i obsługa",
+              "Parking dedykowany",
+            ],
+            popular: false,
           },
         },
       },
@@ -119,29 +169,50 @@ const translations = {
         title: "Sale spotkań / Wydarzenia",
         subtitle: "Profesjonalne sale od 30 zł/godzinę",
         description: "W pełni wyposażone sale konferencyjne z obsługą techniczną",
-        benefits: ["Profesjonalny sprzęt AV", "Szybki internet", "Flipchart i projektor", "Możliwość cateringu"],
+        benefits: [
+          "Profesjonalny sprzęt AV 4K",
+          "Szybki internet i Wi-Fi",
+          "Flipchart i projektor",
+          "Możliwość cateringu premium",
+          "Obsługa techniczna",
+          "Klimatyzacja i oświetlenie LED",
+        ],
         targetCustomer: "Dla firm organizujących spotkania, szkolenia i prezentacje",
         useCase: "Kancelaria prawna organizuje comiesięczne spotkania partnerów w naszej sali średniej",
         pricing: {
           small: {
             name: "Sala mała (2-6 osób)",
             price: "30 zł/h",
-            features: ["Projektor", "Flipchart", "Wi-Fi", "Klimatyzacja"],
+            dayPrice: "200 zł/dzień",
+            features: ["Projektor 4K", "Flipchart", "Wi-Fi", "Klimatyzacja", "Kawa/herbata"],
+            popular: false,
           },
           medium: {
             name: "Sala średnia (6-12 osób)",
             price: "50 zł/h",
-            features: ["Duży ekran", "System audio", "Telekonferencje", "Catering"],
+            dayPrice: "350 zł/dzień",
+            features: ['Duży ekran 65"', "System audio", "Telekonferencje", "Catering", "Tablica interaktywna"],
+            popular: true,
           },
           large: {
             name: "Sala duża (12-20 osób)",
             price: "80 zł/h",
-            features: ["Profesjonalny AV", "Streaming", "Tłumaczenia", "Obsługa"],
+            dayPrice: "550 zł/dzień",
+            features: [
+              "Profesjonalny AV",
+              "Streaming HD",
+              "Tłumaczenia symultaniczne",
+              "Obsługa techniczna",
+              "Premium catering",
+            ],
+            popular: false,
           },
           conference: {
             name: "Sala konferencyjna (20-50 osób)",
             price: "150 zł/h",
-            features: ["Pełne wyposażenie", "Obsługa eventów", "Premium catering", "Parking VIP"],
+            dayPrice: "1000 zł/dzień",
+            features: ["Pełne wyposażenie AV", "Obsługa eventów", "Premium catering", "Parking VIP", "Hostessa"],
+            popular: false,
           },
         },
       },
@@ -152,8 +223,10 @@ const translations = {
         benefits: [
           "Duża powierzchnia reklamowa 5m x 3m",
           "Mobilność - dotarcie do różnych lokalizacji",
-          "Wysoka widoczność",
-          "Elastyczne trasy",
+          "Wysoka widoczność w ruchu miejskim",
+          "Elastyczne trasy i harmonogramy",
+          "Profesjonalny montaż reklam",
+          "Raportowanie tras GPS",
         ],
         targetCustomer: "Dla firm chcących zwiększyć rozpoznawalność marki lokalnie",
         useCase: "Salon samochodowy promuje nowe modele podczas targów i eventów w regionie",
@@ -161,17 +234,41 @@ const translations = {
           mobile: {
             name: "Billboard mobilny",
             price: "350 zł/tydzień",
-            features: ["Przyczepa 5m x 3m", "Elastyczne trasy", "Wysoka widoczność", "Pełna obsługa"],
+            monthlyPrice: "1200 zł/miesiąc",
+            features: [
+              "Przyczepa 5m x 3m",
+              "Elastyczne trasy",
+              "Wysoka widoczność",
+              "Pełna obsługa",
+              "Raportowanie GPS",
+            ],
+            popular: true,
           },
           static: {
             name: "Billboard stacjonarny",
             price: "200 zł/tydzień",
-            features: ["Stała lokalizacja", "24/7 widoczność", "Główna droga", "Długoterminowa ekspozycja"],
+            monthlyPrice: "700 zł/miesiąc",
+            features: [
+              "Stała lokalizacja",
+              "24/7 widoczność",
+              "Główna droga",
+              "Długoterminowa ekspozycja",
+              "Oświetlenie LED",
+            ],
+            popular: false,
           },
           digital: {
             name: "Reklama cyfrowa",
             price: "500 zł/tydzień",
-            features: ["Ekran LED", "Dynamiczne treści", "Pełny kolor", "Zdalne zarządzanie"],
+            monthlyPrice: "1800 zł/miesiąc",
+            features: [
+              "Ekran LED Full HD",
+              "Dynamiczne treści",
+              "Pełny kolor",
+              "Zdalne zarządzanie",
+              "Animacje i video",
+            ],
+            popular: false,
           },
         },
       },
@@ -184,6 +281,8 @@ const translations = {
           "Program poleceń -25%",
           "Oferta studencka -40%",
           "Umowy długoterminowe -50%",
+          "Bezpłatny dzień próbny",
+          "Elastyczne warunki płatności",
         ],
         targetCustomer: "Dla wszystkich nowych klientów i firm planujących długoterminową współpracę",
         useCase: "Startup skorzystał z pakietu powitalnego i zaoszczędził 2000 zł w pierwszym roku",
@@ -192,17 +291,25 @@ const translations = {
             name: "Pakiet powitalny",
             discount: "-30%",
             description: "Rabat dla nowych klientów na pierwsze 3 miesiące",
+            validUntil: "31.03.2024",
           },
-          referral: { name: "Program poleceń", discount: "-25%", description: "Rabat za polecenie nowego klienta" },
+          referral: {
+            name: "Program poleceń",
+            discount: "-25%",
+            description: "Rabat za polecenie nowego klienta + bonus 200 zł",
+            validUntil: "Stała oferta",
+          },
           student: {
             name: "Oferta studencka",
             discount: "-40%",
             description: "Specjalne ceny dla studentów i absolwentów",
+            validUntil: "30.06.2024",
           },
           longTerm: {
             name: "Umowa długoterminowa",
             discount: "-50%",
             description: "Największe oszczędności przy umowach rocznych",
+            validUntil: "Stała oferta",
           },
         },
       },
@@ -214,21 +321,39 @@ const translations = {
         {
           name: "Anna Kowalska",
           company: "Digital Marketing Pro",
-          text: "Biuro wirtualne w Gliwicka 111 to strzał w dziesiątkę. Profesjonalna obsługa, szybkie przekazywanie korespondencji i świetna lokalizacja.",
+          position: "CEO & Founder",
+          text: "Biuro wirtualne w Gliwicka 111 to strzał w dziesiątkę. Profesjonalna obsługa, szybkie przekazywanie korespondencji i świetna lokalizacja. Oszczędzam 3000 zł miesięcznie w porównaniu do wynajmu tradycyjnego biura.",
           rating: 5,
+          avatar: "/placeholder-user.jpg",
+          verified: true,
         },
         {
           name: "Marcin Nowak",
           company: "Tech Solutions Sp. z o.o.",
-          text: "Coworking idealny dla naszego zespołu. Świetna atmosfera, szybki internet i możliwość organizowania spotkań w salach konferencyjnych.",
+          position: "CTO",
+          text: "Coworking idealny dla naszego zespołu. Świetna atmosfera, szybki internet 1Gb/s i możliwość organizowania spotkań w salach konferencyjnych. Nasz zespół jest bardziej produktywny niż kiedykolwiek.",
           rating: 5,
+          avatar: "/placeholder-user.jpg",
+          verified: true,
         },
         {
           name: "Katarzyna Wiśniewska",
           company: "Legal Consulting",
-          text: "Regularnie wynajmujemy sale konferencyjne. Profesjonalne wyposażenie, obsługa na najwyższym poziomie. Polecam!",
+          position: "Partner",
+          text: "Regularnie wynajmujemy sale konferencyjne. Profesjonalne wyposażenie, obsługa na najwyższym poziomie. Nasi klienci są pod wrażeniem jakości i standardu sal. Polecam każdemu prawnikowi!",
           rating: 5,
+          avatar: "/placeholder-user.jpg",
+          verified: true,
         },
+      ],
+    },
+    stats: {
+      title: "Gliwicka 111 w liczbach",
+      items: [
+        { number: "150+", label: "Zadowolonych klientów", icon: Users },
+        { number: "99.9%", label: "Dostępność usług", icon: Zap },
+        { number: "24/7", label: "Wsparcie techniczne", icon: Shield },
+        { number: "5", label: "Różnych przestrzeni", icon: Building2 },
       ],
     },
     cta: {
@@ -237,6 +362,7 @@ const translations = {
       freeConsultation: "Bezpłatna konsultacja",
       visitUs: "Odwiedź nas",
       freeDay: "Wypróbuj coworking za darmo",
+      bookTour: "Umów wizytę",
     },
     faq: {
       title: "Często zadawane pytania",
@@ -246,16 +372,22 @@ const translations = {
           {
             question: "Czy mogę zarejestrować firmę na Waszym adresie?",
             answer:
-              "Tak, nasz adres można wykorzystać do rejestracji działalności gospodarczej i spółek. Zapewniamy wszystkie niezbędne dokumenty.",
+              "Tak, nasz adres można wykorzystać do rejestracji działalności gospodarczej i spółek. Zapewniamy wszystkie niezbędne dokumenty i potwierdzenia wymagane przez KRS i CEIDG.",
           },
           {
             question: "Jak szybko otrzymam informację o korespondencji?",
-            answer: "Powiadomienia wysyłamy natychmiast po otrzymaniu przesyłki - SMS i email w ciągu 15 minut.",
+            answer:
+              "Powiadomienia wysyłamy natychmiast po otrzymaniu przesyłki - SMS i email w ciągu 15 minut. Dodatkowo oferujemy skanowanie ważnych dokumentów i przesyłanie ich drogą elektroniczną.",
           },
           {
             question: "Czy mogę odbierać gości w recepcji?",
             answer:
-              "Tak, recepcja jest dostępna w godzinach 8:00-18:00. Goście mogą czekać w wygodnej strefie oczekiwania.",
+              "Tak, recepcja jest dostępna w godzinach 8:00-18:00. Goście mogą czekać w wygodnej strefie oczekiwania. Oferujemy również obsługę spotkań biznesowych w naszych salach konferencyjnych.",
+          },
+          {
+            question: "Jakie dokumenty potrzebuję do założenia biura wirtualnego?",
+            answer:
+              "Potrzebujesz tylko dowodu osobistego i wypełnionej umowy. Proces zajmuje maksymalnie 24 godziny, a adres jest dostępny natychmiast po podpisaniu umowy.",
           },
         ],
       },
@@ -265,18 +397,46 @@ const translations = {
           {
             question: "Czy mogę skorzystać z dnia próbnego?",
             answer:
-              "Tak, oferujemy bezpłatny dzień próbny dla wszystkich nowych klientów. Wystarczy umówić się telefonicznie.",
+              "Tak, oferujemy bezpłatny dzień próbny dla wszystkich nowych klientów. Wystarczy umówić się telefonicznie lub przez formularz online. Dzień próbny obejmuje dostęp do wszystkich udogodnień.",
           },
           {
             question: "Jakie są godziny dostępu?",
-            answer: "Coworking jest dostępny 24/7 dla posiadaczy kart dostępu. Recepcja czynna 8:00-18:00.",
+            answer:
+              "Coworking jest dostępny 24/7 dla posiadaczy kart dostępu. Recepcja czynna 8:00-18:00. Po godzinach dostęp przez kartę magnetyczną z systemem bezpieczeństwa.",
           },
           {
             question: "Czy mogę drukować dokumenty?",
-            answer: "Tak, mamy drukarki, skanery i kserokopiarkę. Opłata według cennika - 0,50 zł za stronę A4.",
+            answer:
+              "Tak, mamy drukarki laserowe, skanery i kserokopiarkę. Opłata według cennika - 0,50 zł za stronę A4 czarno-białą, 2 zł za kolorową. Pierwsze 50 stron miesięcznie gratis dla stałych klientów.",
+          },
+          {
+            question: "Czy jest możliwość parkowania?",
+            answer:
+              "Tak, mamy bezpłatny parking dla klientów coworkingu. Dodatkowo oferujemy miejsca parkingowe z ładowarkami do samochodów elektrycznych.",
           },
         ],
       },
+    },
+    partnerships: {
+      title: "Nasi partnerzy biznesowi",
+      subtitle: "Współpracujemy z najlepszymi firmami w regionie",
+      items: [
+        {
+          name: "Kancelaria Prawna Kowalski & Partnerzy",
+          service: "Obsługa prawna",
+          discount: "15% rabatu dla klientów Gliwicka 111",
+        },
+        {
+          name: "Biuro Rachunkowe ProFin",
+          service: "Księgowość i podatki",
+          discount: "20% rabatu na pierwsze 6 miesięcy",
+        },
+        {
+          name: "Agencja Rekrutacyjna TalentHub",
+          service: "Rekrutacja IT i biznes",
+          discount: "Bezpłatna konsultacja + 10% rabatu",
+        },
+      ],
     },
     footer: {
       company: "Gliwicka 111",
@@ -292,6 +452,7 @@ const translations = {
       mondayFriday: "Pon-Pt: 8:00-18:00",
       saturday: "Sob: 9:00-14:00",
       sunday: "Nie: zamknięte",
+      emergency: "Kontakt awaryjny: +48 791 554 674",
     },
   },
   en: {
@@ -314,6 +475,11 @@ const translations = {
       cta: "View Our Offer",
       contact: "Contact Us",
       trustBadge: "Serving entrepreneurs since 2024",
+      stats: {
+        clients: "150+ satisfied clients",
+        spaces: "5 different spaces",
+        support: "24/7 technical support",
+      },
     },
     offer: {
       title: "Our Offer",
@@ -328,8 +494,10 @@ const translations = {
         benefits: [
           "Company registration address",
           "Mail collection and forwarding",
-          "SMS/email notifications",
+          "Real-time SMS/email notifications",
           "Reception meeting possibility",
+          "Document scanning on demand",
+          "Professional phone service",
         ],
         targetCustomer: "Perfect for freelancers, online companies and startups",
         useCase: "IT company from Katowice uses our address for registration and official document collection",
@@ -337,17 +505,29 @@ const translations = {
           basic: {
             name: "Basic",
             price: "99 PLN/month",
-            features: ["Business address", "Mail collection", "Notifications"],
+            originalPrice: "129 PLN",
+            features: ["Business address", "Mail collection", "SMS/email notifications", "Reception 8-18"],
+            popular: false,
           },
           standard: {
             name: "Standard",
             price: "149 PLN/month",
-            features: ["Everything from basic", "Call forwarding", "2h room/month"],
+            originalPrice: "199 PLN",
+            features: ["Everything from basic", "Call forwarding", "2h conference room/month", "Document scanning"],
+            popular: true,
           },
           premium: {
             name: "Premium",
             price: "249 PLN/month",
-            features: ["Everything from standard", "Dedicated phone", "5h room/month"],
+            originalPrice: "329 PLN",
+            features: [
+              "Everything from standard",
+              "Dedicated phone number",
+              "5h conference room/month",
+              "Secretary service",
+              "Document storage",
+            ],
+            popular: false,
           },
         },
       },
@@ -356,10 +536,12 @@ const translations = {
         subtitle: "Flexible spaces from 25 PLN/day",
         description: "Modern workstations in an inspiring environment",
         benefits: [
-          "High-speed internet and Wi-Fi",
+          "High-speed 1Gb/s internet and Wi-Fi",
           "Access to conference rooms",
-          "Unlimited coffee and tea",
-          "Entrepreneur community",
+          "Unlimited coffee, tea and snacks",
+          "Community of 150+ entrepreneurs",
+          "Printers and scanners",
+          "24/7 access with card",
         ],
         targetCustomer: "For freelancers, small teams and growing companies",
         useCase: "Marketing team rents dedicated desk for 6 months during a major project implementation",
@@ -367,17 +549,35 @@ const translations = {
           hotDesk: {
             name: "Hot Desk",
             price: "25 PLN/day",
-            features: ["Flexible workspace", "Wi-Fi", "Coffee/tea", "Conference room"],
+            monthlyPrice: "450 PLN/month",
+            features: ["Flexible workspace", "1Gb/s Wi-Fi", "Coffee/tea", "Conference room", "Printers"],
+            popular: false,
           },
           dedicatedDesk: {
             name: "Dedicated Desk",
             price: "350 PLN/month",
-            features: ["Fixed workspace", "Locker", "Everything from Hot Desk", "Personalization"],
+            originalPrice: "450 PLN",
+            features: [
+              "Fixed workspace",
+              "Document locker",
+              "Everything from Hot Desk",
+              "Space personalization",
+              "Monitor on request",
+            ],
+            popular: true,
           },
           privateOffice: {
             name: "Private Office",
             price: "800 PLN/month",
-            features: ["Closed office", "Up to 4 people", "Own equipment", "Reception"],
+            originalPrice: "1000 PLN",
+            features: [
+              "Closed office for up to 4 people",
+              "Own equipment",
+              "Everything from Dedicated Desk",
+              "Reception and service",
+              "Dedicated parking",
+            ],
+            popular: false,
           },
         },
       },
@@ -386,10 +586,12 @@ const translations = {
         subtitle: "Professional rooms from 30 PLN/hour",
         description: "Fully equipped conference rooms with technical support",
         benefits: [
-          "Professional AV equipment",
-          "High-speed internet",
+          "Professional 4K AV equipment",
+          "High-speed internet and Wi-Fi",
           "Flipchart and projector",
-          "Catering possibility",
+          "Premium catering possibility",
+          "Technical support",
+          "Air conditioning and LED lighting",
         ],
         targetCustomer: "For companies organizing meetings, training and presentations",
         useCase: "Law firm organizes monthly partner meetings in our medium room",
@@ -397,22 +599,36 @@ const translations = {
           small: {
             name: "Small room (2-6 people)",
             price: "30 PLN/h",
-            features: ["Projector", "Flipchart", "Wi-Fi", "Air conditioning"],
+            dayPrice: "200 PLN/day",
+            features: ["4K Projector", "Flipchart", "Wi-Fi", "Air conditioning", "Coffee/tea"],
+            popular: false,
           },
           medium: {
             name: "Medium room (6-12 people)",
             price: "50 PLN/h",
-            features: ["Large screen", "Audio system", "Video conferencing", "Catering"],
+            dayPrice: "350 PLN/day",
+            features: ['65" Large screen', "Audio system", "Video conferencing", "Catering", "Interactive board"],
+            popular: true,
           },
           large: {
             name: "Large room (12-20 people)",
             price: "80 PLN/h",
-            features: ["Professional AV", "Streaming", "Translation", "Support"],
+            dayPrice: "550 PLN/day",
+            features: [
+              "Professional AV",
+              "HD Streaming",
+              "Simultaneous translation",
+              "Technical support",
+              "Premium catering",
+            ],
+            popular: false,
           },
           conference: {
             name: "Conference hall (20-50 people)",
             price: "150 PLN/h",
-            features: ["Full equipment", "Event management", "Premium catering", "VIP parking"],
+            dayPrice: "1000 PLN/day",
+            features: ["Full AV equipment", "Event management", "Premium catering", "VIP parking", "Hostess"],
+            popular: false,
           },
         },
       },
@@ -423,8 +639,10 @@ const translations = {
         benefits: [
           "Large advertising space 5m x 3m",
           "Mobility - reach different locations",
-          "High visibility",
-          "Flexible routes",
+          "High visibility in city traffic",
+          "Flexible routes and schedules",
+          "Professional ad installation",
+          "GPS route reporting",
         ],
         targetCustomer: "For companies wanting to increase local brand recognition",
         useCase: "Car dealership promotes new models during fairs and events in the region",
@@ -432,17 +650,29 @@ const translations = {
           mobile: {
             name: "Mobile billboard",
             price: "350 PLN/week",
-            features: ["5m x 3m trailer", "Flexible routes", "High visibility", "Full service"],
+            monthlyPrice: "1200 PLN/month",
+            features: ["5m x 3m trailer", "Flexible routes", "High visibility", "Full service", "GPS reporting"],
+            popular: true,
           },
           static: {
             name: "Static billboard",
             price: "200 PLN/week",
-            features: ["Fixed location", "24/7 visibility", "Main road", "Long-term exposure"],
+            monthlyPrice: "700 PLN/month",
+            features: ["Fixed location", "24/7 visibility", "Main road", "Long-term exposure", "LED lighting"],
+            popular: false,
           },
           digital: {
             name: "Digital advertising",
             price: "500 PLN/week",
-            features: ["LED screen", "Dynamic content", "Full color", "Remote management"],
+            monthlyPrice: "1800 PLN/month",
+            features: [
+              "Full HD LED screen",
+              "Dynamic content",
+              "Full color",
+              "Remote management",
+              "Animations and video",
+            ],
+            popular: false,
           },
         },
       },
@@ -455,6 +685,8 @@ const translations = {
           "Referral program -25%",
           "Student offer -40%",
           "Long-term contracts -50%",
+          "Free trial day",
+          "Flexible payment terms",
         ],
         targetCustomer: "For all new clients and companies planning long-term cooperation",
         useCase: "Startup used welcome package and saved 2000 PLN in the first year",
@@ -463,17 +695,25 @@ const translations = {
             name: "Welcome package",
             discount: "-30%",
             description: "Discount for new clients for the first 3 months",
+            validUntil: "31.03.2024",
           },
-          referral: { name: "Referral program", discount: "-25%", description: "Discount for referring a new client" },
+          referral: {
+            name: "Referral program",
+            discount: "-25%",
+            description: "Discount for referring a new client + 200 PLN bonus",
+            validUntil: "Permanent offer",
+          },
           student: {
             name: "Student offer",
             discount: "-40%",
             description: "Special prices for students and graduates",
+            validUntil: "30.06.2024",
           },
           longTerm: {
             name: "Long-term contract",
             discount: "-50%",
             description: "Biggest savings with annual contracts",
+            validUntil: "Permanent offer",
           },
         },
       },
@@ -485,21 +725,39 @@ const translations = {
         {
           name: "Anna Kowalska",
           company: "Digital Marketing Pro",
-          text: "Virtual office at Gliwicka 111 is a bullseye. Professional service, quick mail forwarding and great location.",
+          position: "CEO & Founder",
+          text: "Virtual office at Gliwicka 111 is a bullseye. Professional service, quick mail forwarding and great location. I save 3000 PLN monthly compared to renting a traditional office.",
           rating: 5,
+          avatar: "/placeholder-user.jpg",
+          verified: true,
         },
         {
           name: "Marcin Nowak",
           company: "Tech Solutions Ltd.",
-          text: "Coworking perfect for our team. Great atmosphere, fast internet and possibility to organize meetings in conference rooms.",
+          position: "CTO",
+          text: "Coworking perfect for our team. Great atmosphere, 1Gb/s fast internet and possibility to organize meetings in conference rooms. Our team is more productive than ever.",
           rating: 5,
+          avatar: "/placeholder-user.jpg",
+          verified: true,
         },
         {
           name: "Katarzyna Wiśniewska",
           company: "Legal Consulting",
-          text: "We regularly rent conference rooms. Professional equipment, top-level service. I recommend!",
+          position: "Partner",
+          text: "We regularly rent conference rooms. Professional equipment, top-level service. Our clients are impressed by the quality and standard of the rooms. I recommend to every lawyer!",
           rating: 5,
+          avatar: "/placeholder-user.jpg",
+          verified: true,
         },
+      ],
+    },
+    stats: {
+      title: "Gliwicka 111 in numbers",
+      items: [
+        { number: "150+", label: "Satisfied clients", icon: Users },
+        { number: "99.9%", label: "Service availability", icon: Zap },
+        { number: "24/7", label: "Technical support", icon: Shield },
+        { number: "5", label: "Different spaces", icon: Building2 },
       ],
     },
     cta: {
@@ -508,6 +766,7 @@ const translations = {
       freeConsultation: "Free Consultation",
       visitUs: "Visit Us",
       freeDay: "Try coworking for free",
+      bookTour: "Book a tour",
     },
     faq: {
       title: "Frequently Asked Questions",
@@ -517,15 +776,22 @@ const translations = {
           {
             question: "Can I register my company at your address?",
             answer:
-              "Yes, our address can be used for business registration and companies. We provide all necessary documents.",
+              "Yes, our address can be used for business registration and companies. We provide all necessary documents and confirmations required by KRS and CEIDG.",
           },
           {
             question: "How quickly will I receive information about correspondence?",
-            answer: "We send notifications immediately after receiving mail - SMS and email within 15 minutes.",
+            answer:
+              "We send notifications immediately after receiving mail - SMS and email within 15 minutes. Additionally, we offer scanning of important documents and sending them electronically.",
           },
           {
             question: "Can I receive guests at the reception?",
-            answer: "Yes, reception is available from 8:00-18:00. Guests can wait in the comfortable waiting area.",
+            answer:
+              "Yes, reception is available from 8:00-18:00. Guests can wait in the comfortable waiting area. We also offer business meeting service in our conference rooms.",
+          },
+          {
+            question: "What documents do I need to set up a virtual office?",
+            answer:
+              "You only need an ID and a completed contract. The process takes a maximum of 24 hours, and the address is available immediately after signing the contract.",
           },
         ],
       },
@@ -534,19 +800,47 @@ const translations = {
         items: [
           {
             question: "Can I use a trial day?",
-            answer: "Yes, we offer a free trial day for all new clients. Just make an appointment by phone.",
+            answer:
+              "Yes, we offer a free trial day for all new clients. Just make an appointment by phone or through the online form. The trial day includes access to all amenities.",
           },
           {
             question: "What are the access hours?",
-            answer: "Coworking is available 24/7 for access card holders. Reception open 8:00-18:00.",
+            answer:
+              "Coworking is available 24/7 for access card holders. Reception open 8:00-18:00. After hours access through magnetic card with security system.",
           },
           {
             question: "Can I print documents?",
             answer:
-              "Yes, we have printers, scanners and photocopier. Fee according to price list - 0.50 PLN per A4 page.",
+              "Yes, we have laser printers, scanners and photocopier. Fee according to price list - 0.50 PLN per black and white A4 page, 2 PLN for color. First 50 pages monthly free for regular clients.",
+          },
+          {
+            question: "Is parking available?",
+            answer:
+              "Yes, we have free parking for coworking clients. Additionally, we offer parking spaces with electric car chargers.",
           },
         ],
       },
+    },
+    partnerships: {
+      title: "Our business partners",
+      subtitle: "We cooperate with the best companies in the region",
+      items: [
+        {
+          name: "Law Firm Kowalski & Partners",
+          service: "Legal services",
+          discount: "15% discount for Gliwicka 111 clients",
+        },
+        {
+          name: "Accounting Office ProFin",
+          service: "Accounting and taxes",
+          discount: "20% discount for the first 6 months",
+        },
+        {
+          name: "Recruitment Agency TalentHub",
+          service: "IT and business recruitment",
+          discount: "Free consultation + 10% discount",
+        },
+      ],
     },
     footer: {
       company: "Gliwicka 111",
@@ -562,6 +856,7 @@ const translations = {
       mondayFriday: "Mon-Fri: 8:00-18:00",
       saturday: "Sat: 9:00-14:00",
       sunday: "Sun: closed",
+      emergency: "Emergency contact: +48 791 554 674",
     },
   },
 }
@@ -569,15 +864,24 @@ const translations = {
 export default function HomePage() {
   const [language, setLanguage] = useState<"pl" | "en">("pl")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const t = translations[language]
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const toggleLanguage = () => {
     setLanguage(language === "pl" ? "en" : "pl")
   }
 
   const ServiceCard = ({ service, icon: Icon, href }: { service: any; icon: any; href: string }) => (
-    <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-teal-200">
+    <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-teal-200 h-full">
       <CardHeader className="text-center pb-4">
         <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
           <Icon className="w-8 h-8 text-teal-600" />
@@ -588,8 +892,8 @@ export default function HomePage() {
         </Badge>
         <CardDescription className="mt-2">{service.description}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
+      <CardContent className="space-y-4 flex-1 flex flex-col">
+        <div className="flex-1">
           <h4 className="font-semibold mb-2 text-sm text-gray-700">
             {language === "pl" ? "Kluczowe korzyści:" : "Key benefits:"}
           </h4>
@@ -618,7 +922,7 @@ export default function HomePage() {
   )
 
   const PricingCard = ({ plan, isPopular = false }: { plan: any; isPopular?: boolean }) => (
-    <Card className={`relative ${isPopular ? "border-2 border-teal-500 shadow-lg" : ""}`}>
+    <Card className={`relative h-full ${isPopular ? "border-2 border-teal-500 shadow-lg scale-105" : ""}`}>
       {isPopular && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
           <Badge className="bg-teal-600 text-white px-4 py-1">
@@ -628,9 +932,14 @@ export default function HomePage() {
       )}
       <CardHeader className="text-center">
         <CardTitle className="text-lg">{plan.name}</CardTitle>
-        <div className="text-3xl font-bold text-teal-600">{plan.price}</div>
+        <div className="space-y-1">
+          <div className="text-3xl font-bold text-teal-600">{plan.price}</div>
+          {plan.originalPrice && <div className="text-sm text-gray-500 line-through">{plan.originalPrice}</div>}
+          {plan.monthlyPrice && <div className="text-sm text-gray-600">({plan.monthlyPrice})</div>}
+          {plan.dayPrice && <div className="text-sm text-gray-600">({plan.dayPrice})</div>}
+        </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <ul className="space-y-2">
           {plan.features.map((feature: string, index: number) => (
             <li key={index} className="flex items-start">
@@ -639,6 +948,44 @@ export default function HomePage() {
             </li>
           ))}
         </ul>
+        <Button asChild className="w-full mt-6 bg-teal-600 hover:bg-teal-700">
+          <Link href="/contact">{language === "pl" ? "Wybierz plan" : "Choose Plan"}</Link>
+        </Button>
+      </CardContent>
+    </Card>
+  )
+
+  const TestimonialCard = ({ testimonial }: { testimonial: any }) => (
+    <Card className="hover:shadow-lg transition-shadow h-full">
+      <CardContent className="p-6 flex flex-col h-full">
+        <div className="flex items-center mb-4">
+          <div className="flex">
+            {[...Array(testimonial.rating)].map((_, i) => (
+              <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+            ))}
+          </div>
+          {testimonial.verified && (
+            <Badge variant="outline" className="ml-2 text-xs">
+              <CheckCircle className="w-3 h-3 mr-1" />
+              {language === "pl" ? "Zweryfikowana" : "Verified"}
+            </Badge>
+          )}
+        </div>
+        <blockquote className="text-slate-700 mb-4 italic flex-1">"{testimonial.text}"</blockquote>
+        <div className="flex items-center">
+          <Image
+            src={testimonial.avatar || "/placeholder.svg"}
+            alt={testimonial.name}
+            width={48}
+            height={48}
+            className="rounded-full mr-3"
+          />
+          <div>
+            <p className="font-semibold text-slate-900">{testimonial.name}</p>
+            <p className="text-sm text-slate-600">{testimonial.position}</p>
+            <p className="text-sm text-slate-500">{testimonial.company}</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   )
@@ -646,11 +993,15 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white shadow-sm"
+        } border-b border-gray-100`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
@@ -658,7 +1009,7 @@ export default function HomePage() {
                 <h1 className="text-xl font-bold text-slate-900">Gliwicka 111</h1>
                 <p className="text-xs text-slate-600">Property Management</p>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6">
@@ -668,9 +1019,9 @@ export default function HomePage() {
               <div className="relative group">
                 <button className="text-slate-700 hover:text-teal-600 font-medium transition-colors flex items-center">
                   {t.nav.offer}
-                  <ChevronRight className="w-4 h-4 ml-1 transform group-hover:rotate-90 transition-transform" />
+                  <ChevronDown className="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform" />
                 </button>
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   <div className="p-2">
                     <Link
                       href="#virtual-office"
@@ -743,7 +1094,7 @@ export default function HomePage() {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden border-t border-gray-100 py-4">
+            <div className="lg:hidden border-t border-gray-100 py-4 bg-white">
               <nav className="flex flex-col space-y-4">
                 <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium">
                   {t.nav.home}
@@ -776,33 +1127,51 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 to-white py-20 lg:py-32">
+      <section className="relative bg-gradient-to-br from-slate-50 to-white py-20 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="flex items-center mb-4">
-                <Badge variant="outline" className="mr-3">
-                  <Award className="w-3 h-3 mr-1" />
+              <div className="flex items-center mb-6">
+                <Badge variant="outline" className="mr-3 bg-teal-50 border-teal-200">
+                  <Award className="w-3 h-3 mr-1 text-teal-600" />
                   {t.hero.trustBadge}
                 </Badge>
               </div>
-              <h2 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-4">{t.hero.title}</h2>
-              <h3 className="text-2xl lg:text-3xl font-semibold text-teal-600 mb-6">{t.hero.subtitle}</h3>
+              <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-4 leading-tight">{t.hero.title}</h1>
+              <h2 className="text-2xl lg:text-3xl font-semibold text-teal-600 mb-6">{t.hero.subtitle}</h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">{t.hero.description}</p>
+
+              {/* Hero Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-teal-600">150+</div>
+                  <div className="text-sm text-slate-600">{language === "pl" ? "Klientów" : "Clients"}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-teal-600">99.9%</div>
+                  <div className="text-sm text-slate-600">{language === "pl" ? "Dostępność" : "Uptime"}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-teal-600">24/7</div>
+                  <div className="text-sm text-slate-600">{language === "pl" ? "Wsparcie" : "Support"}</div>
+                </div>
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-teal-600 hover:bg-teal-700">
+                <Button asChild size="lg" className="bg-teal-600 hover:bg-teal-700 shadow-lg">
                   <Link href="#offer">
                     {t.hero.cta}
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="border-2 bg-transparent">
                   <Link href="/contact">{t.hero.contact}</Link>
                 </Button>
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center">
+              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center shadow-2xl">
                 <Image
                   src="/placeholder.svg?height=500&width=500&text=Gliwicka+111+Building"
                   alt="Gliwicka 111 Building"
@@ -810,6 +1179,13 @@ export default function HomePage() {
                   height={500}
                   className="rounded-2xl object-cover"
                 />
+              </div>
+              {/* Floating elements */}
+              <div className="absolute -top-4 -right-4 bg-white rounded-lg shadow-lg p-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-sm font-medium">{language === "pl" ? "Dostępne teraz" : "Available now"}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -820,12 +1196,32 @@ export default function HomePage() {
       <section className="bg-gradient-to-r from-teal-600 to-teal-700 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center text-center text-white">
-            <Gift className="w-5 h-5 mr-2" />
+            <Gift className="w-5 h-5 mr-2 animate-bounce" />
             <span className="font-medium">
               {language === "pl"
                 ? "🎉 Pakiet powitalny -30% dla nowych klientów! Bezpłatna konsultacja i dzień próbny coworkingu!"
                 : "🎉 Welcome package -30% for new clients! Free consultation and coworking trial day!"}
             </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">{t.stats.title}</h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {t.stats.items.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <stat.icon className="w-8 h-8 text-teal-600" />
+                </div>
+                <div className="text-3xl font-bold text-slate-900 mb-2">{stat.number}</div>
+                <div className="text-slate-600">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -867,7 +1263,7 @@ export default function HomePage() {
               </div>
               <p className="text-lg text-slate-600 mb-6">{t.services.virtualOffice.description}</p>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 mb-6">
                 {t.services.virtualOffice.benefits.map((benefit: string, index: number) => (
                   <div key={index} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -877,19 +1273,27 @@ export default function HomePage() {
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg mb-6">
-                <h4 className="font-semibold mb-2">{language === "pl" ? "Przykład użycia:" : "Use Case Example:"}</h4>
+                <h4 className="font-semibold mb-2 flex items-center">
+                  <Target className="w-4 h-4 mr-2 text-blue-600" />
+                  {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
+                </h4>
                 <p className="text-sm text-slate-700">{t.services.virtualOffice.useCase}</p>
               </div>
 
-              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
-                <Link href="/contact">
-                  {language === "pl" ? "Zamów biuro wirtualne" : "Order Virtual Office"}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+                  <Link href="/contact">
+                    {language === "pl" ? "Zamów biuro wirtualne" : "Order Virtual Office"}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/contact">{language === "pl" ? "Bezpłatna konsultacja" : "Free Consultation"}</Link>
+                </Button>
+              </div>
             </div>
             <div>
-              <div className="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6">
+              <div className="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
                 <Image
                   src="/placeholder.svg?height=400&width=400&text=Virtual+Office"
                   alt="Virtual Office"
@@ -915,7 +1319,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div className="order-2 lg:order-1">
-              <div className="aspect-square bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6">
+              <div className="aspect-square bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
                 <Image
                   src="/placeholder.svg?height=400&width=400&text=Coworking+Space"
                   alt="Coworking Space"
@@ -937,7 +1341,7 @@ export default function HomePage() {
               </div>
               <p className="text-lg text-slate-600 mb-6">{t.services.coworking.description}</p>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 mb-6">
                 {t.services.coworking.benefits.map((benefit: string, index: number) => (
                   <div key={index} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -947,7 +1351,10 @@ export default function HomePage() {
               </div>
 
               <div className="bg-green-50 p-4 rounded-lg mb-6">
-                <h4 className="font-semibold mb-2">{language === "pl" ? "Przykład użycia:" : "Use Case Example:"}</h4>
+                <h4 className="font-semibold mb-2 flex items-center">
+                  <Target className="w-4 h-4 mr-2 text-green-600" />
+                  {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
+                </h4>
                 <p className="text-sm text-slate-700">{t.services.coworking.useCase}</p>
               </div>
 
@@ -990,7 +1397,7 @@ export default function HomePage() {
               </div>
               <p className="text-lg text-slate-600 mb-6">{t.services.meetingRooms.description}</p>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 mb-6">
                 {t.services.meetingRooms.benefits.map((benefit: string, index: number) => (
                   <div key={index} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -1000,19 +1407,27 @@ export default function HomePage() {
               </div>
 
               <div className="bg-purple-50 p-4 rounded-lg mb-6">
-                <h4 className="font-semibold mb-2">{language === "pl" ? "Przykład użycia:" : "Use Case Example:"}</h4>
+                <h4 className="font-semibold mb-2 flex items-center">
+                  <Target className="w-4 h-4 mr-2 text-purple-600" />
+                  {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
+                </h4>
                 <p className="text-sm text-slate-700">{t.services.meetingRooms.useCase}</p>
               </div>
 
-              <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
-                <Link href="/contact">
-                  {language === "pl" ? "Zarezerwuj salę" : "Book Room"}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
+                  <Link href="/contact">
+                    {language === "pl" ? "Zarezerwuj salę" : "Book Room"}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/contact">{t.cta.bookTour}</Link>
+                </Button>
+              </div>
             </div>
             <div>
-              <div className="aspect-square bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6">
+              <div className="aspect-square bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
                 <Image
                   src="/placeholder.svg?height=400&width=400&text=Meeting+Room"
                   alt="Meeting Room"
@@ -1039,7 +1454,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div className="order-2 lg:order-1">
-              <div className="aspect-square bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6">
+              <div className="aspect-square bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
                 <Image
                   src="/placeholder.svg?height=400&width=400&text=Mobile+Billboard"
                   alt="Mobile Billboard"
@@ -1061,7 +1476,7 @@ export default function HomePage() {
               </div>
               <p className="text-lg text-slate-600 mb-6">{t.services.advertising.description}</p>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 mb-6">
                 {t.services.advertising.benefits.map((benefit: string, index: number) => (
                   <div key={index} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -1071,7 +1486,10 @@ export default function HomePage() {
               </div>
 
               <div className="bg-orange-50 p-4 rounded-lg mb-6">
-                <h4 className="font-semibold mb-2">{language === "pl" ? "Przykład użycia:" : "Use Case Example:"}</h4>
+                <h4 className="font-semibold mb-2 flex items-center">
+                  <Target className="w-4 h-4 mr-2 text-orange-600" />
+                  {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
+                </h4>
                 <p className="text-sm text-slate-700">{t.services.advertising.useCase}</p>
               </div>
 
@@ -1111,23 +1529,37 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {Object.entries(t.services.specialDeals.deals).map(([key, deal]: [string, any]) => (
-              <Card key={key} className="relative border-2 border-red-200 hover:border-red-300 transition-colors">
+              <Card
+                key={key}
+                className="relative border-2 border-red-200 hover:border-red-300 transition-colors h-full"
+              >
                 <div className="absolute -top-3 -right-3">
                   <Badge className="bg-red-600 text-white px-3 py-1 text-lg font-bold">{deal.discount}</Badge>
                 </div>
-                <CardHeader className="text-center">
+                <CardHeader className="text-center pb-4">
                   <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <Star className="w-6 h-6 text-red-600" />
                   </div>
                   <CardTitle className="text-lg">{deal.name}</CardTitle>
                   <CardDescription className="text-sm">{deal.description}</CardDescription>
                 </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="text-center">
+                    <Badge variant="outline" className="text-xs">
+                      <Clock className="w-3 h-3 mr-1" />
+                      {language === "pl" ? "Ważne do:" : "Valid until:"} {deal.validUntil}
+                    </Badge>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </div>
 
           <div className="bg-red-50 p-6 rounded-lg mb-8">
-            <h4 className="font-semibold mb-2">{language === "pl" ? "Przykład oszczędności:" : "Savings Example:"}</h4>
+            <h4 className="font-semibold mb-2 flex items-center">
+              <TrendingUp className="w-4 h-4 mr-2 text-red-600" />
+              {language === "pl" ? "Przykład oszczędności:" : "Savings Example:"}
+            </h4>
             <p className="text-slate-700">{t.services.specialDeals.useCase}</p>
           </div>
 
@@ -1152,18 +1584,32 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {t.testimonials.items.map((testimonial: any, index: number) => (
+              <TestimonialCard key={index} testimonial={testimonial} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partnerships Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">{t.partnerships.title}</h2>
+            <p className="text-lg text-slate-600">{t.partnerships.subtitle}</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {t.partnerships.items.map((partner, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Building2 className="w-6 h-6 text-teal-600" />
                   </div>
-                  <p className="text-slate-700 mb-4 italic">"{testimonial.text}"</p>
-                  <div>
-                    <p className="font-semibold text-slate-900">{testimonial.name}</p>
-                    <p className="text-sm text-slate-600">{testimonial.company}</p>
-                  </div>
+                  <h3 className="font-semibold mb-2">{partner.name}</h3>
+                  <p className="text-sm text-slate-600 mb-3">{partner.service}</p>
+                  <Badge variant="secondary" className="text-xs">
+                    {partner.discount}
+                  </Badge>
                 </CardContent>
               </Card>
             ))}
@@ -1172,7 +1618,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t.faq.title}</h2>
@@ -1189,8 +1635,11 @@ export default function HomePage() {
               {t.faq.virtualOffice.items.map((item: any, index: number) => (
                 <Card key={index}>
                   <CardContent className="p-6">
-                    <h4 className="font-semibold mb-2">{item.question}</h4>
-                    <p className="text-slate-600">{item.answer}</p>
+                    <h4 className="font-semibold mb-2 flex items-center">
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                      {item.question}
+                    </h4>
+                    <p className="text-slate-600 pl-6">{item.answer}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -1201,8 +1650,11 @@ export default function HomePage() {
               {t.faq.coworking.items.map((item: any, index: number) => (
                 <Card key={index}>
                   <CardContent className="p-6">
-                    <h4 className="font-semibold mb-2">{item.question}</h4>
-                    <p className="text-slate-600">{item.answer}</p>
+                    <h4 className="font-semibold mb-2 flex items-center">
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                      {item.question}
+                    </h4>
+                    <p className="text-slate-600 pl-6">{item.answer}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -1277,6 +1729,10 @@ export default function HomePage() {
                 <div className="flex items-center space-x-2 text-slate-400">
                   <Mail className="w-4 h-4" />
                   <span>kontakt@gliwicka111.pl</span>
+                </div>
+                <div className="flex items-center space-x-2 text-red-400 text-sm">
+                  <Shield className="w-4 h-4" />
+                  <span>{t.footer.emergency}</span>
                 </div>
               </div>
             </div>
@@ -1357,6 +1813,9 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Consent Banner */}
+      <ConsentBanner />
     </div>
   )
 }
