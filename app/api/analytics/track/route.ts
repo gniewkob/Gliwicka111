@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { db } from "@/lib/database/connection-pool"
 import { requireAuth } from "@/lib/analytics-auth"
 
 // Analytics event schema
@@ -27,7 +26,12 @@ const analyticsEventSchema = z.object({
 })
 
 // Rate limiting backed by database storage
-async function checkRateLimit(identifier: string, limit = 100, windowMs = 60000): Promise<boolean> {
+async function checkRateLimit(
+  db: any,
+  identifier: string,
+  limit = 100,
+  windowMs = 60000,
+): Promise<boolean> {
   const now = Date.now()
   const { rows } = await db.query<{ count: number; reset_time: number }>(
     "SELECT count, reset_time FROM rate_limits WHERE identifier = $1",
@@ -81,11 +85,18 @@ export async function POST(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
   try {
+    const { db } = await import("@/lib/database/connection-pool")
+    try {
+      await db.query("SELECT 1")
+    } catch {
+      return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
+    }
+
     const clientIP = getClientIP(request)
     const hashedIP = await hashIP(clientIP)
 
     // Rate limiting
-    if (!(await checkRateLimit(hashedIP))) {
+    if (!(await checkRateLimit(db, hashedIP))) {
       return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
     }
 
@@ -136,6 +147,13 @@ export async function GET(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
   try {
+    const { db } = await import("@/lib/database/connection-pool")
+    try {
+      await db.query("SELECT 1")
+    } catch {
+      return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
+    }
+
     const { searchParams } = new URL(request.url)
     const formType = searchParams.get("formType")
     const eventType = searchParams.get("eventType")
