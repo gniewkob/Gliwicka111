@@ -77,19 +77,15 @@ export class HealthCheckService {
     const startTime = performance.now()
 
     try {
-      // Simulate database check - replace with actual database connection test
-      await new Promise((resolve) => setTimeout(resolve, Math.random() * 50))
+      const { pool } = await import("@/lib/db")
+
+      await pool.query("SELECT 1")
 
       return {
         service: "database",
         status: "healthy",
         responseTime: performance.now() - startTime,
         message: "Database connection successful",
-        details: {
-          connectionPool: "active",
-          activeConnections: 5,
-          maxConnections: 20,
-        },
         timestamp: new Date().toISOString(),
       }
     } catch (error) {
@@ -107,29 +103,28 @@ export class HealthCheckService {
     const startTime = performance.now()
 
     try {
-      // Simulate SMTP connection test
-      const isEmailServiceHealthy = process.env.SMTP_HOST && process.env.SMTP_USER
+      const { emailClient } = await import("@/lib/email/smtp-client")
 
-      if (!isEmailServiceHealthy) {
-        throw new Error("Email service configuration missing")
+      const isHealthy = await emailClient.verifyConnection()
+      if (!isHealthy) {
+        throw new Error("SMTP connection verification failed")
       }
 
       return {
         service: "email",
         status: "healthy",
         responseTime: performance.now() - startTime,
-        message: "Email service configured and ready",
+        message: "Email service connection successful",
         details: {
           smtpHost: process.env.SMTP_HOST,
           smtpPort: process.env.SMTP_PORT,
-          configured: true,
         },
         timestamp: new Date().toISOString(),
       }
     } catch (error) {
       return {
         service: "email",
-        status: "degraded",
+        status: "unhealthy",
         responseTime: performance.now() - startTime,
         message: (error as Error).message,
         timestamp: new Date().toISOString(),
