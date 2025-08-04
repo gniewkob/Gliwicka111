@@ -16,7 +16,11 @@ const testCases = [
   },
   {
     formType: "coworking",
-    data: { companyName: "Test Co", startDate: "2024-01-01", workspaceType: "hot-desk" },
+    data: {
+      companyName: "Test Co",
+      startDate: "2024-01-01",
+      workspaceType: "hot-desk",
+    },
     subjects: {
       pl: "Potwierdzenie zapytania o coworking - Gliwicka 111",
       en: "Coworking Inquiry Confirmation - Gliwicka 111",
@@ -40,7 +44,11 @@ const testCases = [
   },
   {
     formType: "advertising",
-    data: { companyName: "Test Co", startDate: "2024-01-01", campaignType: "digital" },
+    data: {
+      companyName: "Test Co",
+      startDate: "2024-01-01",
+      campaignType: "digital",
+    },
     subjects: {
       pl: "Potwierdzenie zapytania o reklamę - Gliwicka 111",
       en: "Advertising Inquiry Confirmation - Gliwicka 111",
@@ -52,7 +60,11 @@ const testCases = [
   },
   {
     formType: "special-deals",
-    data: { companyName: "Test Co", timeline: "immediate", dealType: "welcome" },
+    data: {
+      companyName: "Test Co",
+      timeline: "immediate",
+      dealType: "welcome",
+    },
     subjects: {
       pl: "Potwierdzenie zapytania o oferty specjalne - Gliwicka 111",
       en: "Special Deals Inquiry Confirmation - Gliwicka 111",
@@ -73,27 +85,23 @@ describe("getEmailSubject", () => {
   });
 });
 
-  describe("getEmailBody", () => {
-    testCases.forEach(({ formType, data, bodies }) => {
-      it(`returns correct body for ${formType}`, () => {
-        expect(getEmailBody(data, formType, "pl")).toBe(bodies.pl);
-        expect(getEmailBody(data, formType, "en")).toBe(bodies.en);
-      });
+describe("getEmailBody", () => {
+  testCases.forEach(({ formType, data, bodies }) => {
+    it(`returns correct body for ${formType}`, () => {
+      expect(getEmailBody(data, formType, "pl")).toBe(bodies.pl);
+      expect(getEmailBody(data, formType, "en")).toBe(bodies.en);
     });
   });
+});
 
-  it("falls back to default strings for unknown form types", () => {
-    const unknownData = { foo: "bar" };
-    expect(getEmailSubject("unknown", "pl")).toBe(
-      "Potwierdzenie - Gliwicka 111",
-    );
-    expect(getEmailSubject("unknown", "en")).toBe(
-      "Potwierdzenie - Gliwicka 111",
-    );
-    expect(getEmailBody(unknownData, "unknown", "pl")).toBe(
-      "Dziękujemy za zgłoszenie dotyczące unknown.\n\nSkontaktujemy się wkrótce.",
-    );
-    expect(getEmailBody(unknownData, "unknown", "en")).toBe(
-      "Thank you for your unknown inquiry.\n\nWe will contact you soon.",
-    );
-  });
+it("falls back to default strings for unknown form types", () => {
+  const unknownData = { foo: "bar" };
+  expect(getEmailSubject("unknown", "pl")).toBe("Potwierdzenie - Gliwicka 111");
+  expect(getEmailSubject("unknown", "en")).toBe("Potwierdzenie - Gliwicka 111");
+  expect(getEmailBody(unknownData, "unknown", "pl")).toBe(
+    "Dziękujemy za zgłoszenie dotyczące unknown.\n\nSkontaktujemy się wkrótce.",
+  );
+  expect(getEmailBody(unknownData, "unknown", "en")).toBe(
+    "Thank you for your unknown inquiry.\n\nWe will contact you soon.",
+  );
+});
