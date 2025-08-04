@@ -21,6 +21,15 @@ const EMAIL_CONFIG = {
   smtpPass: process.env.SMTP_PASS,
 };
 
+// Service names mapping for admin notifications
+const SERVICE_NAMES = {
+  "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
+  coworking: { pl: "coworking", en: "coworking" },
+  "meeting-room": { pl: "sala konferencyjna", en: "meeting room" },
+  advertising: { pl: "reklama", en: "advertising" },
+  "special-deals": { pl: "oferty specjalne", en: "special deals" },
+} as const;
+
 // Generic form submission handler
 async function handleFormSubmission<T>(
   formData: FormData,
@@ -258,14 +267,16 @@ async function sendAdminNotification(
   formType: string,
   language: "pl" | "en",
 ): Promise<void> {
+  const serviceName =
+    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
   const subject =
     language === "en"
-      ? `New submission: ${formType}`
-      : `Nowe zgłoszenie: ${formType}`;
+      ? `New submission: ${serviceName}`
+      : `Nowe zgłoszenie: ${serviceName}`;
   const text =
     language === "en"
-      ? `New submission from ${data.email} regarding ${formType}.`
-      : `Nowe zgłoszenie od ${data.email} dotyczące ${formType}.`;
+      ? `New submission from ${data.email} regarding ${serviceName}.`
+      : `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`;
   await emailClient.sendEmail({
     to: EMAIL_CONFIG.adminEmail,
     subject,
