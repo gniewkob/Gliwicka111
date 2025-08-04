@@ -40,7 +40,7 @@ describe("Server Actions", () => {
       formData.append("businessType", "sole-proprietorship");
       formData.append("message", "Test message");
 
-      const result = await submitVirtualOfficeForm(formData);
+      const result = await submitVirtualOfficeForm(formData, "pl");
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -51,7 +51,7 @@ describe("Server Actions", () => {
       formData.append("firstName", "");
       formData.append("email", "invalid-email");
 
-      const result = await submitVirtualOfficeForm(formData);
+      const result = await submitVirtualOfficeForm(formData, "pl");
 
       expect(result.success).toBe(false);
       expect(result.message).toContain("błęd");
@@ -73,7 +73,7 @@ describe("Server Actions", () => {
       formData.append("startDate", "2024-12-01");
       formData.append("businessType", "sole-proprietorship");
 
-      const result = await submitVirtualOfficeForm(formData);
+      const result = await submitVirtualOfficeForm(formData, "pl");
 
       expect(result.success).toBe(false);
       expect(result.message).toContain("błąd");
@@ -93,7 +93,7 @@ describe("Server Actions", () => {
       formData.append("startDate", "2024-12-01");
       formData.append("teamSize", "5");
 
-      const result = await submitCoworkingForm(formData);
+      const result = await submitCoworkingForm(formData, "pl");
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -115,7 +115,7 @@ describe("Server Actions", () => {
       formData.append("attendees", "10");
       formData.append("roomType", "conference");
 
-      const result = await submitMeetingRoomForm(formData);
+      const result = await submitMeetingRoomForm(formData, "pl");
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -135,7 +135,7 @@ describe("Server Actions", () => {
       formData.append("duration", "3-months");
       formData.append("budget", "5000");
 
-      const result = await submitAdvertisingForm(formData);
+      const result = await submitAdvertisingForm(formData, "pl");
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -157,7 +157,7 @@ describe("Server Actions", () => {
       formData.append("timeline", "immediate");
       formData.append("budget", "10000");
 
-      const result = await submitSpecialDealsForm(formData);
+      const result = await submitSpecialDealsForm(formData, "pl");
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");

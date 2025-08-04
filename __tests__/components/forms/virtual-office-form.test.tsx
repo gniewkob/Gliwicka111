@@ -1,19 +1,19 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { VirtualOfficeForm } from "@/components/forms/virtual-office-form"
+import VirtualOfficeForm from "@/components/forms/virtual-office-form"
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
-import { jest } from "@jest/globals"
+import { vi } from "vitest"
 
 // Mock the server action
-jest.mock("@/lib/server-actions", () => ({
-  submitVirtualOfficeForm: jest.fn(),
+vi.mock("@/lib/server-actions", () => ({
+  submitVirtualOfficeForm: vi.fn(),
 }))
 
-const mockSubmitVirtualOfficeForm = submitVirtualOfficeForm as jest.MockedFunction<typeof submitVirtualOfficeForm>
+const mockSubmitVirtualOfficeForm = submitVirtualOfficeForm as vi.MockedFunction<typeof submitVirtualOfficeForm>
 
 describe("VirtualOfficeForm", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it("renders all form fields", () => {
@@ -109,7 +109,10 @@ describe("VirtualOfficeForm", () => {
     await user.click(submitButton)
 
     await waitFor(() => {
-      expect(mockSubmitVirtualOfficeForm).toHaveBeenCalledWith(expect.any(FormData))
+      expect(mockSubmitVirtualOfficeForm).toHaveBeenCalledWith(
+        expect.any(FormData),
+        "pl",
+      )
     })
   })
 
@@ -175,11 +178,11 @@ describe("VirtualOfficeForm", () => {
 
   it("tracks analytics events", async () => {
     const user = userEvent.setup()
-    const mockTrackFormView = jest.fn()
-    const mockTrackFormStart = jest.fn()
+    const mockTrackFormView = vi.fn()
+    const mockTrackFormStart = vi.fn()
 
     // Mock analytics client
-    jest.doMock("@/lib/analytics-client", () => ({
+    vi.doMock("@/lib/analytics-client", () => ({
       analyticsClient: {
         trackFormView: mockTrackFormView,
         trackFormStart: mockTrackFormStart,

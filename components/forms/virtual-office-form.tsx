@@ -194,7 +194,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitVirtualOfficeForm(formData)
+      const result = await submitVirtualOfficeForm(formData, language)
       setSubmitResult(result)
 
       if (result.success) {

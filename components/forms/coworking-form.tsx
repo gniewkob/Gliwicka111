@@ -167,7 +167,7 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitCoworkingForm(formData)
+      const result = await submitCoworkingForm(formData, language)
       setSubmitResult(result)
 
       if (result.success) {
