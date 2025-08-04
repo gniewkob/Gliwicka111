@@ -20,15 +20,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
+import { navTranslations, backTranslations } from "@/lib/i18n"
 
 const translations = {
   pl: {
-    nav: {
-      home: "Strona główna",
-      properties: "Nieruchomości",
-      about: "O nas",
-      contact: "Kontakt",
-    },
+    nav: navTranslations.pl,
     header: {
       title: "O firmie Gliwicka 111",
       subtitle: "Profesjonalizm i zaufanie w zarządzaniu nieruchomościami",
@@ -79,15 +75,10 @@ const translations = {
       contact: "Skontaktuj się",
       properties: "Zobacz nieruchomości",
     },
-    back: "Powrót do strony głównej",
+    back: backTranslations.pl,
   },
   en: {
-    nav: {
-      home: "Home",
-      properties: "Properties",
-      about: "About",
-      contact: "Contact",
-    },
+    nav: navTranslations.en,
     header: {
       title: "About Gliwicka 111",
       subtitle: "Professionalism and trust in property management",
@@ -138,7 +129,7 @@ const translations = {
       contact: "Contact Us",
       properties: "View Properties",
     },
-    back: "Back to homepage",
+    back: backTranslations.en,
   },
 }
 

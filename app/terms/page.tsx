@@ -6,15 +6,11 @@ import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
+import { navTranslations, backTranslations } from "@/lib/i18n"
 
 const translations = {
   pl: {
-    nav: {
-      home: "Strona główna",
-      properties: "Nieruchomości",
-      about: "O nas",
-      contact: "Kontakt",
-    },
+    nav: navTranslations.pl,
     title: "Regulamin",
     lastUpdated: "Ostatnia aktualizacja: 3 sierpnia 2024",
     sections: {
@@ -98,15 +94,10 @@ const translations = {
           "W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają przepisy prawa polskiego, w szczególności Kodeksu cywilnego. Wszelkie spory będą rozstrzygane przez sąd właściwy dla siedziby Usługodawcy.",
       },
     },
-    back: "Powrót do strony głównej",
+    back: backTranslations.pl,
   },
   en: {
-    nav: {
-      home: "Home",
-      properties: "Properties",
-      about: "About",
-      contact: "Contact",
-    },
+    nav: navTranslations.en,
     title: "Terms of Service",
     lastUpdated: "Last updated: August 3, 2024",
     sections: {
@@ -190,7 +181,7 @@ const translations = {
           "In matters not regulated by these Terms of Service, Polish law applies, in particular the Civil Code. All disputes will be resolved by the court competent for the Service Provider's registered office.",
       },
     },
-    back: "Back to homepage",
+    back: backTranslations.en,
   },
 }
 
