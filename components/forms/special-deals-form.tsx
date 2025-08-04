@@ -217,7 +217,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitSpecialDealsForm(formData)
+      const result = await submitSpecialDealsForm(formData, language)
       setSubmitResult(result)
 
       if (result.success) {

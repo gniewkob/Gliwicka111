@@ -197,7 +197,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitAdvertisingForm(formData)
+      const result = await submitAdvertisingForm(formData, language)
       setSubmitResult(result)
 
       if (result.success) {

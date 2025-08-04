@@ -230,7 +230,7 @@ describe('VirtualOfficeForm', () => {
     fireEvent.click(submitButton)
 
     await waitFor(() => {
-      expect(mockSubmit).toHaveBeenCalled()
+      expect(mockSubmit).toHaveBeenCalledWith(expect.any(FormData), "pl")
     })
   })
 })
@@ -456,7 +456,10 @@ export const db = DatabasePool.getInstance()
 // lib/form-factory.ts
 interface FormConfig<T> {
   schema: z.ZodSchema<T>
-  submitAction: (data: FormData) => Promise<{ success: boolean; message: string }>
+  submitAction: (
+    data: FormData,
+    language: "pl" | "en",
+  ) => Promise<{ success: boolean; message: string }>
   fields: FormField[]
   analytics: {
     formType: string
@@ -509,7 +512,7 @@ export class FormFactory {
             }
           })
 
-          const result = await config.submitAction(formData)
+          const result = await config.submitAction(formData, language)
           setSubmitResult(result)
 
           if (result.success) {
@@ -1547,7 +1550,7 @@ class SubmissionController extends BaseController {
       })
 
       // Send confirmation email (async)
-      this.sendConfirmationEmail(submission).catch(error => {
+      this.sendConfirmationEmail(submission, data.language).catch(error => {
         logger.error('Failed to send confirmation email', error)
       })
 
@@ -1624,9 +1627,11 @@ class SubmissionController extends BaseController {
       .substring(0, 16)
   }
 
-  private async sendConfirmationEmail(submission: any): Promise<void> {
+  private async sendConfirmationEmail(submission: any, language: string): Promise<void> {
     // Implement email sending logic
-    logger.info(`Sending confirmation email for submission ${submission.id}`)
+    logger.info(
+      `Sending confirmation email for submission ${submission.id} in ${language}`,
+    )
   }
 }
 
