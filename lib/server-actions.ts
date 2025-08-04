@@ -340,16 +340,24 @@ async function enqueueFailedEmail(
   data: any,
   error: unknown,
 ): Promise<void> {
-  // Mask potentially sensitive fields before logging to avoid storing PII
-  // in logs. Names, emails and phone numbers are replaced with placeholders
-  // so troubleshooting information is preserved without exposing personal data.
-  const safeData = Object.fromEntries(
-    Object.entries(data || {}).map(([key, value]) =>
-      /(name|email|phone)/i.test(key)
-        ? [key, "[REDACTED]"]
-        : [key, value],
-    ),
-  );
+  function maskPII(value: unknown): unknown {
+    if (Array.isArray(value)) return value.map(maskPII);
+    if (value && typeof value === "object") {
+      return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>).map(([key, val]) =>
+          /(name|email|phone)/i.test(key)
+            ? [key, "[REDACTED]"]
+            : [key, maskPII(val)],
+        ),
+      );
+    }
+    return value;
+  }
+
+  // Before logging we recursively mask fields that may contain personally
+  // identifiable information (e.g. names, emails, phone numbers). This keeps
+  // logs useful for debugging while avoiding storage of sensitive data.
+  const safeData = maskPII(data);
   console.log(`Enqueuing ${type} email for retry`, { data: safeData, error });
 }
 
