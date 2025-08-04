@@ -4,6 +4,8 @@ import {
   submitMeetingRoomForm,
   submitAdvertisingForm,
   submitSpecialDealsForm,
+  getEmailSubject,
+  getEmailBody,
 } from "@/lib/server-actions";
 import { vi } from "vitest";
 
@@ -20,6 +22,33 @@ vi.mock("@/lib/database/connection-pool", () => ({
     query: vi.fn().mockResolvedValue({ rows: [], rowCount: 1 }),
   },
 }));
+
+const SERVICE_NAMES_PL = {
+  "virtual-office": "biuro wirtualne",
+  coworking: "coworking",
+  "meeting-room": "sala konferencyjna",
+  advertising: "reklama",
+  "special-deals": "oferty specjalne",
+} as const;
+
+async function expectEmailCalls(data: any, formType: keyof typeof SERVICE_NAMES_PL) {
+  const { emailClient } = await import("@/lib/email/smtp-client");
+  const expectedUserSubject = getEmailSubject(formType, "pl");
+  const expectedUserText = getEmailBody(data, formType, "pl");
+  const serviceName = SERVICE_NAMES_PL[formType];
+
+  expect(emailClient.sendEmail).toHaveBeenCalledWith({
+    to: data.email,
+    subject: expectedUserSubject,
+    text: expectedUserText,
+  });
+  expect(emailClient.sendEmail).toHaveBeenCalledWith({
+    to: "admin@gliwicka111.pl",
+    subject: `Nowe zgłoszenie: ${serviceName}`,
+    text: `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`,
+  });
+  expect(emailClient.sendEmail).toHaveBeenCalledTimes(2);
+}
 
 describe("Server Actions", () => {
   beforeEach(() => {
@@ -44,6 +73,15 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          package: "basic",
+          startDate: "2024-12-01",
+        },
+        "virtual-office",
+      );
     });
 
     it("rejects invalid form data", async () => {
@@ -97,6 +135,14 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          startDate: "2024-12-01",
+          workspaceType: "hot-desk",
+        },
+        "coworking",
+      );
     });
   });
 
@@ -119,6 +165,15 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          date: "2024-12-01",
+          startTime: "09:00",
+        },
+        "meeting-room",
+      );
     });
   });
 
@@ -140,6 +195,15 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          startDate: "2024-12-01",
+          campaignType: "digital",
+        },
+        "advertising",
+      );
     });
   });
 
@@ -163,6 +227,15 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          timeline: "immediate",
+          dealType: "welcome-package",
+        },
+        "special-deals",
+      );
     });
   });
 });
