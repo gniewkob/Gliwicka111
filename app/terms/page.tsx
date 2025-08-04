@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useLanguage } from "@/components/language-provider"
 import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -194,14 +195,10 @@ const translations = {
 }
 
 export default function TermsPage() {
-  const [language, setLanguage] = useState<"pl" | "en">("pl")
+  const { language, toggleLanguage } = useLanguage()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const t = translations[language]
-
-  const toggleLanguage = () => {
-    setLanguage(language === "pl" ? "en" : "pl")
-  }
 
   return (
     <div className="min-h-screen bg-white">

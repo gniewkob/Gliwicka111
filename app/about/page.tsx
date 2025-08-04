@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useLanguage } from "@/components/language-provider"
 import {
   Building2,
   MapPin,
@@ -142,14 +143,10 @@ const translations = {
 }
 
 export default function AboutPage() {
-  const [language, setLanguage] = useState<"pl" | "en">("pl")
+  const { language, toggleLanguage } = useLanguage()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const t = translations[language]
-
-  const toggleLanguage = () => {
-    setLanguage(language === "pl" ? "en" : "pl")
-  }
 
   const values = [
     {

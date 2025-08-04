@@ -1,6 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { cookies } from "next/headers"
+import { LanguageProvider } from "@/components/language-provider"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -70,8 +72,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const cookieStore = cookies()
+  const initialLanguage = cookieStore.get("lang")?.value === "en" ? "en" : "pl"
+
   return (
-    <html lang="pl">
+    <html lang={initialLanguage}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -102,7 +107,9 @@ export default function RootLayout({
         />
         {/* End Matomo Code */}
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <LanguageProvider initialLanguage={initialLanguage}>{children}</LanguageProvider>
+      </body>
     </html>
   )
 }
