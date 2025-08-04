@@ -11,6 +11,7 @@ import {
 import { db } from "./database/connection-pool";
 import { emailClient } from "./email/smtp-client";
 import { saveFailedEmail } from "./email/failed-email-store";
+import { getCurrentLanguage, messages } from "./i18n";
 
 // Email service configuration
 const EMAIL_CONFIG = {
@@ -58,13 +59,13 @@ async function handleFormSubmission<T>(
   formData: FormData,
   schema: z.ZodSchema<T>,
   formType: string,
-  language: "pl" | "en" = "pl",
 ): Promise<{
   success: boolean;
   message: string;
   errors?: Record<string, string>;
 }> {
   try {
+    const language = getCurrentLanguage();
     // Convert FormData to object
     const data = Object.fromEntries(formData.entries());
     const sessionId = typeof data.sessionId === "string" ? data.sessionId : null;
@@ -102,7 +103,7 @@ async function handleFormSubmission<T>(
 
       return {
         success: false,
-        message: "Formularz zawiera błędy. Sprawdź wprowadzone dane.",
+        message: messages.form.validationError[language],
         errors,
       };
     }
@@ -147,81 +148,41 @@ async function handleFormSubmission<T>(
 
     return {
       success: true,
-      message:
-        "Formularz został wysłany pomyślnie. Skontaktujemy się z Tobą wkrótce.",
+      message: messages.form.success[language],
     };
   } catch (error) {
     console.error("Form submission error:", error);
+    const language = getCurrentLanguage();
     return {
       success: false,
-      message: "Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie.",
+      message: messages.form.serverError[language],
     };
   }
 }
 
 // Virtual Office Form Action
-export async function submitVirtualOfficeForm(
-  formData: FormData,
-  language: "pl" | "en" = "pl",
-) {
-  return handleFormSubmission(
-    formData,
-    virtualOfficeFormSchema,
-    "virtual-office",
-    language,
-  );
+export async function submitVirtualOfficeForm(formData: FormData) {
+  return handleFormSubmission(formData, virtualOfficeFormSchema, "virtual-office");
 }
 
 // Coworking Form Action
-export async function submitCoworkingForm(
-  formData: FormData,
-  language: "pl" | "en" = "pl",
-) {
-  return handleFormSubmission(
-    formData,
-    coworkingFormSchema,
-    "coworking",
-    language,
-  );
+export async function submitCoworkingForm(formData: FormData) {
+  return handleFormSubmission(formData, coworkingFormSchema, "coworking");
 }
 
 // Meeting Room Form Action
-export async function submitMeetingRoomForm(
-  formData: FormData,
-  language: "pl" | "en" = "pl",
-) {
-  return handleFormSubmission(
-    formData,
-    meetingRoomFormSchema,
-    "meeting-room",
-    language,
-  );
+export async function submitMeetingRoomForm(formData: FormData) {
+  return handleFormSubmission(formData, meetingRoomFormSchema, "meeting-room");
 }
 
 // Advertising Form Action
-export async function submitAdvertisingForm(
-  formData: FormData,
-  language: "pl" | "en" = "pl",
-) {
-  return handleFormSubmission(
-    formData,
-    advertisingFormSchema,
-    "advertising",
-    language,
-  );
+export async function submitAdvertisingForm(formData: FormData) {
+  return handleFormSubmission(formData, advertisingFormSchema, "advertising");
 }
 
 // Special Deals Form Action
-export async function submitSpecialDealsForm(
-  formData: FormData,
-  language: "pl" | "en" = "pl",
-) {
-  return handleFormSubmission(
-    formData,
-    specialDealsFormSchema,
-    "special-deals",
-    language,
-  );
+export async function submitSpecialDealsForm(formData: FormData) {
+  return handleFormSubmission(formData, specialDealsFormSchema, "special-deals");
 }
 
 // Utility functions
@@ -276,7 +237,7 @@ function getClientIP(): string {
 export async function sendConfirmationEmail(
   data: any,
   formType: string,
-  language: "pl" | "en",
+  language: "pl" | "en" = getCurrentLanguage(),
 ): Promise<void> {
   await emailClient.sendEmail({
     to: data.email,
@@ -288,7 +249,7 @@ export async function sendConfirmationEmail(
 export async function sendAdminNotification(
   data: any,
   formType: string,
-  language: "pl" | "en",
+  language: "pl" | "en" = getCurrentLanguage(),
 ): Promise<void> {
   const serviceName =
     SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
@@ -441,7 +402,7 @@ export async function updateSubmissionStatus(
   if (result.rowCount > 0) {
     return { success: true };
   }
-  return { success: false, message: "Submission not found" };
+  return { success: false, message: messages.admin.notFound[getCurrentLanguage()] };
 }
 
 export async function deleteSubmission(id: string) {
@@ -451,7 +412,7 @@ export async function deleteSubmission(id: string) {
   if (result.rowCount > 0) {
     return { success: true };
   }
-  return { success: false, message: "Submission not found" };
+  return { success: false, message: messages.admin.notFound[getCurrentLanguage()] };
 }
 
 export { getEmailSubject, getEmailBody };

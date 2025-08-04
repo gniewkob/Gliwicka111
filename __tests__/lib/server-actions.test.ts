@@ -1,13 +1,12 @@
-import {
-  submitVirtualOfficeForm,
-  submitCoworkingForm,
-  submitMeetingRoomForm,
-  submitAdvertisingForm,
-  submitSpecialDealsForm,
-} from "@/lib/server-actions";
 import { vi } from "vitest";
 
-// Mock email client and database
+vi.mock("@/lib/i18n", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/i18n")>(
+    "@/lib/i18n",
+  );
+  return { ...actual, getCurrentLanguage: vi.fn() };
+});
+
 vi.mock("@/lib/email/smtp-client", () => ({
   emailClient: {
     sendEmail: vi.fn().mockResolvedValue({ messageId: "test-message-id" }),
@@ -24,6 +23,15 @@ vi.mock("@/lib/database/connection-pool", () => ({
 vi.mock("@/lib/email/failed-email-store", () => ({
   saveFailedEmail: vi.fn().mockResolvedValue(undefined),
 }));
+
+import {
+  submitVirtualOfficeForm,
+  submitCoworkingForm,
+  submitMeetingRoomForm,
+  submitAdvertisingForm,
+  submitSpecialDealsForm,
+} from "@/lib/server-actions";
+import { getCurrentLanguage } from "@/lib/i18n";
 
 const SERVICE_NAMES = {
   "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
@@ -90,7 +98,8 @@ describe("Server Actions", () => {
       formData.append("businessType", "sole-proprietorship");
       formData.append("message", "Test message");
 
-      const result = await submitVirtualOfficeForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitVirtualOfficeForm(formData);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -125,7 +134,8 @@ describe("Server Actions", () => {
       formData.append("businessType", "sole-proprietorship");
       formData.append("message", "Test message");
 
-      const result = await submitVirtualOfficeForm(formData, "en");
+      (getCurrentLanguage as any).mockReturnValue("en");
+      const result = await submitVirtualOfficeForm(formData);
 
       expect(result.success).toBe(true);
       await expectEmailCalls(
@@ -151,7 +161,8 @@ describe("Server Actions", () => {
       formData.append("firstName", "");
       formData.append("email", "invalid-email");
 
-      const result = await submitVirtualOfficeForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitVirtualOfficeForm(formData);
 
       expect(result.success).toBe(false);
       expect(result.message).toContain("błęd");
@@ -174,7 +185,8 @@ describe("Server Actions", () => {
       formData.append("startDate", "2024-12-01");
       formData.append("businessType", "sole-proprietorship");
 
-      const result = await submitVirtualOfficeForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitVirtualOfficeForm(formData);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -225,7 +237,8 @@ describe("Server Actions", () => {
       formData.append("startDate", "2024-12-01");
       formData.append("teamSize", "5");
 
-      const result = await submitCoworkingForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitCoworkingForm(formData);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -262,7 +275,8 @@ describe("Server Actions", () => {
       formData.append("attendees", "10");
       formData.append("roomType", "conference");
 
-      const result = await submitMeetingRoomForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitMeetingRoomForm(formData);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -299,7 +313,8 @@ describe("Server Actions", () => {
       formData.append("startDate", "2024-12-01");
       formData.append("budget", "5000-10000");
 
-      const result = await submitAdvertisingForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitAdvertisingForm(formData);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
@@ -338,7 +353,8 @@ describe("Server Actions", () => {
       formData.append("timeline", "immediate");
       formData.append("budget", "5000-10000");
 
-      const result = await submitSpecialDealsForm(formData, "pl");
+      (getCurrentLanguage as any).mockReturnValue("pl");
+      const result = await submitSpecialDealsForm(formData);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");

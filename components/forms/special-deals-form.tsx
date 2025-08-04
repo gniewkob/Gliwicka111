@@ -217,7 +217,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitSpecialDealsForm(formData, language)
+      const result = await submitSpecialDealsForm(formData)
       setSubmitResult(result)
 
       if (result.success) {
@@ -227,7 +227,8 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         analytics.trackSubmissionError(result.message)
       }
     } catch (error) {
-      const errorMessage = "Wystąpił nieoczekiwany błąd"
+      const errorMessage =
+        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       setSubmitResult({ success: false, message: errorMessage })
       analytics.trackSubmissionError(errorMessage)
     } finally {
