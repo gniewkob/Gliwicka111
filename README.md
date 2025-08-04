@@ -149,7 +149,8 @@ gliwicka-contact-forms/
     SMTP_PASS=your-smtp-password
 
     # Security
-    IP_SALT=your-random-salt-string-for-ip-hashing
+    # Strong random salt for IP hashing (e.g., openssl rand -hex 32)
+    IP_SALT=your-strong-random-salt-for-ip-hashing
 
     # Analytics (Optional)
     NEXT_PUBLIC_ANALYTICS_TOKEN=public-analytics-token
@@ -266,7 +267,7 @@ Configuration is managed through environment variables (see `.env.example`):
 | `SMTP_PASS` | SMTP password |
 | `SMTP_FROM` | Default "from" email address |
 | `ADMIN_EMAIL` | Administrator notification address |
-| `IP_SALT` | Salt used for IP hashing |
+| `IP_SALT` | Salt used for IP hashing (set to a strong random value, e.g., from `openssl rand -hex 32`) |
 | `NEXT_PUBLIC_ANALYTICS_TOKEN` | Public token for analytics client |
 | `ANALYTICS_AUTH_TOKEN` | Token for securing analytics endpoints |
 | `ANALYTICS_BASIC_USER` | Basic auth user for analytics endpoints |
