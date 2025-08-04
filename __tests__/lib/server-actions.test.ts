@@ -4,8 +4,6 @@ import {
   submitMeetingRoomForm,
   submitAdvertisingForm,
   submitSpecialDealsForm,
-  getEmailSubject,
-  getEmailBody,
 } from "@/lib/server-actions";
 import { vi } from "vitest";
 
@@ -23,6 +21,10 @@ vi.mock("@/lib/database/connection-pool", () => ({
   },
 }));
 
+vi.mock("@/lib/email/failed-email-store", () => ({
+  saveFailedEmail: vi.fn().mockResolvedValue(undefined),
+}));
+
 const SERVICE_NAMES = {
   "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
   coworking: { pl: "coworking", en: "coworking" },
@@ -35,10 +37,10 @@ async function expectEmailCalls(
   data: any,
   formType: keyof typeof SERVICE_NAMES,
   language: "pl" | "en",
+  expectedUserSubject: string,
+  expectedUserText: string,
 ) {
   const { emailClient } = await import("@/lib/email/smtp-client");
-  const expectedUserSubject = getEmailSubject(formType, language);
-  const expectedUserText = getEmailBody(data, formType, language);
   const serviceName = SERVICE_NAMES[formType][language];
   const expectedAdminSubject =
     language === "en"
@@ -49,17 +51,17 @@ async function expectEmailCalls(
       ? `New submission from ${data.email} regarding ${serviceName}.`
       : `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`;
 
-  expect(emailClient.sendEmail).toHaveBeenCalledWith({
-    to: data.email,
-    subject: expectedUserSubject,
-    text: expectedUserText,
-  });
-  expect(emailClient.sendEmail).toHaveBeenCalledWith({
-    to: "admin@gliwicka111.pl",
-    subject: expectedAdminSubject,
-    text: expectedAdminText,
-  });
-  expect(emailClient.sendEmail).toHaveBeenCalledTimes(2);
+  const calls = (emailClient.sendEmail as any).mock.calls;
+  const userCall = calls.find((c: any) => c[0].to === data.email)?.[0];
+  const adminCall = calls.find(
+    (c: any) => c[0].to === "admin@gliwicka111.pl",
+  )?.[0];
+
+  expect(userCall.subject).toBe(expectedUserSubject);
+  expect(userCall.text.replace(/\r\n/g, "\n")).toBe(expectedUserText);
+  expect(adminCall.subject).toBe(expectedAdminSubject);
+  expect(adminCall.text.replace(/\r\n/g, "\n")).toBe(expectedAdminText);
+  expect(calls).toHaveLength(2);
 }
 
 describe("Server Actions", () => {
@@ -94,6 +96,8 @@ describe("Server Actions", () => {
         },
         "virtual-office",
         "pl",
+        "Potwierdzenie zapytania o biuro wirtualne - Gliwicka 111",
+        "Dziękujemy za zgłoszenie dotyczące biuro wirtualne.\n\nNazwa firmy: Test Company\nData rozpoczęcia: 2024-12-01\nPakiet: basic\n\nSkontaktujemy się wkrótce.",
       );
     });
 
@@ -122,6 +126,8 @@ describe("Server Actions", () => {
         },
         "virtual-office",
         "en",
+        "Virtual Office Inquiry Confirmation - Gliwicka 111",
+        "Thank you for your virtual office inquiry.\n\nCompany name: Test Company\nStart date: 2024-12-01\nPackage: basic\n\nWe will contact you soon.",
       );
     });
 
@@ -148,6 +154,7 @@ describe("Server Actions", () => {
       formData.append("email", "jan@example.com");
       formData.append("phone", "+48 123 456 789");
       formData.append("gdprConsent", "on");
+      formData.append("companyName", "Test Company");
       formData.append("package", "basic");
       formData.append("startDate", "2024-12-01");
       formData.append("businessType", "sole-proprietorship");
@@ -156,6 +163,33 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          package: "basic",
+          startDate: "2024-12-01",
+        },
+        "virtual-office",
+        "pl",
+        "Potwierdzenie zapytania o biuro wirtualne - Gliwicka 111",
+        "Dziękujemy za zgłoszenie dotyczące biuro wirtualne.\n\nNazwa firmy: Test Company\nData rozpoczęcia: 2024-12-01\nPakiet: basic\n\nSkontaktujemy się wkrótce.",
+      );
+
+      const { saveFailedEmail } = await import(
+        "@/lib/email/failed-email-store"
+      );
+      expect(saveFailedEmail).toHaveBeenCalledTimes(2);
+      expect(saveFailedEmail).toHaveBeenCalledWith(
+        "confirmation",
+        expect.any(Object),
+        expect.any(Error),
+      );
+      expect(saveFailedEmail).toHaveBeenCalledWith(
+        "admin",
+        expect.any(Object),
+        expect.any(Error),
+      );
     });
   });
 
@@ -184,6 +218,8 @@ describe("Server Actions", () => {
         },
         "coworking",
         "pl",
+        "Potwierdzenie zapytania o coworking - Gliwicka 111",
+        "Dziękujemy za zgłoszenie dotyczące coworking.\n\nData rozpoczęcia: 2024-12-01\nTyp przestrzeni: hot-desk\n\nSkontaktujemy się wkrótce.",
       );
     });
   });
@@ -216,6 +252,8 @@ describe("Server Actions", () => {
         },
         "meeting-room",
         "pl",
+        "Potwierdzenie rezerwacji sali - Gliwicka 111",
+        "Dziękujemy za zgłoszenie dotyczące sala konferencyjna.\n\nNazwa firmy: Test Company\nData: 2024-12-01\nGodzina rozpoczęcia: 09:00\n\nSkontaktujemy się wkrótce.",
       );
     });
   });
@@ -247,6 +285,8 @@ describe("Server Actions", () => {
         },
         "advertising",
         "pl",
+        "Potwierdzenie zapytania o reklamę - Gliwicka 111",
+        "Dziękujemy za zgłoszenie dotyczące reklama.\n\nNazwa firmy: Test Company\nData rozpoczęcia: 2024-12-01\nTyp kampanii: digital\n\nSkontaktujemy się wkrótce.",
       );
     });
   });
@@ -280,6 +320,8 @@ describe("Server Actions", () => {
         },
         "special-deals",
         "pl",
+        "Potwierdzenie zapytania o oferty specjalne - Gliwicka 111",
+        "Dziękujemy za zgłoszenie dotyczące oferty specjalne.\n\nNazwa firmy: Test Company\nHarmonogram: immediate\nTyp oferty: welcome-package\n\nSkontaktujemy się wkrótce.",
       );
     });
   });
