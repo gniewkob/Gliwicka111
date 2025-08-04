@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { advertisingFormSchema, type AdvertisingFormData } from "@/lib/validation-schemas"
 import { submitAdvertisingForm } from "@/lib/server-actions"
+import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { Megaphone, Truck, Monitor, Target, Calendar, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
@@ -195,6 +196,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
         }
       })
 
+      formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitAdvertisingForm(formData)
       setSubmitResult(result)
 

@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { specialDealsFormSchema, type SpecialDealsFormData } from "@/lib/validation-schemas"
 import { submitSpecialDealsForm } from "@/lib/server-actions"
+import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { Gift, Percent, Star, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
@@ -215,6 +216,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         }
       })
 
+      formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitSpecialDealsForm(formData)
       setSubmitResult(result)
 

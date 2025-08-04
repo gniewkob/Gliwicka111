@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { virtualOfficeFormSchema, type VirtualOfficeFormData } from "@/lib/validation-schemas"
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
+import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { Building2, Phone, Mail, FileText, Calendar, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
@@ -192,6 +193,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
         }
       })
 
+      formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitVirtualOfficeForm(formData)
       setSubmitResult(result)
 

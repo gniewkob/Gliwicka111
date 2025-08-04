@@ -34,6 +34,8 @@ async function handleFormSubmission<T>(
   try {
     // Convert FormData to object
     const data = Object.fromEntries(formData.entries());
+    const sessionId = typeof data.sessionId === "string" ? data.sessionId : null;
+    delete (data as any).sessionId;
 
     // Handle checkboxes and arrays
     const processedData = {
@@ -78,16 +80,18 @@ async function handleFormSubmission<T>(
       submittedAt: new Date().toISOString(),
       status: "pending",
       ipHash: await hashIP(getClientIP()),
+      sessionId,
     };
 
     await db.query(
-      `INSERT INTO form_submissions (id, form_type, data, status, ip_hash) VALUES ($1, $2, $3, $4, $5)`,
+      `INSERT INTO form_submissions (id, form_type, data, status, ip_hash, session_id) VALUES ($1, $2, $3, $4, $5, $6)`,
       [
         submission.id,
         formType,
         JSON.stringify(sanitizedData),
         submission.status,
         submission.ipHash,
+        submission.sessionId,
       ],
     );
 
