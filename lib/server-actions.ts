@@ -10,6 +10,7 @@ import {
 } from "./validation-schemas";
 import { db } from "./database/connection-pool";
 import { emailClient } from "./email/smtp-client";
+import { saveFailedEmail } from "./email/failed-email-store";
 
 // Email service configuration
 const EMAIL_CONFIG = {
@@ -140,7 +141,7 @@ async function handleFormSubmission<T>(
       if (result.status === "rejected") {
         const type = index === 0 ? "confirmation" : "admin";
         console.error(`Failed to send ${type} email:`, result.reason);
-        void enqueueFailedEmail(type, sanitizedData, result.reason);
+        void enqueueFailedEmail(type, sanitizedData, formType, language, result.reason);
       }
     });
 
@@ -272,7 +273,7 @@ function getClientIP(): string {
   return "127.0.0.1";
 }
 
-async function sendConfirmationEmail(
+export async function sendConfirmationEmail(
   data: any,
   formType: string,
   language: "pl" | "en",
@@ -284,7 +285,7 @@ async function sendConfirmationEmail(
   });
 }
 
-async function sendAdminNotification(
+export async function sendAdminNotification(
   data: any,
   formType: string,
   language: "pl" | "en",
@@ -309,6 +310,8 @@ async function sendAdminNotification(
 async function enqueueFailedEmail(
   type: "confirmation" | "admin",
   data: any,
+  formType: string,
+  language: "pl" | "en",
   error: unknown,
 ): Promise<void> {
   function maskPII(value: unknown): unknown {
@@ -328,8 +331,9 @@ async function enqueueFailedEmail(
   // Before logging we recursively mask fields that may contain personally
   // identifiable information (e.g. names, emails, phone numbers). This keeps
   // logs useful for debugging while avoiding storage of sensitive data.
-  const safeData = maskPII(data);
+  const safeData = maskPII({ data, formType, language });
   console.log(`Enqueuing ${type} email for retry`, { data: safeData, error });
+  await saveFailedEmail(type, { data, formType, language }, error);
 }
 
 function getEmailBody(
