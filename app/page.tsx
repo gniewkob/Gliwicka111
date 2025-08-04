@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useLanguage } from "@/components/language-provider"
 import {
   Building2,
   MapPin,
@@ -862,7 +863,7 @@ const translations = {
 }
 
 export default function HomePage() {
-  const [language, setLanguage] = useState<"pl" | "en">("pl")
+  const { language, toggleLanguage } = useLanguage()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -875,10 +876,6 @@ export default function HomePage() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const toggleLanguage = () => {
-    setLanguage(language === "pl" ? "en" : "pl")
-  }
 
   const ServiceCard = ({ service, icon: Icon, href }: { service: any; icon: any; href: string }) => (
     <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-teal-200 h-full">

@@ -4,6 +4,8 @@ import {
   submitMeetingRoomForm,
   submitAdvertisingForm,
   submitSpecialDealsForm,
+  getEmailSubject,
+  getEmailBody,
 } from "@/lib/server-actions";
 import { vi } from "vitest";
 
@@ -20,6 +22,45 @@ vi.mock("@/lib/database/connection-pool", () => ({
     query: vi.fn().mockResolvedValue({ rows: [], rowCount: 1 }),
   },
 }));
+
+const SERVICE_NAMES = {
+  "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
+  coworking: { pl: "coworking", en: "coworking" },
+  "meeting-room": { pl: "sala konferencyjna", en: "meeting room" },
+  advertising: { pl: "reklama", en: "advertising" },
+  "special-deals": { pl: "oferty specjalne", en: "special deals" },
+} as const;
+
+async function expectEmailCalls(
+  data: any,
+  formType: keyof typeof SERVICE_NAMES,
+  language: "pl" | "en",
+) {
+  const { emailClient } = await import("@/lib/email/smtp-client");
+  const expectedUserSubject = getEmailSubject(formType, language);
+  const expectedUserText = getEmailBody(data, formType, language);
+  const serviceName = SERVICE_NAMES[formType][language];
+  const expectedAdminSubject =
+    language === "en"
+      ? `New submission: ${serviceName}`
+      : `Nowe zgłoszenie: ${serviceName}`;
+  const expectedAdminText =
+    language === "en"
+      ? `New submission from ${data.email} regarding ${serviceName}.`
+      : `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`;
+
+  expect(emailClient.sendEmail).toHaveBeenCalledWith({
+    to: data.email,
+    subject: expectedUserSubject,
+    text: expectedUserText,
+  });
+  expect(emailClient.sendEmail).toHaveBeenCalledWith({
+    to: "admin@gliwicka111.pl",
+    subject: expectedAdminSubject,
+    text: expectedAdminText,
+  });
+  expect(emailClient.sendEmail).toHaveBeenCalledTimes(2);
+}
 
 describe("Server Actions", () => {
   beforeEach(() => {
@@ -44,6 +85,44 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          package: "basic",
+          startDate: "2024-12-01",
+        },
+        "virtual-office",
+        "pl",
+      );
+    });
+
+    it("sends English emails when language is en", async () => {
+      const formData = new FormData();
+      formData.append("firstName", "John");
+      formData.append("lastName", "Smith");
+      formData.append("email", "john@example.com");
+      formData.append("phone", "+48 123 456 789");
+      formData.append("gdprConsent", "on");
+      formData.append("companyName", "Test Company");
+      formData.append("package", "basic");
+      formData.append("startDate", "2024-12-01");
+      formData.append("businessType", "sole-proprietorship");
+      formData.append("message", "Test message");
+
+      const result = await submitVirtualOfficeForm(formData, "en");
+
+      expect(result.success).toBe(true);
+      await expectEmailCalls(
+        {
+          email: "john@example.com",
+          companyName: "Test Company",
+          package: "basic",
+          startDate: "2024-12-01",
+        },
+        "virtual-office",
+        "en",
+      );
     });
 
     it("rejects invalid form data", async () => {
@@ -97,6 +176,15 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          startDate: "2024-12-01",
+          workspaceType: "hot-desk",
+        },
+        "coworking",
+        "pl",
+      );
     });
   });
 
@@ -119,6 +207,16 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          date: "2024-12-01",
+          startTime: "09:00",
+        },
+        "meeting-room",
+        "pl",
+      );
     });
   });
 
@@ -140,6 +238,16 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          startDate: "2024-12-01",
+          campaignType: "digital",
+        },
+        "advertising",
+        "pl",
+      );
     });
   });
 
@@ -163,6 +271,16 @@ describe("Server Actions", () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toContain("wysłany");
+      await expectEmailCalls(
+        {
+          email: "jan@example.com",
+          companyName: "Test Company",
+          timeline: "immediate",
+          dealType: "welcome-package",
+        },
+        "special-deals",
+        "pl",
+      );
     });
   });
 });

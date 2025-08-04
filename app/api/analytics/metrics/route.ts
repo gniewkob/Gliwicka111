@@ -35,146 +35,6 @@ interface MetricsSummary {
   }>
 }
 
-function calculateMetrics(events: any[], timeRange = "7d"): MetricsSummary {
-  // Filter events by time range
-  const now = Date.now()
-  const timeRangeMs =
-    {
-      "24h": 24 * 60 * 60 * 1000,
-      "7d": 7 * 24 * 60 * 60 * 1000,
-      "30d": 30 * 24 * 60 * 60 * 1000,
-      "90d": 90 * 24 * 60 * 60 * 1000,
-    }[timeRange] || 7 * 24 * 60 * 60 * 1000
-
-  const filteredEvents = events.filter((event) => now - event.timestamp <= timeRangeMs)
-
-  // Calculate overall metrics
-  const views = filteredEvents.filter((e) => e.eventType === "view").length
-  const starts = filteredEvents.filter((e) => e.eventType === "start").length
-  const completions = filteredEvents.filter((e) => e.eventType === "submission_success").length
-  const conversionRate = starts > 0 ? (completions / starts) * 100 : 0
-  const abandonmentRate = 100 - conversionRate
-
-  // Calculate average completion time
-  const completionEvents = filteredEvents.filter((e) => e.eventType === "submission_success")
-  const startEvents = filteredEvents.filter((e) => e.eventType === "start")
-
-  let totalCompletionTime = 0
-  let completionTimeCount = 0
-
-  completionEvents.forEach((completion) => {
-    const correspondingStart = startEvents.find(
-      (start) =>
-        start.sessionId === completion.sessionId &&
-        start.formType === completion.formType &&
-        start.timestamp <= completion.timestamp,
-    )
-
-    if (correspondingStart) {
-      totalCompletionTime += completion.timestamp - correspondingStart.timestamp
-      completionTimeCount++
-    }
-  })
-
-  const avgCompletionTime = completionTimeCount > 0 ? totalCompletionTime / completionTimeCount : 0
-
-  // Form breakdown
-  const formTypes = [...new Set(filteredEvents.map((e) => e.formType))]
-  const formBreakdown: Record<string, any> = {}
-
-  formTypes.forEach((formType) => {
-    const formEvents = filteredEvents.filter((e) => e.formType === formType)
-    const formViews = formEvents.filter((e) => e.eventType === "view").length
-    const formStarts = formEvents.filter((e) => e.eventType === "start").length
-    const formCompletions = formEvents.filter((e) => e.eventType === "submission_success").length
-    const formConversionRate = formStarts > 0 ? (formCompletions / formStarts) * 100 : 0
-
-    // Calculate avg completion time for this form
-    const formCompletionEvents = formEvents.filter((e) => e.eventType === "submission_success")
-    const formStartEvents = formEvents.filter((e) => e.eventType === "start")
-
-    let formTotalCompletionTime = 0
-    let formCompletionTimeCount = 0
-
-    formCompletionEvents.forEach((completion) => {
-      const correspondingStart = formStartEvents.find(
-        (start) => start.sessionId === completion.sessionId && start.timestamp <= completion.timestamp,
-      )
-
-      if (correspondingStart) {
-        formTotalCompletionTime += completion.timestamp - correspondingStart.timestamp
-        formCompletionTimeCount++
-      }
-    })
-
-    const formAvgCompletionTime = formCompletionTimeCount > 0 ? formTotalCompletionTime / formCompletionTimeCount : 0
-
-    formBreakdown[formType] = {
-      views: formViews,
-      starts: formStarts,
-      completions: formCompletions,
-      conversionRate: formConversionRate,
-      avgCompletionTime: formAvgCompletionTime,
-    }
-  })
-
-  // Field analytics
-  const fieldEvents = filteredEvents.filter((e) => ["field_focus", "field_error"].includes(e.eventType) && e.fieldName)
-
-  const fieldNames = [...new Set(fieldEvents.map((e) => e.fieldName))]
-  const fieldAnalytics: Record<string, any> = {}
-
-  fieldNames.forEach((fieldName) => {
-    const fieldFocusEvents = fieldEvents.filter((e) => e.eventType === "field_focus" && e.fieldName === fieldName)
-    const fieldErrorEvents = fieldEvents.filter((e) => e.eventType === "field_error" && e.fieldName === fieldName)
-
-    const focusCount = fieldFocusEvents.length
-    const errorCount = fieldErrorEvents.length
-    const errorRate = focusCount > 0 ? (errorCount / focusCount) * 100 : 0
-
-    // Calculate average focus time (simplified - would need blur events for accuracy)
-    const avgFocusTime = 2000 + Math.random() * 3000 // Mock data for demo
-
-    fieldAnalytics[fieldName] = {
-      focusCount,
-      errorCount,
-      errorRate,
-      avgFocusTime,
-    }
-  })
-
-  // Time series data (simplified for demo)
-  const timeSeriesData = []
-  const daysToShow = Math.min(Number.parseInt(timeRange.replace(/\D/g, "")) || 7, 30)
-
-  for (let i = daysToShow - 1; i >= 0; i--) {
-    const date = new Date(now - i * 24 * 60 * 60 * 1000)
-    const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
-    const dayEnd = dayStart + 24 * 60 * 60 * 1000
-
-    const dayEvents = filteredEvents.filter((e) => e.timestamp >= dayStart && e.timestamp < dayEnd)
-
-    timeSeriesData.push({
-      date: date.toISOString().split("T")[0],
-      views: dayEvents.filter((e) => e.eventType === "view").length,
-      starts: dayEvents.filter((e) => e.eventType === "start").length,
-      completions: dayEvents.filter((e) => e.eventType === "submission_success").length,
-    })
-  }
-
-  return {
-    totalViews: views,
-    totalStarts: starts,
-    totalCompletions: completions,
-    conversionRate,
-    abandonmentRate,
-    avgCompletionTime,
-    formBreakdown,
-    fieldAnalytics,
-    timeSeriesData,
-  }
-}
-
 export async function GET(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
@@ -185,11 +45,10 @@ export async function GET(request: NextRequest) {
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
     }
+
     const { searchParams } = new URL(request.url)
     const timeRange = searchParams.get("timeRange") || "7d"
     const formType = searchParams.get("formType")
-
-    const now = Date.now()
     const timeRangeMs =
       {
         "24h": 24 * 60 * 60 * 1000,
@@ -197,18 +56,130 @@ export async function GET(request: NextRequest) {
         "30d": 30 * 24 * 60 * 60 * 1000,
         "90d": 90 * 24 * 60 * 60 * 1000,
       }[timeRange] || 7 * 24 * 60 * 60 * 1000
+    const startTime = Date.now() - timeRangeMs
 
-    const params: any[] = [now - timeRangeMs]
-    let query =
-      'SELECT form_type AS "formType", event_type AS "eventType", field_name AS "fieldName", error_message AS "errorMessage", timestamp, session_id AS "sessionId", user_agent AS "userAgent", language, form_version AS "formVersion", ip_hash AS "ipHash", received_at AS "receivedAt" FROM analytics_events WHERE timestamp >= $1'
-    if (formType && formType !== "all") {
-      query += ` AND form_type = $2`
-      params.push(formType)
+    const params: any[] = [startTime]
+    const filter = formType && formType !== "all" ? "AND form_type = $2" : ""
+    if (filter) params.push(formType)
+
+    const overallQuery = `
+      SELECT
+        COUNT(*) FILTER (WHERE event_type = 'view') AS views,
+        COUNT(*) FILTER (WHERE event_type = 'start') AS starts,
+        COUNT(*) FILTER (WHERE event_type = 'submission_success') AS completions
+      FROM analytics_events
+      WHERE timestamp >= $1 ${filter}
+    `
+    const overallRes = await db.query(overallQuery, params)
+    const totalViews = Number(overallRes.rows[0]?.views ?? 0)
+    const totalStarts = Number(overallRes.rows[0]?.starts ?? 0)
+    const totalCompletions = Number(overallRes.rows[0]?.completions ?? 0)
+
+    const avgTimeQuery = `
+      SELECT AVG(c.timestamp - s.timestamp) AS avg_completion_time
+      FROM analytics_events s
+      JOIN analytics_events c ON s.session_id = c.session_id AND s.form_type = c.form_type
+      WHERE s.event_type = 'start' AND c.event_type = 'submission_success'
+        AND s.timestamp >= $1 AND c.timestamp >= $1 ${filter}
+    `
+    const avgTimeRes = await db.query(avgTimeQuery, params)
+    const avgCompletionTime = Number(avgTimeRes.rows[0]?.avg_completion_time ?? 0)
+
+    const formStatsQuery = `
+      SELECT
+        form_type,
+        COUNT(*) FILTER (WHERE event_type = 'view') AS views,
+        COUNT(*) FILTER (WHERE event_type = 'start') AS starts,
+        COUNT(*) FILTER (WHERE event_type = 'submission_success') AS completions
+      FROM analytics_events
+      WHERE timestamp >= $1 ${filter}
+      GROUP BY form_type
+    `
+    const formStatsRes = await db.query(formStatsQuery, params)
+
+    const formTimeQuery = `
+      SELECT
+        s.form_type,
+        AVG(c.timestamp - s.timestamp) AS avg_completion_time
+      FROM analytics_events s
+      JOIN analytics_events c ON s.session_id = c.session_id AND s.form_type = c.form_type
+      WHERE s.event_type = 'start' AND c.event_type = 'submission_success'
+        AND s.timestamp >= $1 AND c.timestamp >= $1 ${filter}
+      GROUP BY s.form_type
+    `
+    const formTimeRes = await db.query(formTimeQuery, params)
+    const formTimeMap = Object.fromEntries(
+      formTimeRes.rows.map((r: any) => [r.form_type, Number(r.avg_completion_time ?? 0)]),
+    )
+
+    const formBreakdown: Record<string, any> = {}
+    formStatsRes.rows.forEach((r: any) => {
+      const starts = Number(r.starts ?? 0)
+      const completions = Number(r.completions ?? 0)
+      const conversionRate = starts > 0 ? (completions / starts) * 100 : 0
+      formBreakdown[r.form_type] = {
+        views: Number(r.views ?? 0),
+        starts,
+        completions,
+        conversionRate,
+        avgCompletionTime: formTimeMap[r.form_type] || 0,
+      }
+    })
+
+    const fieldQuery = `
+      SELECT field_name,
+             COUNT(*) FILTER (WHERE event_type = 'field_focus') AS focus_count,
+             COUNT(*) FILTER (WHERE event_type = 'field_error') AS error_count
+      FROM analytics_events
+      WHERE timestamp >= $1 AND field_name IS NOT NULL AND event_type IN ('field_focus', 'field_error') ${filter}
+      GROUP BY field_name
+    `
+    const fieldRes = await db.query(fieldQuery, params)
+    const fieldAnalytics: Record<string, any> = {}
+    fieldRes.rows.forEach((r: any) => {
+      const focusCount = Number(r.focus_count ?? 0)
+      const errorCount = Number(r.error_count ?? 0)
+      fieldAnalytics[r.field_name] = {
+        focusCount,
+        errorCount,
+        errorRate: focusCount > 0 ? (errorCount / focusCount) * 100 : 0,
+        avgFocusTime: 0,
+      }
+    })
+
+    const timeSeriesQuery = `
+      SELECT
+        to_char(to_timestamp(timestamp / 1000), 'YYYY-MM-DD') AS date,
+        COUNT(*) FILTER (WHERE event_type = 'view') AS views,
+        COUNT(*) FILTER (WHERE event_type = 'start') AS starts,
+        COUNT(*) FILTER (WHERE event_type = 'submission_success') AS completions
+      FROM analytics_events
+      WHERE timestamp >= $1 ${filter}
+      GROUP BY date
+      ORDER BY date
+    `
+    const timeRes = await db.query(timeSeriesQuery, params)
+    const timeSeriesData = timeRes.rows.map((r: any) => ({
+      date: r.date,
+      views: Number(r.views ?? 0),
+      starts: Number(r.starts ?? 0),
+      completions: Number(r.completions ?? 0),
+    }))
+
+    const conversionRate = totalStarts > 0 ? (totalCompletions / totalStarts) * 100 : 0
+    const abandonmentRate = 100 - conversionRate
+
+    const metrics: MetricsSummary = {
+      totalViews,
+      totalStarts,
+      totalCompletions,
+      conversionRate,
+      abandonmentRate,
+      avgCompletionTime,
+      formBreakdown,
+      fieldAnalytics,
+      timeSeriesData,
     }
-
-    const { rows } = await db.query(query, params)
-
-    const metrics = calculateMetrics(rows, timeRange)
 
     return NextResponse.json({
       success: true,

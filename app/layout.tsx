@@ -1,6 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { cookies } from "next/headers"
+import { LanguageProvider } from "@/components/language-provider"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -67,11 +69,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params?: { lang?: string }
 }) {
+  const cookieStore = cookies()
+  const cookieLang = cookieStore.get("lang")?.value === "en" ? "en" : "pl"
+  const currentLanguage =
+    params?.lang === "en" || params?.lang === "pl"
+      ? params.lang
+      : cookieLang
+
   return (
-    <html lang="pl">
+    <html lang={currentLanguage}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -80,8 +91,33 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#0f766e" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Matomo */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              var _paq = window._paq = window._paq || [];
+              _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+              _paq.push(["setCookieDomain", "*.gliwicka111.pl"]);
+              _paq.push(["setDomains", ["*.gliwicka111.pl"]]);
+              _paq.push(['trackPageView']);
+              _paq.push(['enableLinkTracking']);
+              (function() {
+                var u="//stats0.mydevil.net/";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '589']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+              })();
+            `,
+          }}
+        />
+        {/* End Matomo Code */}
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <LanguageProvider initialLanguage={currentLanguage}>
+          {children}
+        </LanguageProvider>
+      </body>
     </html>
   )
 }
