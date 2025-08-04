@@ -340,7 +340,17 @@ async function enqueueFailedEmail(
   data: any,
   error: unknown,
 ): Promise<void> {
-  console.log(`Enqueuing ${type} email for retry`, { data, error });
+  // Mask potentially sensitive fields before logging to avoid storing PII
+  // in logs. Names, emails and phone numbers are replaced with placeholders
+  // so troubleshooting information is preserved without exposing personal data.
+  const safeData = Object.fromEntries(
+    Object.entries(data || {}).map(([key, value]) =>
+      /(name|email|phone)/i.test(key)
+        ? [key, "[REDACTED]"]
+        : [key, value],
+    ),
+  );
+  console.log(`Enqueuing ${type} email for retry`, { data: safeData, error });
 }
 
 function getEmailSubject(formType: string, language: "pl" | "en"): string {
