@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useLanguage } from "@/components/language-provider"
 import { Building2, MapPin, Phone, Mail, Menu, X, Globe, ArrowLeft, Clock, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -128,7 +129,7 @@ const translations = {
 }
 
 export default function ContactPage() {
-  const [language, setLanguage] = useState<"pl" | "en">("pl")
+  const { language, toggleLanguage } = useLanguage()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -142,10 +143,6 @@ export default function ContactPage() {
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
 
   const t = translations[language]
-
-  const toggleLanguage = () => {
-    setLanguage(language === "pl" ? "en" : "pl")
-  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
