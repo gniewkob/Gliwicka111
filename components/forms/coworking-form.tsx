@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { coworkingFormSchema, type CoworkingFormData } from "@/lib/validation-schemas"
 import { submitCoworkingForm } from "@/lib/server-actions"
+import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { Users, Coffee, Calendar, Shield, CheckCircle, AlertCircle, MapPin } from "lucide-react"
 
@@ -165,6 +166,7 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
         }
       })
 
+      formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitCoworkingForm(formData)
       setSubmitResult(result)
 

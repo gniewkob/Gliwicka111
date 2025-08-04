@@ -39,7 +39,7 @@ export const formSubmissionSchema = z.object({
   submittedAt: z.string(),
   status: z.enum(["pending", "contacted", "completed", "cancelled"]),
   ipHash: z.string(),
-  sessionId: z.string(),
+  sessionId: z.string().optional(),
   updatedAt: z.string().optional(),
 })
 

@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { meetingRoomFormSchema, type MeetingRoomFormData } from "@/lib/validation-schemas"
 import { submitMeetingRoomForm } from "@/lib/server-actions"
+import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { Calendar, Clock, Users, Coffee, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
@@ -209,6 +210,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
         }
       })
 
+      formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitMeetingRoomForm(formData)
       setSubmitResult(result)
 
