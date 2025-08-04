@@ -20,15 +20,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
+import { navTranslations, backTranslations } from "@/lib/i18n"
 
 const translations = {
   pl: {
-    nav: {
-      home: "Strona główna",
-      properties: "Nieruchomości",
-      about: "O nas",
-      contact: "Kontakt",
-    },
+    nav: navTranslations.pl,
     header: {
       title: "Nasze nieruchomości",
       subtitle: "Odkryj idealne rozwiązania dla Twojego biznesu",
@@ -88,15 +84,10 @@ const translations = {
       contact: "Skontaktuj się",
       call: "Zadzwoń teraz",
     },
-    back: "Powrót do strony głównej",
+    back: backTranslations.pl,
   },
   en: {
-    nav: {
-      home: "Home",
-      properties: "Properties",
-      about: "About",
-      contact: "Contact",
-    },
+    nav: navTranslations.en,
     header: {
       title: "Our Properties",
       subtitle: "Discover perfect solutions for your business",
@@ -147,7 +138,7 @@ const translations = {
       contact: "Contact Us",
       call: "Call Now",
     },
-    back: "Back to homepage",
+    back: backTranslations.en,
   },
 }
 

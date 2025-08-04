@@ -12,15 +12,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { navTranslations, backTranslations } from "@/lib/i18n"
 
 const translations = {
   pl: {
-    nav: {
-      home: "Strona główna",
-      properties: "Nieruchomości",
-      about: "O nas",
-      contact: "Kontakt",
-    },
+    nav: navTranslations.pl,
     header: {
       title: "Skontaktuj się z nami",
       subtitle: "Jesteśmy tutaj, aby pomóc",
@@ -68,15 +64,10 @@ const translations = {
       description:
         "Znajdziesz nas przy ulicy Gliwickiej 111 w Tarnowskich Górach. Doskonała lokalizacja z łatwym dostępem komunikacyjnym.",
     },
-    back: "Powrót do strony głównej",
+    back: backTranslations.pl,
   },
   en: {
-    nav: {
-      home: "Home",
-      properties: "Properties",
-      about: "About",
-      contact: "Contact",
-    },
+    nav: navTranslations.en,
     header: {
       title: "Contact Us",
       subtitle: "We are here to help",
@@ -124,7 +115,7 @@ const translations = {
       description:
         "You can find us at Gliwicka 111 street in Tarnowskie Góry. Excellent location with easy transportation access.",
     },
-    back: "Back to homepage",
+    back: backTranslations.en,
   },
 }
 

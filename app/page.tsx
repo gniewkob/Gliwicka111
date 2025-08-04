@@ -33,19 +33,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ConsentBanner } from "@/components/analytics/consent-banner"
 import Link from "next/link"
 import Image from "next/image"
+import { navTranslations } from "@/lib/i18n"
 
 const translations = {
   pl: {
     nav: {
-      home: "Strona główna",
+      ...navTranslations.pl,
       offer: "Nasza oferta",
       virtualOffice: "Biuro wirtualne",
       coworking: "Coworking i biura",
       meetingRooms: "Sale spotkań",
       advertising: "Reklama zewnętrzna",
       specialDeals: "Oferty specjalne",
-      about: "O nas",
-      contact: "Kontakt",
     },
     hero: {
       title: "Profesjonalne zarządzanie nieruchomościami",

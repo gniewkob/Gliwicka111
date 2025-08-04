@@ -6,15 +6,11 @@ import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
+import { navTranslations, backTranslations } from "@/lib/i18n"
 
 const translations = {
   pl: {
-    nav: {
-      home: "Strona główna",
-      properties: "Nieruchomości",
-      about: "O nas",
-      contact: "Kontakt",
-    },
+    nav: navTranslations.pl,
     title: "Polityka Prywatności",
     lastUpdated: "Ostatnia aktualizacja: 3 sierpnia 2024",
     sections: {
@@ -92,15 +88,10 @@ const translations = {
           "W przypadku pytań dotyczących przetwarzania danych osobowych prosimy o kontakt pod adresem kontakt@gliwicka111.pl lub telefonicznie +48 791 554 674.",
       },
     },
-    back: "Powrót do strony głównej",
+    back: backTranslations.pl,
   },
   en: {
-    nav: {
-      home: "Home",
-      properties: "Properties",
-      about: "About",
-      contact: "Contact",
-    },
+    nav: navTranslations.en,
     title: "Privacy Policy",
     lastUpdated: "Last updated: August 3, 2024",
     sections: {
@@ -179,7 +170,7 @@ const translations = {
           "For questions regarding personal data processing, please contact us at kontakt@gliwicka111.pl or by phone +48 791 554 674.",
       },
     },
-    back: "Back to homepage",
+    back: backTranslations.en,
   },
 }
 
