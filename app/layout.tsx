@@ -69,14 +69,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params?: { lang?: string }
 }) {
   const cookieStore = cookies()
-  const initialLanguage = cookieStore.get("lang")?.value === "en" ? "en" : "pl"
+  const cookieLang = cookieStore.get("lang")?.value === "en" ? "en" : "pl"
+  const currentLanguage =
+    params?.lang === "en" || params?.lang === "pl"
+      ? params.lang
+      : cookieLang
 
   return (
-    <html lang={initialLanguage}>
+    <html lang={currentLanguage}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -108,7 +114,9 @@ export default function RootLayout({
         {/* End Matomo Code */}
       </head>
       <body className={inter.className}>
-        <LanguageProvider initialLanguage={initialLanguage}>{children}</LanguageProvider>
+        <LanguageProvider initialLanguage={currentLanguage}>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )
