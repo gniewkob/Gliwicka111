@@ -73,11 +73,27 @@ describe("getEmailSubject", () => {
   });
 });
 
-describe("getEmailBody", () => {
-  testCases.forEach(({ formType, data, bodies }) => {
-    it(`returns correct body for ${formType}`, () => {
-      expect(getEmailBody(data, formType, "pl")).toBe(bodies.pl);
-      expect(getEmailBody(data, formType, "en")).toBe(bodies.en);
+  describe("getEmailBody", () => {
+    testCases.forEach(({ formType, data, bodies }) => {
+      it(`returns correct body for ${formType}`, () => {
+        expect(getEmailBody(data, formType, "pl")).toBe(bodies.pl);
+        expect(getEmailBody(data, formType, "en")).toBe(bodies.en);
+      });
     });
   });
-});
+
+  it("falls back to default strings for unknown form types", () => {
+    const unknownData = { foo: "bar" };
+    expect(getEmailSubject("unknown", "pl")).toBe(
+      "Potwierdzenie - Gliwicka 111",
+    );
+    expect(getEmailSubject("unknown", "en")).toBe(
+      "Potwierdzenie - Gliwicka 111",
+    );
+    expect(getEmailBody(unknownData, "unknown", "pl")).toBe(
+      "Dziękujemy za zgłoszenie dotyczące unknown.\n\nSkontaktujemy się wkrótce.",
+    );
+    expect(getEmailBody(unknownData, "unknown", "en")).toBe(
+      "Thank you for your unknown inquiry.\n\nWe will contact you soon.",
+    );
+  });
