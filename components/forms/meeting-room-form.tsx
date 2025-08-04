@@ -211,7 +211,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitMeetingRoomForm(formData)
+      const result = await submitMeetingRoomForm(formData, language)
       setSubmitResult(result)
 
       if (result.success) {

@@ -26,6 +26,7 @@ async function handleFormSubmission<T>(
   formData: FormData,
   schema: z.ZodSchema<T>,
   formType: string,
+  language: "pl" | "en" = "pl",
 ): Promise<{
   success: boolean;
   message: string;
@@ -96,10 +97,10 @@ async function handleFormSubmission<T>(
     );
 
     // Send confirmation email
-    await sendConfirmationEmail(sanitizedData, formType);
+    await sendConfirmationEmail(sanitizedData, formType, language);
 
     // Send notification to admin
-    await sendAdminNotification(sanitizedData, formType);
+    await sendAdminNotification(sanitizedData, formType, language);
 
     return {
       success: true,
@@ -116,35 +117,67 @@ async function handleFormSubmission<T>(
 }
 
 // Virtual Office Form Action
-export async function submitVirtualOfficeForm(formData: FormData) {
+export async function submitVirtualOfficeForm(
+  formData: FormData,
+  language: "pl" | "en" = "pl",
+) {
   return handleFormSubmission(
     formData,
     virtualOfficeFormSchema,
     "virtual-office",
+    language,
   );
 }
 
 // Coworking Form Action
-export async function submitCoworkingForm(formData: FormData) {
-  return handleFormSubmission(formData, coworkingFormSchema, "coworking");
+export async function submitCoworkingForm(
+  formData: FormData,
+  language: "pl" | "en" = "pl",
+) {
+  return handleFormSubmission(
+    formData,
+    coworkingFormSchema,
+    "coworking",
+    language,
+  );
 }
 
 // Meeting Room Form Action
-export async function submitMeetingRoomForm(formData: FormData) {
-  return handleFormSubmission(formData, meetingRoomFormSchema, "meeting-room");
+export async function submitMeetingRoomForm(
+  formData: FormData,
+  language: "pl" | "en" = "pl",
+) {
+  return handleFormSubmission(
+    formData,
+    meetingRoomFormSchema,
+    "meeting-room",
+    language,
+  );
 }
 
 // Advertising Form Action
-export async function submitAdvertisingForm(formData: FormData) {
-  return handleFormSubmission(formData, advertisingFormSchema, "advertising");
+export async function submitAdvertisingForm(
+  formData: FormData,
+  language: "pl" | "en" = "pl",
+) {
+  return handleFormSubmission(
+    formData,
+    advertisingFormSchema,
+    "advertising",
+    language,
+  );
 }
 
 // Special Deals Form Action
-export async function submitSpecialDealsForm(formData: FormData) {
+export async function submitSpecialDealsForm(
+  formData: FormData,
+  language: "pl" | "en" = "pl",
+) {
   return handleFormSubmission(
     formData,
     specialDealsFormSchema,
     "special-deals",
+    language,
   );
 }
 
@@ -192,12 +225,13 @@ function getClientIP(): string {
 async function sendConfirmationEmail(
   data: any,
   formType: string,
+  language: "pl" | "en",
 ): Promise<void> {
   try {
     await emailClient.sendEmail({
       to: data.email,
-      subject: getEmailSubject(formType, "pl"),
-      text: `Dziękujemy za zgłoszenie dotyczące ${formType}. Skontaktujemy się wkrótce.`,
+      subject: getEmailSubject(formType, language),
+      text: getEmailBody(formType, language),
     });
   } catch (error) {
     console.error("Failed to send confirmation email", error);
@@ -208,12 +242,21 @@ async function sendConfirmationEmail(
 async function sendAdminNotification(
   data: any,
   formType: string,
+  language: "pl" | "en",
 ): Promise<void> {
   try {
+    const subject =
+      language === "en"
+        ? `New submission: ${formType}`
+        : `Nowe zgłoszenie: ${formType}`;
+    const text =
+      language === "en"
+        ? `New submission from ${data.email} regarding ${formType}.`
+        : `Nowe zgłoszenie od ${data.email} dotyczące ${formType}.`;
     await emailClient.sendEmail({
       to: EMAIL_CONFIG.adminEmail,
-      subject: `Nowe zgłoszenie: ${formType}`,
-      text: `Nowe zgłoszenie od ${data.email} dotyczące ${formType}.`,
+      subject,
+      text,
     });
   } catch (error) {
     console.error("Failed to send admin notification", error);
@@ -244,6 +287,42 @@ function getEmailSubject(formType: string, language: "pl" | "en"): string {
   return (
     subjects[language][formType as keyof (typeof subjects)[typeof language]] ||
     "Potwierdzenie - Gliwicka 111"
+  );
+}
+
+function getEmailBody(formType: string, language: "pl" | "en"): string {
+  const bodies = {
+    pl: {
+      "virtual-office":
+        "Dziękujemy za zgłoszenie dotyczące biura wirtualnego. Skontaktujemy się wkrótce.",
+      coworking:
+        "Dziękujemy za zgłoszenie dotyczące coworkingu. Skontaktujemy się wkrótce.",
+      "meeting-room":
+        "Dziękujemy za rezerwację sali. Skontaktujemy się wkrótce.",
+      advertising:
+        "Dziękujemy za zapytanie o reklamę. Skontaktujemy się wkrótce.",
+      "special-deals":
+        "Dziękujemy za zapytanie o oferty specjalne. Skontaktujemy się wkrótce.",
+    },
+    en: {
+      "virtual-office":
+        "Thank you for your virtual office inquiry. We will contact you soon.",
+      coworking:
+        "Thank you for your coworking inquiry. We will contact you soon.",
+      "meeting-room":
+        "Thank you for your meeting room booking. We will contact you soon.",
+      advertising:
+        "Thank you for your advertising inquiry. We will contact you soon.",
+      "special-deals":
+        "Thank you for your special deals inquiry. We will contact you soon.",
+    },
+  };
+
+  return (
+    bodies[language][formType as keyof (typeof bodies)[typeof language]] ||
+    (language === "en"
+      ? "Thank you for your submission. We will contact you soon."
+      : "Dziękujemy za zgłoszenie. Skontaktujemy się wkrótce.")
   );
 }
 
