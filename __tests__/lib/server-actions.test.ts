@@ -23,19 +23,31 @@ vi.mock("@/lib/database/connection-pool", () => ({
   },
 }));
 
-const SERVICE_NAMES_PL = {
-  "virtual-office": "biuro wirtualne",
-  coworking: "coworking",
-  "meeting-room": "sala konferencyjna",
-  advertising: "reklama",
-  "special-deals": "oferty specjalne",
+const SERVICE_NAMES = {
+  "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
+  coworking: { pl: "coworking", en: "coworking" },
+  "meeting-room": { pl: "sala konferencyjna", en: "meeting room" },
+  advertising: { pl: "reklama", en: "advertising" },
+  "special-deals": { pl: "oferty specjalne", en: "special deals" },
 } as const;
 
-async function expectEmailCalls(data: any, formType: keyof typeof SERVICE_NAMES_PL) {
+async function expectEmailCalls(
+  data: any,
+  formType: keyof typeof SERVICE_NAMES,
+  language: "pl" | "en",
+) {
   const { emailClient } = await import("@/lib/email/smtp-client");
-  const expectedUserSubject = getEmailSubject(formType, "pl");
-  const expectedUserText = getEmailBody(data, formType, "pl");
-  const serviceName = SERVICE_NAMES_PL[formType];
+  const expectedUserSubject = getEmailSubject(formType, language);
+  const expectedUserText = getEmailBody(data, formType, language);
+  const serviceName = SERVICE_NAMES[formType][language];
+  const expectedAdminSubject =
+    language === "en"
+      ? `New submission: ${serviceName}`
+      : `Nowe zgłoszenie: ${serviceName}`;
+  const expectedAdminText =
+    language === "en"
+      ? `New submission from ${data.email} regarding ${serviceName}.`
+      : `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`;
 
   expect(emailClient.sendEmail).toHaveBeenCalledWith({
     to: data.email,
@@ -44,8 +56,8 @@ async function expectEmailCalls(data: any, formType: keyof typeof SERVICE_NAMES_
   });
   expect(emailClient.sendEmail).toHaveBeenCalledWith({
     to: "admin@gliwicka111.pl",
-    subject: `Nowe zgłoszenie: ${serviceName}`,
-    text: `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`,
+    subject: expectedAdminSubject,
+    text: expectedAdminText,
   });
   expect(emailClient.sendEmail).toHaveBeenCalledTimes(2);
 }
@@ -81,6 +93,35 @@ describe("Server Actions", () => {
           startDate: "2024-12-01",
         },
         "virtual-office",
+        "pl",
+      );
+    });
+
+    it("sends English emails when language is en", async () => {
+      const formData = new FormData();
+      formData.append("firstName", "John");
+      formData.append("lastName", "Smith");
+      formData.append("email", "john@example.com");
+      formData.append("phone", "+48 123 456 789");
+      formData.append("gdprConsent", "on");
+      formData.append("companyName", "Test Company");
+      formData.append("package", "basic");
+      formData.append("startDate", "2024-12-01");
+      formData.append("businessType", "sole-proprietorship");
+      formData.append("message", "Test message");
+
+      const result = await submitVirtualOfficeForm(formData, "en");
+
+      expect(result.success).toBe(true);
+      await expectEmailCalls(
+        {
+          email: "john@example.com",
+          companyName: "Test Company",
+          package: "basic",
+          startDate: "2024-12-01",
+        },
+        "virtual-office",
+        "en",
       );
     });
 
@@ -142,6 +183,7 @@ describe("Server Actions", () => {
           workspaceType: "hot-desk",
         },
         "coworking",
+        "pl",
       );
     });
   });
@@ -173,6 +215,7 @@ describe("Server Actions", () => {
           startTime: "09:00",
         },
         "meeting-room",
+        "pl",
       );
     });
   });
@@ -203,6 +246,7 @@ describe("Server Actions", () => {
           campaignType: "digital",
         },
         "advertising",
+        "pl",
       );
     });
   });
@@ -235,6 +279,7 @@ describe("Server Actions", () => {
           dealType: "welcome-package",
         },
         "special-deals",
+        "pl",
       );
     });
   });
