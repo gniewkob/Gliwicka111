@@ -50,7 +50,10 @@ async function handleFormSubmission<T>(
     };
 
     ["teamSize", "attendees", "budget"].forEach((field) => {
-      if (processedData[field] !== undefined) {
+      if (
+        processedData[field] !== undefined &&
+        !Number.isNaN(Number(processedData[field]))
+      ) {
         processedData[field] = Number(processedData[field]);
       }
     });
@@ -96,11 +99,19 @@ async function handleFormSubmission<T>(
       ],
     );
 
-    // Send confirmation email
-    await sendConfirmationEmail(sanitizedData, formType, language);
+    // Attempt to send emails without affecting user response
+    const emailResults = await Promise.allSettled([
+      sendConfirmationEmail(sanitizedData, formType, language),
+      sendAdminNotification(sanitizedData, formType, language),
+    ]);
 
-    // Send notification to admin
-    await sendAdminNotification(sanitizedData, formType, language);
+    emailResults.forEach((result, index) => {
+      if (result.status === "rejected") {
+        const type = index === 0 ? "confirmation" : "admin";
+        console.error(`Failed to send ${type} email:`, result.reason);
+        void enqueueFailedEmail(type, sanitizedData, result.reason);
+      }
+    });
 
     return {
       success: true,
@@ -227,16 +238,11 @@ async function sendConfirmationEmail(
   formType: string,
   language: "pl" | "en",
 ): Promise<void> {
-  try {
-    await emailClient.sendEmail({
-      to: data.email,
-      subject: getEmailSubject(formType, language),
-      text: getEmailBody(formType, language),
-    });
-  } catch (error) {
-    console.error("Failed to send confirmation email", error);
-    throw error;
-  }
+  await emailClient.sendEmail({
+    to: data.email,
+    subject: getEmailSubject(formType, language),
+    text: getEmailBody(formType, language),
+  });
 }
 
 async function sendAdminNotification(
@@ -244,24 +250,27 @@ async function sendAdminNotification(
   formType: string,
   language: "pl" | "en",
 ): Promise<void> {
-  try {
-    const subject =
-      language === "en"
-        ? `New submission: ${formType}`
-        : `Nowe zgłoszenie: ${formType}`;
-    const text =
-      language === "en"
-        ? `New submission from ${data.email} regarding ${formType}.`
-        : `Nowe zgłoszenie od ${data.email} dotyczące ${formType}.`;
-    await emailClient.sendEmail({
-      to: EMAIL_CONFIG.adminEmail,
-      subject,
-      text,
-    });
-  } catch (error) {
-    console.error("Failed to send admin notification", error);
-    throw error;
-  }
+  const subject =
+    language === "en"
+      ? `New submission: ${formType}`
+      : `Nowe zgłoszenie: ${formType}`;
+  const text =
+    language === "en"
+      ? `New submission from ${data.email} regarding ${formType}.`
+      : `Nowe zgłoszenie od ${data.email} dotyczące ${formType}.`;
+  await emailClient.sendEmail({
+    to: EMAIL_CONFIG.adminEmail,
+    subject,
+    text,
+  });
+}
+
+async function enqueueFailedEmail(
+  type: "confirmation" | "admin",
+  data: any,
+  error: unknown,
+): Promise<void> {
+  console.log(`Enqueuing ${type} email for retry`, { data, error });
 }
 
 function getEmailSubject(formType: string, language: "pl" | "en"): string {

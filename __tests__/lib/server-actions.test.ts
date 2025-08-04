@@ -75,8 +75,8 @@ describe("Server Actions", () => {
 
       const result = await submitVirtualOfficeForm(formData, "pl");
 
-      expect(result.success).toBe(false);
-      expect(result.message).toContain("błąd");
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("wysłany");
     });
   });
 
@@ -133,7 +133,8 @@ describe("Server Actions", () => {
       formData.append("companyName", "Test Company");
       formData.append("campaignType", "digital");
       formData.append("duration", "3-months");
-      formData.append("budget", "5000");
+      formData.append("startDate", "2024-12-01");
+      formData.append("budget", "5000-10000");
 
       const result = await submitAdvertisingForm(formData, "pl");
 
@@ -153,9 +154,10 @@ describe("Server Actions", () => {
       formData.append("companyName", "Test Company");
       formData.append("interestedServices", "virtual-office");
       formData.append("interestedServices", "coworking");
-      formData.append("companySize", "medium");
+      formData.append("dealType", "welcome-package");
+      formData.append("currentSituation", "new-business");
       formData.append("timeline", "immediate");
-      formData.append("budget", "10000");
+      formData.append("budget", "5000-10000");
 
       const result = await submitSpecialDealsForm(formData, "pl");
 
