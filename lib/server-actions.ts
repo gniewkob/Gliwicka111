@@ -296,10 +296,20 @@ export async function sendAdminNotification(
     language === "en"
       ? `New submission: ${serviceName}`
       : `Nowe zgłoszenie: ${serviceName}`;
+
+  const messageSummary = (() => {
+    if (typeof data.message !== "string" || data.message.trim() === "") {
+      return language === "en" ? "No message provided" : "Brak wiadomości";
+    }
+    const trimmed = data.message.trim();
+    return trimmed.length > 100 ? `${trimmed.slice(0, 100)}...` : trimmed;
+  })();
+
   const text =
     language === "en"
-      ? `New submission from ${data.email} regarding ${serviceName}.`
-      : `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`;
+      ? `New submission from ${data.firstName ?? ""} ${data.lastName ?? ""} (${data.email}, ${data.phone ?? ""}) regarding ${serviceName}.\nMessage: ${messageSummary}`
+      : `Nowe zgłoszenie od ${data.firstName ?? ""} ${data.lastName ?? ""} (${data.email}, ${data.phone ?? ""}) dotyczące ${serviceName}.\nWiadomość: ${messageSummary}`;
+
   await emailClient.sendEmail({
     to: EMAIL_CONFIG.adminEmail,
     subject,
@@ -319,7 +329,7 @@ async function enqueueFailedEmail(
     if (value && typeof value === "object") {
       return Object.fromEntries(
         Object.entries(value as Record<string, unknown>).map(([key, val]) =>
-          /(name|email|phone)/i.test(key)
+          /(name|email|phone|message)/i.test(key)
             ? [key, "[REDACTED]"]
             : [key, maskPII(val)],
         ),
