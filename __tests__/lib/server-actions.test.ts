@@ -46,10 +46,17 @@ async function expectEmailCalls(
     language === "en"
       ? `New submission: ${serviceName}`
       : `Nowe zgłoszenie: ${serviceName}`;
+  const messageSummary = (() => {
+    if (!data.message) {
+      return language === "en" ? "No message provided" : "Brak wiadomości";
+    }
+    const trimmed = data.message.trim();
+    return trimmed.length > 100 ? `${trimmed.slice(0, 100)}...` : trimmed;
+  })();
   const expectedAdminText =
     language === "en"
-      ? `New submission from ${data.email} regarding ${serviceName}.`
-      : `Nowe zgłoszenie od ${data.email} dotyczące ${serviceName}.`;
+      ? `New submission from ${data.firstName} ${data.lastName} (${data.email}, ${data.phone}) regarding ${serviceName}.\nMessage: ${messageSummary}`
+      : `Nowe zgłoszenie od ${data.firstName} ${data.lastName} (${data.email}, ${data.phone}) dotyczące ${serviceName}.\nWiadomość: ${messageSummary}`;
 
   const calls = (emailClient.sendEmail as any).mock.calls;
   const userCall = calls.find((c: any) => c[0].to === data.email)?.[0];
@@ -89,7 +96,11 @@ describe("Server Actions", () => {
       expect(result.message).toContain("wysłany");
       await expectEmailCalls(
         {
+          firstName: "Jan",
+          lastName: "Kowalski",
           email: "jan@example.com",
+          phone: "+48 123 456 789",
+          message: "Test message",
           companyName: "Test Company",
           package: "basic",
           startDate: "2024-12-01",
@@ -119,7 +130,11 @@ describe("Server Actions", () => {
       expect(result.success).toBe(true);
       await expectEmailCalls(
         {
+          firstName: "John",
+          lastName: "Smith",
           email: "john@example.com",
+          phone: "+48 123 456 789",
+          message: "Test message",
           companyName: "Test Company",
           package: "basic",
           startDate: "2024-12-01",
@@ -165,7 +180,11 @@ describe("Server Actions", () => {
       expect(result.message).toContain("wysłany");
       await expectEmailCalls(
         {
+          firstName: "Jan",
+          lastName: "Kowalski",
           email: "jan@example.com",
+          phone: "+48 123 456 789",
+          message: undefined,
           companyName: "Test Company",
           package: "basic",
           startDate: "2024-12-01",
@@ -212,7 +231,11 @@ describe("Server Actions", () => {
       expect(result.message).toContain("wysłany");
       await expectEmailCalls(
         {
+          firstName: "Jan",
+          lastName: "Kowalski",
           email: "jan@example.com",
+          phone: "+48 123 456 789",
+          message: undefined,
           startDate: "2024-12-01",
           workspaceType: "hot-desk",
         },
@@ -245,7 +268,11 @@ describe("Server Actions", () => {
       expect(result.message).toContain("wysłany");
       await expectEmailCalls(
         {
+          firstName: "Jan",
+          lastName: "Kowalski",
           email: "jan@example.com",
+          phone: "+48 123 456 789",
+          message: undefined,
           companyName: "Test Company",
           date: "2024-12-01",
           startTime: "09:00",
@@ -278,7 +305,11 @@ describe("Server Actions", () => {
       expect(result.message).toContain("wysłany");
       await expectEmailCalls(
         {
+          firstName: "Jan",
+          lastName: "Kowalski",
           email: "jan@example.com",
+          phone: "+48 123 456 789",
+          message: undefined,
           companyName: "Test Company",
           startDate: "2024-12-01",
           campaignType: "digital",
@@ -313,7 +344,11 @@ describe("Server Actions", () => {
       expect(result.message).toContain("wysłany");
       await expectEmailCalls(
         {
+          firstName: "Jan",
+          lastName: "Kowalski",
           email: "jan@example.com",
+          phone: "+48 123 456 789",
+          message: undefined,
           companyName: "Test Company",
           timeline: "immediate",
           dealType: "welcome-package",
