@@ -30,6 +30,28 @@ const SERVICE_NAMES = {
   "special-deals": { pl: "oferty specjalne", en: "special deals" },
 } as const;
 
+// Key fields included in confirmation emails
+const EMAIL_SUMMARY_FIELDS = {
+  "virtual-office": ["companyName", "startDate", "package"],
+  coworking: ["companyName", "startDate", "workspaceType"],
+  "meeting-room": ["companyName", "date", "startTime"],
+  advertising: ["companyName", "startDate", "campaignType"],
+  "special-deals": ["companyName", "timeline", "dealType"],
+} as const;
+
+// Field label translations
+const FIELD_LABELS = {
+  companyName: { pl: "Nazwa firmy", en: "Company name" },
+  startDate: { pl: "Data rozpoczęcia", en: "Start date" },
+  date: { pl: "Data", en: "Date" },
+  startTime: { pl: "Godzina rozpoczęcia", en: "Start time" },
+  package: { pl: "Pakiet", en: "Package" },
+  workspaceType: { pl: "Typ przestrzeni", en: "Workspace type" },
+  campaignType: { pl: "Typ kampanii", en: "Campaign type" },
+  timeline: { pl: "Harmonogram", en: "Timeline" },
+  dealType: { pl: "Typ oferty", en: "Deal type" },
+} as const;
+
 // Generic form submission handler
 async function handleFormSubmission<T>(
   formData: FormData,
@@ -255,10 +277,39 @@ async function sendConfirmationEmail(
   formType: string,
   language: "pl" | "en",
 ): Promise<void> {
+  const serviceName =
+    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
+
+  const intro =
+    language === "en"
+      ? `Thank you for your ${serviceName} inquiry.`
+      : `Dziękujemy za zgłoszenie dotyczące ${serviceName}.`;
+
+  const fields = EMAIL_SUMMARY_FIELDS[formType as keyof typeof EMAIL_SUMMARY_FIELDS] || [];
+  const summary = fields
+    .map((field) => {
+      const value = (data as Record<string, unknown>)[field];
+      if (value === undefined || value === null || value === "") {
+        return null;
+      }
+      const label =
+        FIELD_LABELS[field as keyof typeof FIELD_LABELS]?.[language] || field;
+      return `${label}: ${value}`;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  const closing =
+    language === "en"
+      ? "We will contact you soon."
+      : "Skontaktujemy się wkrótce.";
+
+  const text = [intro, summary, closing].filter(Boolean).join("\n\n");
+
   await emailClient.sendEmail({
     to: data.email,
     subject: getEmailSubject(formType, language),
-    text: getEmailBody(formType, language),
+    text,
   });
 }
 
@@ -315,42 +366,6 @@ function getEmailSubject(formType: string, language: "pl" | "en"): string {
   return (
     subjects[language][formType as keyof (typeof subjects)[typeof language]] ||
     "Potwierdzenie - Gliwicka 111"
-  );
-}
-
-function getEmailBody(formType: string, language: "pl" | "en"): string {
-  const bodies = {
-    pl: {
-      "virtual-office":
-        "Dziękujemy za zgłoszenie dotyczące biura wirtualnego. Skontaktujemy się wkrótce.",
-      coworking:
-        "Dziękujemy za zgłoszenie dotyczące coworkingu. Skontaktujemy się wkrótce.",
-      "meeting-room":
-        "Dziękujemy za rezerwację sali. Skontaktujemy się wkrótce.",
-      advertising:
-        "Dziękujemy za zapytanie o reklamę. Skontaktujemy się wkrótce.",
-      "special-deals":
-        "Dziękujemy za zapytanie o oferty specjalne. Skontaktujemy się wkrótce.",
-    },
-    en: {
-      "virtual-office":
-        "Thank you for your virtual office inquiry. We will contact you soon.",
-      coworking:
-        "Thank you for your coworking inquiry. We will contact you soon.",
-      "meeting-room":
-        "Thank you for your meeting room booking. We will contact you soon.",
-      advertising:
-        "Thank you for your advertising inquiry. We will contact you soon.",
-      "special-deals":
-        "Thank you for your special deals inquiry. We will contact you soon.",
-    },
-  };
-
-  return (
-    bodies[language][formType as keyof (typeof bodies)[typeof language]] ||
-    (language === "en"
-      ? "Thank you for your submission. We will contact you soon."
-      : "Dziękujemy za zgłoszenie. Skontaktujemy się wkrótce.")
   );
 }
 
