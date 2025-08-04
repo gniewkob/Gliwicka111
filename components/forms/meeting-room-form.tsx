@@ -211,7 +211,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitMeetingRoomForm(formData, language)
+      const result = await submitMeetingRoomForm(formData)
       setSubmitResult(result)
 
       if (result.success) {
@@ -221,7 +221,8 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
         analytics.trackSubmissionError(result.message)
       }
     } catch (error) {
-      const errorMessage = "Wystąpił nieoczekiwany błąd"
+      const errorMessage =
+        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       setSubmitResult({ success: false, message: errorMessage })
       analytics.trackSubmissionError(errorMessage)
     } finally {

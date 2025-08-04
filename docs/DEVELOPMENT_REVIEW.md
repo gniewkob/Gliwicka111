@@ -512,7 +512,7 @@ export class FormFactory {
             }
           })
 
-          const result = await config.submitAction(formData, language)
+          const result = await config.submitAction(formData)
           setSubmitResult(result)
 
           if (result.success) {
