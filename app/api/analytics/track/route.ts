@@ -59,16 +59,14 @@ async function hashIP(ip: string): Promise<string> {
   const crypto = await import("crypto")
   const salt = process.env.IP_SALT
   if (!salt) {
-    const message = "IP_SALT environment variable is not set"
     if (process.env.NODE_ENV === "production") {
-      throw new Error(message)
-    } else {
-      console.warn(message)
+      throw new Error("IP_SALT environment variable is required in production")
     }
+    console.warn("IP_SALT is not set; using default salt for IP hashing")
   }
   return crypto
     .createHash("sha256")
-    .update(ip + (salt || "default-salt"))
+    .update(ip + (salt ?? "default-salt"))
     .digest("hex")
     .substring(0, 16)
 }
