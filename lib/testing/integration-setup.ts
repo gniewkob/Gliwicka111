@@ -2,6 +2,8 @@ import { vi, beforeAll, afterAll, beforeEach, afterEach } from "vitest"
 import "@testing-library/jest-dom"
 import { cleanup } from "@testing-library/react"
 import { Client } from "pg"
+import { readFile } from "node:fs/promises"
+import path from "node:path"
 
 let client: Client
 
@@ -73,44 +75,32 @@ afterAll(async () => {
 })
 
 async function runMigrations(conn: Client) {
-  // Create tables for testing
-  await conn.query(`
-    CREATE TABLE IF NOT EXISTS form_submissions (
-      id SERIAL PRIMARY KEY,
-      form_type VARCHAR(50) NOT NULL,
-      data JSONB NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      processed_at TIMESTAMP NULL,
-      status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'processed', 'failed'))
-    )
-  `)
+  const migrations = [
+    "migrations/001_create_form_submissions.sql",
+    "migrations/002_create_analytics_tables.sql",
+  ]
 
-  await conn.query(`
-    CREATE TABLE IF NOT EXISTS analytics_events (
-      id SERIAL PRIMARY KEY,
-      form_type VARCHAR(50) NOT NULL,
-      event_type VARCHAR(50) NOT NULL,
-      session_id VARCHAR(100) NOT NULL,
-      timestamp BIGINT NOT NULL,
-      data JSONB,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `)
+  for (const migration of migrations) {
+    const sql = await readFile(path.join(process.cwd(), migration), "utf8")
+    await conn.query(sql)
+  }
 }
 
 async function cleanDatabase(conn: Client) {
   await conn.query("TRUNCATE TABLE form_submissions RESTART IDENTITY CASCADE")
   await conn.query("TRUNCATE TABLE analytics_events RESTART IDENTITY CASCADE")
+  await conn.query("TRUNCATE TABLE rate_limits RESTART IDENTITY CASCADE")
 }
 
 async function seedTestData(conn: Client) {
   // Insert test form submission
   await conn.query(
     `
-    INSERT INTO form_submissions (form_type, data, status)
-    VALUES ($1, $2, $3)
+    INSERT INTO form_submissions (id, form_type, data, status, ip_hash)
+    VALUES ($1, $2, $3, $4, $5)
   `,
     [
+      "sub_test_1",
       "virtual-office",
       JSON.stringify({
         companyName: "Test Company",
@@ -118,7 +108,8 @@ async function seedTestData(conn: Client) {
         email: "test@example.com",
         phone: "+48 123 456 789",
       }),
-      "processed",
+      "completed",
+      "test_ip_hash",
     ],
   )
 }
