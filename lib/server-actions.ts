@@ -277,39 +277,10 @@ async function sendConfirmationEmail(
   formType: string,
   language: "pl" | "en",
 ): Promise<void> {
-  const serviceName =
-    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
-
-  const intro =
-    language === "en"
-      ? `Thank you for your ${serviceName} inquiry.`
-      : `Dziękujemy za zgłoszenie dotyczące ${serviceName}.`;
-
-  const fields = EMAIL_SUMMARY_FIELDS[formType as keyof typeof EMAIL_SUMMARY_FIELDS] || [];
-  const summary = fields
-    .map((field) => {
-      const value = (data as Record<string, unknown>)[field];
-      if (value === undefined || value === null || value === "") {
-        return null;
-      }
-      const label =
-        FIELD_LABELS[field as keyof typeof FIELD_LABELS]?.[language] || field;
-      return `${label}: ${value}`;
-    })
-    .filter(Boolean)
-    .join("\n");
-
-  const closing =
-    language === "en"
-      ? "We will contact you soon."
-      : "Skontaktujemy się wkrótce.";
-
-  const text = [intro, summary, closing].filter(Boolean).join("\n\n");
-
   await emailClient.sendEmail({
     to: data.email,
     subject: getEmailSubject(formType, language),
-    text,
+    text: getEmailBody(data, formType, language),
   });
 }
 
@@ -359,6 +330,42 @@ async function enqueueFailedEmail(
   // logs useful for debugging while avoiding storage of sensitive data.
   const safeData = maskPII(data);
   console.log(`Enqueuing ${type} email for retry`, { data: safeData, error });
+}
+
+function getEmailBody(
+  data: any,
+  formType: string,
+  language: "pl" | "en",
+): string {
+  const serviceName =
+    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
+
+  const intro =
+    language === "en"
+      ? `Thank you for your ${serviceName} inquiry.`
+      : `Dziękujemy za zgłoszenie dotyczące ${serviceName}.`;
+
+  const fields =
+    EMAIL_SUMMARY_FIELDS[formType as keyof typeof EMAIL_SUMMARY_FIELDS] || [];
+  const summary = fields
+    .map((field) => {
+      const value = (data as Record<string, unknown>)[field];
+      if (value === undefined || value === null || value === "") {
+        return null;
+      }
+      const label =
+        FIELD_LABELS[field as keyof typeof FIELD_LABELS]?.[language] || field;
+      return `${label}: ${value}`;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  const closing =
+    language === "en"
+      ? "We will contact you soon."
+      : "Skontaktujemy się wkrótce.";
+
+  return [intro, summary, closing].filter(Boolean).join("\n\n");
 }
 
 function getEmailSubject(formType: string, language: "pl" | "en"): string {
@@ -432,3 +439,5 @@ export async function deleteSubmission(id: string) {
   }
   return { success: false, message: "Submission not found" };
 }
+
+export { getEmailSubject, getEmailBody };
