@@ -44,7 +44,7 @@ export default defineConfig({
     ? projects.filter(({ name }) => name === "chromium")
     : projects,
   webServer: {
-    command: "npm run build && npm run start",
+    command: "npm run start",
     port: 3000,
     reuseExistingServer: !process.env.CI,
     env: {
