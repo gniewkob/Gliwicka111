@@ -29,7 +29,9 @@ export const virtualOfficeFormSchema = baseFormSchema.extend({
   package: z.enum(["basic", "standard", "premium"], {
     required_error: "Wybór pakietu jest wymagany",
   }),
-  startDate: z.string().min(1, "Data rozpoczęcia jest wymagana"),
+  startDate: z
+    .string({ required_error: "Data rozpoczęcia jest wymagana" })
+    .min(1, "Data rozpoczęcia jest wymagana"),
   additionalServices: z.array(z.string()).optional(),
   nip: z.string().regex(nipRegex, "NIP musi składać się z 10 cyfr").optional(),
   businessType: z.enum(["sole-proprietorship", "llc", "corporation", "other"], {
@@ -45,7 +47,9 @@ export const coworkingFormSchema = baseFormSchema.extend({
   duration: z.enum(["daily", "weekly", "monthly", "yearly"], {
     required_error: "Okres wynajmu jest wymagany",
   }),
-  startDate: z.string().min(1, "Data rozpoczęcia jest wymagana"),
+  startDate: z
+    .string({ required_error: "Data rozpoczęcia jest wymagana" })
+    .min(1, "Data rozpoczęcia jest wymagana"),
   teamSize: z.number().min(1, "Wielkość zespołu musi być co najmniej 1").max(50, "Maksymalna wielkość zespołu to 50"),
   specialRequirements: z.string().max(500, "Wymagania specjalne nie mogą być dłuższe niż 500 znaków").optional(),
   trialDay: z.boolean().optional(),
@@ -78,7 +82,9 @@ export const advertisingFormSchema = baseFormSchema.extend({
   duration: z.enum(["1-week", "2-weeks", "1-month", "3-months", "6-months"], {
     required_error: "Czas trwania kampanii jest wymagany",
   }),
-  startDate: z.string().min(1, "Data rozpoczęcia kampanii jest wymagana"),
+  startDate: z
+    .string({ required_error: "Data rozpoczęcia kampanii jest wymagana" })
+    .min(1, "Data rozpoczęcia kampanii jest wymagana"),
   budget: z.enum(["under-1000", "1000-5000", "5000-10000", "over-10000"], {
     required_error: "Budżet jest wymagany",
   }),
