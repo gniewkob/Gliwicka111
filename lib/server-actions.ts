@@ -82,6 +82,8 @@ async function handleFormSubmission<T>(
         status: 429,
       };
     }
+
+    const processingStart = Date.now();
     // Convert FormData to object
     const data = Object.fromEntries(formData.entries());
     const sessionId = typeof data.sessionId === "string" ? data.sessionId : null;
@@ -137,7 +139,7 @@ async function handleFormSubmission<T>(
     };
 
     await db.query(
-      `INSERT INTO form_submissions (id, form_type, data, status, ip_hash, session_id) VALUES ($1, $2, $3, $4, $5, $6)`,
+      `INSERT INTO form_submissions (id, form_type, data, status, ip_hash, session_id, processing_time_ms, email_latency_ms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
       [
         submission.id,
         formType,
@@ -145,14 +147,31 @@ async function handleFormSubmission<T>(
         submission.status,
         submission.ipHash,
         submission.sessionId,
+        null,
+        null,
       ],
     );
 
+    const processingEnd = Date.now();
+    const processingTime = processingEnd - processingStart;
+    await db.query(
+      `UPDATE form_submissions SET processing_time_ms=$1 WHERE id=$2`,
+      [processingTime, submission.id],
+    );
+
+    const emailStart = Date.now();
     // Attempt to send emails without affecting user response
     const emailResults = await Promise.allSettled([
       sendConfirmationEmail(sanitizedData, formType, language),
       sendAdminNotification(sanitizedData, formType, language),
     ]);
+    const emailEnd = Date.now();
+    const emailLatency = emailEnd - emailStart;
+
+    await db.query(
+      `UPDATE form_submissions SET email_latency_ms=$1 WHERE id=$2`,
+      [emailLatency, submission.id],
+    );
 
     emailResults.forEach((result, index) => {
       if (result.status === "rejected") {

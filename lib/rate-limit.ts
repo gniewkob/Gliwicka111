@@ -19,6 +19,10 @@ export async function checkRateLimit(
   }
 
   if (rows[0].count >= limit) {
+    await db.query(
+      "INSERT INTO duplicate_attempts (ip_hash, attempted_at) VALUES ($1, NOW())",
+      [identifier],
+    )
     return false
   }
 
