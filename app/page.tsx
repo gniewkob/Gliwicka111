@@ -1622,8 +1622,18 @@ export default function HomePage() {
 
           <Tabs defaultValue="virtual-office" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="virtual-office">{t.nav.virtualOffice}</TabsTrigger>
-              <TabsTrigger value="coworking">{t.nav.coworking}</TabsTrigger>
+              <TabsTrigger
+                value="virtual-office"
+                data-testid="tab-faq-virtual-office"
+              >
+                {t.nav.virtualOffice}
+              </TabsTrigger>
+              <TabsTrigger
+                value="coworking"
+                data-testid="tab-faq-coworking"
+              >
+                {t.nav.coworking}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="virtual-office" className="space-y-4">
