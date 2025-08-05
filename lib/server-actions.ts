@@ -11,7 +11,8 @@ import {
 import { db } from "./database/connection-pool";
 import { emailClient } from "./email/smtp-client";
 import { saveFailedEmail } from "./email/failed-email-store";
-import { getCurrentLanguage, messages } from "./i18n";
+import { messages } from "./i18n";
+import { getCurrentLanguage } from "./get-current-language";
 import { hashIP } from "./security/ip";
 import { checkRateLimit } from "./rate-limit";
 
@@ -68,7 +69,7 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   try {
-    const language = getCurrentLanguage();
+    const language = await getCurrentLanguage();
     const clientIP = getClientIP();
     const ipHash = await hashIP(clientIP);
 
@@ -167,7 +168,7 @@ async function handleFormSubmission<T>(
     };
   } catch (error) {
     console.error("Form submission error:", error);
-    const language = getCurrentLanguage();
+    const language = await getCurrentLanguage();
     return {
       success: false,
       message: messages.form.serverError[language],
@@ -234,7 +235,7 @@ function getClientIP(): string {
 export async function sendConfirmationEmail(
   data: any,
   formType: string,
-  language: "pl" | "en" = getCurrentLanguage(),
+  language: "pl" | "en",
 ): Promise<void> {
   await emailClient.sendEmail({
     to: data.email,
@@ -246,7 +247,7 @@ export async function sendConfirmationEmail(
 export async function sendAdminNotification(
   data: any,
   formType: string,
-  language: "pl" | "en" = getCurrentLanguage(),
+  language: "pl" | "en",
 ): Promise<void> {
   const serviceName =
     SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
@@ -399,7 +400,8 @@ export async function updateSubmissionStatus(
   if (result.rowCount > 0) {
     return { success: true };
   }
-  return { success: false, message: messages.admin.notFound[getCurrentLanguage()] };
+  const language = await getCurrentLanguage();
+  return { success: false, message: messages.admin.notFound[language] };
 }
 
 export async function deleteSubmission(id: string) {
@@ -409,7 +411,8 @@ export async function deleteSubmission(id: string) {
   if (result.rowCount > 0) {
     return { success: true };
   }
-  return { success: false, message: messages.admin.notFound[getCurrentLanguage()] };
+  const language = await getCurrentLanguage();
+  return { success: false, message: messages.admin.notFound[language] };
 }
 
 export { getEmailSubject, getEmailBody };

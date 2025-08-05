@@ -4,17 +4,17 @@ vi.mock("next/headers", () => ({
   cookies: vi.fn(),
 }));
 
-import { getCurrentLanguage } from "@/lib/i18n";
+import { getCurrentLanguage } from "@/lib/get-current-language";
 import { cookies } from "next/headers";
 
 describe("getCurrentLanguage", () => {
-  it("returns language from cookie", () => {
+  it("returns language from cookie", async () => {
     (cookies as any).mockReturnValue({ get: () => ({ value: "en" }) });
-    expect(getCurrentLanguage()).toBe("en");
+    await expect(getCurrentLanguage()).resolves.toBe("en");
   });
 
-  it("defaults to pl when cookie missing", () => {
+  it("defaults to pl when cookie missing", async () => {
     (cookies as any).mockReturnValue({ get: () => undefined });
-    expect(getCurrentLanguage()).toBe("pl");
+    await expect(getCurrentLanguage()).resolves.toBe("pl");
   });
 });
