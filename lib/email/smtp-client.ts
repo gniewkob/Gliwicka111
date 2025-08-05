@@ -1,4 +1,7 @@
-import nodemailer, { type SendMailOptions } from "nodemailer";
+import nodemailer, {
+  type SendMailOptions,
+  type SentMessageInfo,
+} from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -12,7 +15,18 @@ const transporter = nodemailer.createTransport({
     : undefined,
 });
 
-async function sendEmail(options: SendMailOptions) {
+async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
+  if (process.env.MOCK_EMAIL === "true") {
+    return {
+      envelope: {},
+      messageId: "mocked-message-id",
+      accepted: [],
+      rejected: [],
+      pending: [],
+      response: "MOCK_EMAIL=true",
+    } as SentMessageInfo;
+  }
+
   try {
     const info = await transporter.sendMail({
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
