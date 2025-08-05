@@ -1,5 +1,3 @@
-import { cookies } from "next/headers"
-
 export const navTranslations = {
   pl: {
     home: "Strona główna",
@@ -48,8 +46,3 @@ export const messages = {
 } as const
 
 export type Language = keyof typeof navTranslations
-
-export function getCurrentLanguage(): Language {
-  const lang = cookies().get("lang")?.value
-  return lang === "en" ? "en" : "pl"
-}
