@@ -36,8 +36,8 @@ describe("GET /api/health", () => {
   })
 
   it("returns 200 when dependencies are healthy", async () => {
-    ;(db.query as any).mockResolvedValue({ rows: [], rowCount: 1 })
-    ;(emailClient.verifyConnection as any).mockResolvedValue(true)
+    vi.spyOn(db, "query").mockResolvedValue({ rows: [], rowCount: 1 } as any)
+    vi.spyOn(emailClient, "verifyConnection").mockResolvedValue(true as any)
     mockOtherChecks()
 
     const response = await GET(new Request("http://localhost/api/health"))
@@ -45,8 +45,8 @@ describe("GET /api/health", () => {
   })
 
   it("returns 503 when database check fails", async () => {
-    ;(db.query as any).mockRejectedValue(new Error("db error"))
-    ;(emailClient.verifyConnection as any).mockResolvedValue(true)
+    vi.spyOn(db, "query").mockRejectedValue(new Error("db error"))
+    vi.spyOn(emailClient, "verifyConnection").mockResolvedValue(true as any)
     mockOtherChecks()
 
     const response = await GET(new Request("http://localhost/api/health"))
@@ -54,8 +54,8 @@ describe("GET /api/health", () => {
   })
 
   it("returns 503 when email service check fails", async () => {
-    ;(db.query as any).mockResolvedValue({ rows: [], rowCount: 1 })
-    ;(emailClient.verifyConnection as any).mockResolvedValue(false)
+    vi.spyOn(db, "query").mockResolvedValue({ rows: [], rowCount: 1 } as any)
+    vi.spyOn(emailClient, "verifyConnection").mockResolvedValue(false as any)
     mockOtherChecks()
 
     const response = await GET(new Request("http://localhost/api/health"))
