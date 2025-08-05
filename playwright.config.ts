@@ -54,6 +54,7 @@ export default defineConfig({
       DB_USER: "test_user",
       DB_PASSWORD: "test_password",
       MOCK_DB: "true",
+      MOCK_EMAIL: "true",
     },
   },
 })
