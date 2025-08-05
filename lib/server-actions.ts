@@ -12,6 +12,7 @@ import { db } from "./database/connection-pool";
 import { emailClient } from "./email/smtp-client";
 import { saveFailedEmail } from "./email/failed-email-store";
 import { getCurrentLanguage, messages } from "./i18n";
+import { hashIP } from "./security/ip";
 
 // Email service configuration
 const EMAIL_CONFIG = {
@@ -209,24 +210,6 @@ function sanitizeSubmissionData(data: any): any {
 
 function generateSubmissionId(): string {
   return `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
-
-async function hashIP(ip: string): Promise<string> {
-  const crypto = await import("crypto");
-  const salt = process.env.IP_SALT;
-  if (!salt) {
-    const message = "IP_SALT environment variable is not set";
-    if (process.env.NODE_ENV === "production") {
-      throw new Error(message);
-    } else {
-      console.warn(message);
-    }
-  }
-  return crypto
-    .createHash("sha256")
-    .update(ip + (salt || "default-salt"))
-    .digest("hex")
-    .substring(0, 16);
 }
 
 function getClientIP(): string {
