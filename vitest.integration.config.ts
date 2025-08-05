@@ -22,6 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./"),
+      pg: path.resolve(__dirname, "./lib/testing/__mocks__/pg"),
     },
   },
 })
