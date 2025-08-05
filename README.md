@@ -130,6 +130,8 @@ gliwicka-contact-forms/
 
 3. **Environment Variables Setup**
 
+    The application requires the following environment variables to connect to the database, send emails, and enforce rate limiting.
+
     Create a `.env.local` file in the root directory:
     ```env
     # Database
@@ -219,6 +221,12 @@ npm run lint
    ```
 
 ### CI/CD Pipeline
+GitHub Actions manage continuous integration and deployment:
+
+- `ci.yml` runs linting, unit tests, and the production build on every push and pull request.
+- `e2e.yml` executes Playwright end-to-end tests after CI completes and uploads an HTML report and JUnit results as artifacts.
+- `deploy.yml` deploys the application when the E2E workflow succeeds.
+  Test artifacts can be downloaded from the GitHub Actions run summary.
 
 1. **Run tests and linting**
    \`\`\`bash
@@ -248,11 +256,38 @@ npm run migrate
 
 ### Health Checks
 
-The application exposes a health endpoint for monitoring:
+The application exposes a rate-limited health endpoint for monitoring overall system status:
 
-\`\`\`bash
+```bash
 curl https://your-domain/api/health
-\`\`\`
+```
+
+The endpoint responds with JSON similar to:
+
+```json
+{
+  "status": "healthy",
+  "version": "1.0.0",
+  "uptime": 123456,
+  "summary": { "healthy": 5, "degraded": 0, "unhealthy": 0 },
+  "checks": [ { "service": "database", "status": "healthy" }, ... ]
+}
+```
+
+- **200** – overall status is `healthy` or `degraded`
+- **503** – any check reports `unhealthy`
+
+Rate limiting for this endpoint uses `RATE_LIMIT_COUNT` and `RATE_LIMIT_WINDOW_MS` environment variables.
+
+### Email Retry Worker
+
+Failed emails are stored for later processing. Run the worker manually with:
+
+```bash
+npm run retry:failed-emails
+```
+
+Schedule it with cron in production to retry deliveries automatically.
 
 ### Logging
 
