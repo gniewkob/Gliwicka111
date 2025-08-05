@@ -18,7 +18,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npx playwright install --with-deps
-      - run: npx playwright test --reporter=html,junit --CI
+      - run: npx playwright test --reporter=html,junit
       - name: Upload HTML report
         if: always()
         uses: actions/upload-artifact@v4
