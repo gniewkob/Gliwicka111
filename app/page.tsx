@@ -967,7 +967,7 @@ export default function HomePage() {
             </Badge>
           )}
         </div>
-        <blockquote className="text-slate-700 mb-4 italic flex-1">"{testimonial.text}"</blockquote>
+        <blockquote className="text-slate-700 mb-4 italic flex-1">&ldquo;{testimonial.text}&rdquo;</blockquote>
         <div className="flex items-center">
           <Image
             src={testimonial.avatar || "/placeholder.svg"}
