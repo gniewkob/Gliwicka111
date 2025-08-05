@@ -73,23 +73,43 @@ export default function FormShowcase() {
         ) : (
           <Tabs defaultValue="virtual-office" className="w-full">
             <TabsList className="grid w-full grid-cols-5 mb-8">
-              <TabsTrigger value="virtual-office" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="virtual-office"
+                className="flex items-center space-x-2"
+                data-testid="tab-virtual-office"
+              >
                 <MapPin className="w-4 h-4" />
                 <span className="hidden sm:inline">{language === "pl" ? "Biuro wirtualne" : "Virtual Office"}</span>
               </TabsTrigger>
-              <TabsTrigger value="coworking" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="coworking"
+                className="flex items-center space-x-2"
+                data-testid="tab-coworking"
+              >
                 <Users className="w-4 h-4" />
                 <span className="hidden sm:inline">Coworking</span>
               </TabsTrigger>
-              <TabsTrigger value="meeting-rooms" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="meeting-rooms"
+                className="flex items-center space-x-2"
+                data-testid="tab-meeting-rooms"
+              >
                 <Calendar className="w-4 h-4" />
                 <span className="hidden sm:inline">{language === "pl" ? "Sale" : "Rooms"}</span>
               </TabsTrigger>
-              <TabsTrigger value="advertising" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="advertising"
+                className="flex items-center space-x-2"
+                data-testid="tab-advertising"
+              >
                 <Megaphone className="w-4 h-4" />
                 <span className="hidden sm:inline">{language === "pl" ? "Reklama" : "Advertising"}</span>
               </TabsTrigger>
-              <TabsTrigger value="special-deals" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="special-deals"
+                className="flex items-center space-x-2"
+                data-testid="tab-special-deals"
+              >
                 <Gift className="w-4 h-4" />
                 <span className="hidden sm:inline">{language === "pl" ? "Promocje" : "Deals"}</span>
               </TabsTrigger>

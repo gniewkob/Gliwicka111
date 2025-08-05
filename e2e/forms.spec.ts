@@ -6,16 +6,16 @@ test.describe("Contact Forms", () => {
   })
 
   test("should display all form types", async ({ page }) => {
-    await expect(page.getByText("Biuro Wirtualne")).toBeVisible()
-    await expect(page.getByText("Coworking")).toBeVisible()
-    await expect(page.getByText("Sala Konferencyjna")).toBeVisible()
-    await expect(page.getByText("Reklama")).toBeVisible()
-    await expect(page.getByText("Oferty Specjalne")).toBeVisible()
+    await expect(page.getByTestId("tab-virtual-office")).toBeVisible()
+    await expect(page.getByTestId("tab-coworking")).toBeVisible()
+    await expect(page.getByTestId("tab-meeting-rooms")).toBeVisible()
+    await expect(page.getByTestId("tab-advertising")).toBeVisible()
+    await expect(page.getByTestId("tab-special-deals")).toBeVisible()
   })
 
   test("should submit virtual office form successfully", async ({ page }) => {
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Fill out the form
     await page.fill('[name="companyName"]', "Test Company")
@@ -36,7 +36,7 @@ test.describe("Contact Forms", () => {
 
   test("should validate required fields", async ({ page }) => {
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Try to submit empty form
     await page.click('button[type="submit"]')
@@ -50,7 +50,7 @@ test.describe("Contact Forms", () => {
 
   test("should validate email format", async ({ page }) => {
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Fill with invalid email
     await page.fill('[name="email"]', "invalid-email")
@@ -62,7 +62,7 @@ test.describe("Contact Forms", () => {
 
   test("should submit coworking form successfully", async ({ page }) => {
     // Navigate to coworking form
-    await page.click("text=Coworking")
+    await page.getByTestId("tab-coworking").click()
 
     // Fill out the form
     await page.fill('[name="contactPerson"]', "Anna Nowak")
@@ -84,7 +84,7 @@ test.describe("Contact Forms", () => {
 
   test("should submit meeting room form successfully", async ({ page }) => {
     // Navigate to meeting room form
-    await page.click("text=Sala Konferencyjna")
+    await page.getByTestId("tab-meeting-rooms").click()
 
     // Fill out the form
     await page.fill('[name="contactPerson"]', "Piotr Kowalczyk")
@@ -112,7 +112,7 @@ test.describe("Contact Forms", () => {
     await page.route("**/api/**", (route) => route.abort())
 
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Fill out minimal required fields
     await page.fill('[name="companyName"]', "Test Company")
@@ -137,7 +137,7 @@ test.describe("Contact Forms", () => {
     })
 
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Interact with form fields
     await page.fill('[name="companyName"]', "Test Company")
@@ -155,7 +155,7 @@ test.describe("Contact Forms", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
 
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Check form accessibility
     await expect(page.getByRole("form")).toBeVisible()
@@ -178,7 +178,7 @@ test.describe("Contact Forms", () => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     // Navigate to virtual office form
-    await page.click("text=Biuro Wirtualne")
+    await page.getByTestId("tab-virtual-office").click()
 
     // Check that form is responsive
     await expect(page.locator("form")).toBeVisible()
