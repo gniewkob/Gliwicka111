@@ -157,9 +157,15 @@ gliwicka-contact-forms/
     ANALYTICS_AUTH_TOKEN=analytics-auth-token
     ANALYTICS_BASIC_USER=analytics-user
     ANALYTICS_BASIC_PASS=analytics-pass
+
+    # Rate limiting (defaults allow 100 requests per minute)
+    RATE_LIMIT_COUNT=100
+    RATE_LIMIT_WINDOW_MS=60000
     ```
 
     These variables are required both locally and in Vercel. The application issues a `SELECT 1` query on each form submission to ensure the database specified above is reachable.
+
+    `RATE_LIMIT_COUNT` and `RATE_LIMIT_WINDOW_MS` define how many requests an IP can make within the specified time window. The defaults permit 100 requests per 60 seconds. Lower the count or extend the window to tighten limits, or relax them for higher throughput environments.
 
 4. **Start development server**
    \`\`\`bash

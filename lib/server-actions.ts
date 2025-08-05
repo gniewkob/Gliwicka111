@@ -72,7 +72,9 @@ async function handleFormSubmission<T>(
     const clientIP = getClientIP();
     const ipHash = await hashIP(clientIP);
 
-    if (!(await checkRateLimit(db, ipHash, 5, 60000))) {
+    const rateLimitCount = Number(process.env.RATE_LIMIT_COUNT ?? "100")
+    const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000")
+    if (!(await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow))) {
       return {
         success: false,
         message: messages.form.tooManyRequests[language],
