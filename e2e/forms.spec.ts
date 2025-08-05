@@ -1,198 +1,217 @@
-import { test, expect } from "@playwright/test"
+import { test, expect } from "@playwright/test";
 
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/forms")
-  })
+    await page.goto("/forms");
+  });
 
   test("should display all form types", async ({ page }) => {
-    await expect(page.getByTestId("tab-virtual-office")).toBeVisible()
-    await expect(page.getByTestId("tab-coworking")).toBeVisible()
-    await expect(page.getByTestId("tab-meeting-rooms")).toBeVisible()
-    await expect(page.getByTestId("tab-advertising")).toBeVisible()
-    await expect(page.getByTestId("tab-special-deals")).toBeVisible()
-  })
+    await expect(page.getByTestId("tab-virtual-office")).toBeVisible();
+    await expect(page.getByTestId("tab-coworking")).toBeVisible();
+    await expect(page.getByTestId("tab-meeting-rooms")).toBeVisible();
+    await expect(page.getByTestId("tab-advertising")).toBeVisible();
+    await expect(page.getByTestId("tab-special-deals")).toBeVisible();
+  });
 
   test("should submit virtual office form successfully", async ({ page }) => {
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Fill out the form
-    await page.fill('[name="companyName"]', "Test Company")
-    await page.fill('[name="contactPerson"]', "Jan Kowalski")
-    await page.fill('[name="email"]', "jan@example.com")
-    await page.fill('[name="phone"]', "+48 123 456 789")
-    await page.fill('[name="nip"]', "1234567890")
-    await page.selectOption('[name="businessType"]', "consulting")
-    await page.fill('[name="preferredDate"]', "2024-12-01")
-    await page.fill('[name="message"]', "Test message for virtual office")
+    await page.fill('[name="companyName"]', "Test Company");
+    await page.fill('[name="firstName"]', "Jan");
+    await page.fill('[name="lastName"]', "Kowalski");
+    await page.fill('[name="email"]', "jan@example.com");
+    await page.fill('[name="phone"]', "+48 123 456 789");
+    await page.fill('[name="nip"]', "1234567890");
+    await page.selectOption('[name="businessType"]', "sole-proprietorship");
+    await page.fill('[name="startDate"]', "2024-12-01");
+    await page.check('[name="gdprConsent"]');
+    await page.fill('[name="message"]', "Test message for virtual office");
 
     // Submit the form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
-  })
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+  });
 
   test("should validate required fields", async ({ page }) => {
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Try to submit empty form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Check for validation errors
-    await expect(page.getByText(/nazwa firmy jest wymagana/i)).toBeVisible()
-    await expect(page.getByText(/imię i nazwisko jest wymagane/i)).toBeVisible()
-    await expect(page.getByText(/email jest wymagany/i)).toBeVisible()
-    await expect(page.getByText(/telefon jest wymagany/i)).toBeVisible()
-  })
+    await expect(
+      page.getByText(/zgoda na przetwarzanie danych jest wymagana/i),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/typ działalności jest wymagany/i),
+    ).toBeVisible();
+    await expect(page.getByText(/wybór pakietu jest wymagany/i)).toBeVisible();
+    await expect(
+      page.getByText(/data rozpoczęcia jest wymagana/i),
+    ).toBeVisible();
+  });
 
   test("should validate email format", async ({ page }) => {
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Fill with invalid email
-    await page.fill('[name="email"]', "invalid-email")
-    await page.click('button[type="submit"]')
+    await page.fill('[name="email"]', "invalid-email");
+    await page.click('button[type="submit"]');
 
     // Check for email validation error
-    await expect(page.getByText(/nieprawidłowy format email/i)).toBeVisible()
-  })
+    await expect(
+      page.getByText(/nieprawidłowy format adresu email/i),
+    ).toBeVisible();
+  });
 
   test("should submit coworking form successfully", async ({ page }) => {
     // Navigate to coworking form
-    await page.getByTestId("tab-coworking").click()
+    await page.getByTestId("tab-coworking").click();
 
     // Fill out the form
-    await page.fill('[name="contactPerson"]', "Anna Nowak")
-    await page.fill('[name="email"]', "anna@example.com")
-    await page.fill('[name="phone"]', "+48 987 654 321")
-    await page.fill('[name="companyName"]', "Coworking Company")
-    await page.selectOption('[name="workspaceType"]', "hot-desk")
-    await page.selectOption('[name="duration"]', "monthly")
-    await page.fill('[name="startDate"]', "2024-12-01")
-    await page.fill('[name="teamSize"]', "3")
-    await page.fill('[name="message"]', "Test message for coworking")
+    await page.fill('[name="firstName"]', "Anna");
+    await page.fill('[name="lastName"]', "Nowak");
+    await page.fill('[name="email"]', "anna@example.com");
+    await page.fill('[name="phone"]', "+48 987 654 321");
+    await page.fill('[name="companyName"]', "Coworking Company");
+    await page.selectOption('[name="workspaceType"]', "hot-desk");
+    await page.selectOption('[name="duration"]', "monthly");
+    await page.fill('[name="startDate"]', "2024-12-01");
+    await page.fill('[name="teamSize"]', "3");
+    await page.check('[name="gdprConsent"]');
+    await page.fill('[name="message"]', "Test message for coworking");
 
     // Submit the form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
-  })
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+  });
 
   test("should submit meeting room form successfully", async ({ page }) => {
     // Navigate to meeting room form
-    await page.getByTestId("tab-meeting-rooms").click()
+    await page.getByTestId("tab-meeting-rooms").click();
 
     // Fill out the form
-    await page.fill('[name="contactPerson"]', "Piotr Kowalczyk")
-    await page.fill('[name="email"]', "piotr@example.com")
-    await page.fill('[name="phone"]', "+48 555 666 777")
-    await page.fill('[name="companyName"]', "Meeting Company")
-    await page.fill('[name="meetingDate"]', "2024-12-15")
-    await page.fill('[name="startTime"]', "09:00")
-    await page.fill('[name="endTime"]', "17:00")
-    await page.fill('[name="attendees"]', "8")
-    await page.selectOption('[name="roomType"]', "conference")
-    await page.check('[name="equipment"][value="projector"]')
-    await page.check('[name="catering"]')
-    await page.fill('[name="message"]', "Test message for meeting room")
+    await page.fill('[name="firstName"]', "Piotr");
+    await page.fill('[name="lastName"]', "Kowalczyk");
+    await page.fill('[name="email"]', "piotr@example.com");
+    await page.fill('[name="phone"]', "+48 555 666 777");
+    await page.fill('[name="companyName"]', "Meeting Company");
+    await page.fill('[name="date"]', "2024-12-15");
+    await page.fill('[name="startTime"]', "09:00");
+    await page.fill('[name="endTime"]', "17:00");
+    await page.fill('[name="attendees"]', "8");
+    await page.selectOption('[name="roomType"]', "conference");
+    await page.check('[name="equipment"][value="projector"]');
+    await page.check('[name="catering"]');
+    await page.check('[name="gdprConsent"]');
+    await page.fill('[name="message"]', "Test message for meeting room");
 
     // Submit the form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
-  })
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+  });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
     // Mock network error
-    await page.route("**/api/**", (route) => route.abort())
+    await page.route("**/api/**", (route) => route.abort());
 
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Fill out minimal required fields
-    await page.fill('[name="companyName"]', "Test Company")
-    await page.fill('[name="contactPerson"]', "Jan Kowalski")
-    await page.fill('[name="email"]', "jan@example.com")
-    await page.fill('[name="phone"]', "+48 123 456 789")
+    await page.fill('[name="companyName"]', "Test Company");
+    await page.fill('[name="firstName"]', "Jan");
+    await page.fill('[name="lastName"]', "Kowalski");
+    await page.fill('[name="email"]', "jan@example.com");
+    await page.fill('[name="phone"]', "+48 123 456 789");
+    await page.check('[name="gdprConsent"]');
 
     // Submit the form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Check for error message
-    await expect(page.getByText(/błąd podczas wysyłania/i)).toBeVisible()
-  })
+    await expect(page.getByText(/błąd podczas wysyłania/i)).toBeVisible();
+  });
 
   test("should track analytics events", async ({ page }) => {
     // Listen for analytics requests
-    const analyticsRequests = []
+    const analyticsRequests = [];
     page.on("request", (request) => {
       if (request.url().includes("/api/analytics/track")) {
-        analyticsRequests.push(request)
+        analyticsRequests.push(request);
       }
-    })
+    });
 
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Interact with form fields
-    await page.fill('[name="companyName"]', "Test Company")
-    await page.fill('[name="contactPerson"]', "Jan Kowalski")
+    await page.fill('[name="companyName"]', "Test Company");
+    await page.fill('[name="firstName"]', "Jan");
+    await page.fill('[name="lastName"]', "Kowalski");
 
     // Wait a bit for analytics events to be sent
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(1000);
 
     // Check that analytics events were tracked
-    expect(analyticsRequests.length).toBeGreaterThan(0)
-  })
+    expect(analyticsRequests.length).toBeGreaterThan(0);
+  });
 
   test("should be accessible", async ({ page }) => {
     // Check for proper heading structure
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Check form accessibility
-    await expect(page.getByRole("form")).toBeVisible()
+    await expect(page.getByRole("form")).toBeVisible();
 
     // Check that all form fields have labels
-    const inputs = await page.locator("input, select, textarea").all()
+    const inputs = await page.locator("input, select, textarea").all();
     for (const input of inputs) {
-      const id = await input.getAttribute("id")
+      const id = await input.getAttribute("id");
       if (id) {
-        await expect(page.locator(`label[for="${id}"]`)).toBeVisible()
+        await expect(page.locator(`label[for="${id}"]`)).toBeVisible();
       }
     }
 
     // Check submit button
-    await expect(page.getByRole("button", { name: /wyślij/i })).toBeVisible()
-  })
+    await expect(page.getByRole("button", { name: /wyślij/i })).toBeVisible();
+  });
 
   test("should work on mobile devices", async ({ page }) => {
     // Set mobile viewport
-    await page.setViewportSize({ width: 375, height: 667 })
+    await page.setViewportSize({ width: 375, height: 667 });
 
     // Navigate to virtual office form
-    await page.getByTestId("tab-virtual-office").click()
+    await page.getByTestId("tab-virtual-office").click();
 
     // Check that form is responsive
-    await expect(page.locator("form")).toBeVisible()
+    await expect(page.locator("form")).toBeVisible();
 
     // Fill out form on mobile
-    await page.fill('[name="companyName"]', "Mobile Test Company")
-    await page.fill('[name="contactPerson"]', "Mobile User")
-    await page.fill('[name="email"]', "mobile@example.com")
-    await page.fill('[name="phone"]', "+48 123 456 789")
+    await page.fill('[name="companyName"]', "Mobile Test Company");
+    await page.fill('[name="firstName"]', "Mobile");
+    await page.fill('[name="lastName"]', "User");
+    await page.fill('[name="email"]', "mobile@example.com");
+    await page.fill('[name="phone"]', "+48 123 456 789");
+    await page.check('[name="gdprConsent"]');
 
     // Submit the form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible()
-  })
-})
+    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+  });
+});
