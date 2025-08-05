@@ -34,6 +34,10 @@ export const messages = {
       pl: "Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie.",
       en: "An error occurred while sending the form. Please try again.",
     },
+    tooManyRequests: {
+      pl: "Zbyt wiele prób. Spróbuj ponownie później.",
+      en: "Too many requests. Please try again later.",
+    },
   },
   admin: {
     notFound: {

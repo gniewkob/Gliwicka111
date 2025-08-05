@@ -13,6 +13,7 @@ import { emailClient } from "./email/smtp-client";
 import { saveFailedEmail } from "./email/failed-email-store";
 import { getCurrentLanguage, messages } from "./i18n";
 import { hashIP } from "./security/ip";
+import { checkRateLimit } from "./rate-limit";
 
 // Email service configuration
 const EMAIL_CONFIG = {
@@ -64,9 +65,20 @@ async function handleFormSubmission<T>(
   success: boolean;
   message: string;
   errors?: Record<string, string>;
+  status?: number;
 }> {
   try {
     const language = getCurrentLanguage();
+    const clientIP = getClientIP();
+    const ipHash = await hashIP(clientIP);
+
+    if (!(await checkRateLimit(db, ipHash, 5, 60000))) {
+      return {
+        success: false,
+        message: messages.form.tooManyRequests[language],
+        status: 429,
+      };
+    }
     // Convert FormData to object
     const data = Object.fromEntries(formData.entries());
     const sessionId = typeof data.sessionId === "string" ? data.sessionId : null;
@@ -117,7 +129,7 @@ async function handleFormSubmission<T>(
       data: sanitizedData,
       submittedAt: new Date().toISOString(),
       status: "pending",
-      ipHash: await hashIP(getClientIP()),
+      ipHash,
       sessionId,
     };
 
