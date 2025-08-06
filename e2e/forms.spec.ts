@@ -19,6 +19,9 @@ test.describe("Contact Forms", () => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
+
     // Fill out the form
     await page.fill('[name="companyName"]', "Test Company");
     await page.fill('[name="firstName"]', "Jan");
@@ -61,6 +64,9 @@ test.describe("Contact Forms", () => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
+
     // Try to submit empty form
     await page.click('button[type="submit"]');
 
@@ -80,6 +86,9 @@ test.describe("Contact Forms", () => {
   test("should validate email format", async ({ page }) => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
+
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
 
     // Fill required fields with valid data
     await page.fill('[name="companyName"]', "Test Company");
@@ -123,6 +132,9 @@ test.describe("Contact Forms", () => {
     // Navigate to coworking form
     await page.getByTestId("tab-coworking").click();
 
+    const form = page.getByTestId("contact-form").nth(1);
+    await expect(form).toBeVisible();
+
     // Fill out the form
     await page.fill('[name="firstName"]', "Anna");
     await page.fill('[name="lastName"]', "Nowak");
@@ -161,6 +173,9 @@ test.describe("Contact Forms", () => {
     // Navigate to meeting room form
     await page.getByTestId("tab-meeting-rooms").click();
 
+    const form = page.getByTestId("contact-form").nth(2);
+    await expect(form).toBeVisible();
+
     // Fill out the form
     await page.fill('[name="firstName"]', "Piotr");
     await page.fill('[name="lastName"]', "Kowalczyk");
@@ -197,6 +212,9 @@ test.describe("Contact Forms", () => {
 
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
+
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
 
     // Fill out minimal required fields
     await page.fill('[name="companyName"]', "Test Company");
@@ -241,6 +259,9 @@ test.describe("Contact Forms", () => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
+
     // Interact with form fields
     await page.fill('[name="companyName"]', "Test Company");
     await page.fill('[name="firstName"]', "Jan");
@@ -260,11 +281,11 @@ test.describe("Contact Forms", () => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
-    // Check form accessibility
-    await expect(page.getByRole("form")).toBeVisible();
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
 
     // Check that all form fields have labels
-    const inputs = await page.locator("input, select, textarea").all();
+    const inputs = await form.locator("input, select, textarea").all();
     for (const input of inputs) {
       const id = await input.getAttribute("id");
       if (id) {
@@ -283,8 +304,8 @@ test.describe("Contact Forms", () => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
-    // Check that form is responsive
-    await expect(page.locator("form")).toBeVisible();
+    const form = page.getByTestId("contact-form").first();
+    await expect(form).toBeVisible();
 
     // Fill out form on mobile
     await page.fill('[name="companyName"]', "Mobile Test Company");

@@ -261,7 +261,11 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
           <CardDescription>Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            data-testid="contact-form"
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6"
+          >
             {/* Personal Information */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
