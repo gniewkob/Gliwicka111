@@ -222,6 +222,22 @@ test.describe("Contact Forms", () => {
       }
     });
 
+    // Simulate analytics consent
+    await page.evaluate(() => {
+      localStorage.setItem(
+        "analytics-consent",
+        JSON.stringify({
+          necessary: true,
+          analytics: true,
+          marketing: false,
+          timestamp: Date.now(),
+        }),
+      );
+    });
+    await page.reload();
+    const consent = page.getByRole("button", { name: /accept/i });
+    if (await consent.isVisible()) await consent.click();
+
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
