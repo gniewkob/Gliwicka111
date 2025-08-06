@@ -37,6 +37,8 @@ test.describe("Admin Dashboard", () => {
 
     await page.setExtraHTTPHeaders({ authorization: `Basic ${auth}` });
     await page.goto("/admin/dashboard");
+    const consent = page.getByRole("button", { name: /accept/i });
+    if (await consent.isVisible()) await consent.click();
 
     await expect(page.getByRole("heading", { name: "Admin Metrics" })).toBeVisible();
     await expect(page.getByText("Avg Processing Time")).toBeVisible();

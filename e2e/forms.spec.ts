@@ -3,6 +3,8 @@ import { test, expect } from "@playwright/test";
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/forms");
+    const consent = page.getByRole("button", { name: /accept/i });
+    if (await consent.isVisible()) await consent.click();
   });
 
   test("should display all form types", async ({ page }) => {
