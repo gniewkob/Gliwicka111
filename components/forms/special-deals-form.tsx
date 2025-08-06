@@ -302,7 +302,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         </CardHeader>
         <CardContent>
           <form
-            data-testid="contact-form"
+            data-testid="contact-form-special-deals"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
           >
