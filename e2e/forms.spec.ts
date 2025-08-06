@@ -132,10 +132,14 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="email"]', "invalid-email");
     await page.click('button[type="submit"]');
 
-    // Check for email validation error
-    await expect(
-      page.getByText(/nieprawidłowy format adresu email/i),
-    ).toBeVisible();
+    // Check for email validation error and ensure it uses the correct element
+    const emailError = page
+      .locator('input[name="email"]')
+      .locator(
+        'xpath=../following-sibling::p[contains(@class, "text-red-500")]',
+      );
+    await expect(emailError).toHaveText(/nieprawidłowy format adresu email/i);
+    await expect(emailError).toBeVisible();
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
