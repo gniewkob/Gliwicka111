@@ -277,7 +277,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
         </CardHeader>
         <CardContent>
           <form
-            data-testid="contact-form"
+            data-testid="contact-form-virtual-office"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
           >

@@ -262,7 +262,7 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
         </CardHeader>
         <CardContent>
           <form
-            data-testid="contact-form"
+            data-testid="contact-form-coworking"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
           >
