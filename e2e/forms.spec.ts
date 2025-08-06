@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { messages } from "../lib/i18n";
 
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
@@ -16,6 +17,21 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit virtual office form successfully", async ({ page }) => {
+    await page.route("**/api/**", async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          }),
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
@@ -123,6 +139,21 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
+    await page.route("**/api/**", async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          }),
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
     // Navigate to coworking form
     await page.getByTestId("tab-coworking").click();
 
@@ -164,6 +195,21 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
+    await page.route("**/api/**", async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          }),
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
     // Navigate to meeting room form
     await page.getByTestId("tab-meeting-rooms").click();
 
@@ -201,8 +247,20 @@ test.describe("Contact Forms", () => {
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
-    // Mock network error
-    await page.route("**/api/**", (route) => route.abort());
+    await page.route("**/api/**", async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 500,
+          contentType: "application/json",
+          body: JSON.stringify({
+            success: false,
+            message: messages.form.serverError.pl,
+          }),
+        });
+      } else {
+        await route.continue();
+      }
+    });
 
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
@@ -292,6 +350,21 @@ test.describe("Contact Forms", () => {
   });
 
   test("should work on mobile devices", async ({ page }) => {
+    await page.route("**/api/**", async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          }),
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
 
