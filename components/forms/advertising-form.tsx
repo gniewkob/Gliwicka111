@@ -281,7 +281,11 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
           <CardDescription>Opisz swoją kampanię, a przygotujemy dla Ciebie spersonalizowaną ofertę</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            data-testid="contact-form"
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6"
+          >
             {/* Personal Information */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
