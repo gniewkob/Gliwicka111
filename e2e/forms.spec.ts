@@ -29,9 +29,7 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="email"]', "jan@example.com");
     await page.fill('[name="phone"]', "+48 123 456 789");
     await page.fill('[name="nip"]', "1234567890");
-    await page
-      .locator('label:has-text("Typ działalności") + div')
-      .click();
+    await page.getByLabel("Typ działalności").click();
     await page
       .getByRole('option', { name: /Działalność gospodarcza/i })
       .click();
@@ -39,9 +37,7 @@ test.describe("Contact Forms", () => {
     if (await businessTypeInput.count()) {
       await expect(businessTypeInput).toHaveValue('sole-proprietorship');
     }
-    await page
-      .locator('label:has-text("Wybierz pakiet") + div')
-      .click();
+    await page.getByLabel("Wybierz pakiet").click();
     await page
       .getByRole('option', { name: /Pakiet Podstawowy/i })
       .click();
@@ -96,9 +92,7 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="lastName"]', "Kowalski");
     await page.fill('[name="phone"]', "+48 123 456 789");
     await page.fill('[name="nip"]', "1234567890");
-    await page
-      .locator('label:has-text("Typ działalności") + div')
-      .click();
+    await page.getByLabel("Typ działalności").click();
     await page
       .getByRole('option', { name: /Działalność gospodarcza/i })
       .click();
@@ -106,9 +100,7 @@ test.describe("Contact Forms", () => {
     if (await businessTypeInput.count()) {
       await expect(businessTypeInput).toHaveValue('sole-proprietorship');
     }
-    await page
-      .locator('label:has-text("Wybierz pakiet") + div')
-      .click();
+    await page.getByLabel("Wybierz pakiet").click();
     await page
       .getByRole('option', { name: /Pakiet Podstawowy/i })
       .click();
