@@ -160,12 +160,19 @@ gliwicka-contact-forms/
     ANALYTICS_BASIC_USER=analytics-user
     ANALYTICS_BASIC_PASS=analytics-pass
 
+    # Admin Dashboard (Basic auth credentials)
+    ADMIN_USER=admin
+    ADMIN_PASS=strong-password
+    METRICS_WINDOW_HOURS=24
+
     # Rate limiting (defaults allow 100 requests per minute)
     RATE_LIMIT_COUNT=100
     RATE_LIMIT_WINDOW_MS=60000
     ```
 
     These variables are required both locally and in Vercel. The application issues a `SELECT 1` query on each form submission to ensure the database specified above is reachable.
+
+    `ADMIN_USER` and `ADMIN_PASS` secure the admin metrics endpoint and dashboard. Use strong values and keep them out of version control. `METRICS_WINDOW_HOURS` defines how many hours of historical data the dashboard and metrics API return (default 24).
 
     `RATE_LIMIT_COUNT` and `RATE_LIMIT_WINDOW_MS` define how many requests an IP can make within the specified time window. The defaults permit 100 requests per 60 seconds. Lower the count or extend the window to tighten limits, or relax them for higher throughput environments.
 
@@ -293,6 +300,22 @@ Schedule it with cron in production to retry deliveries automatically.
 
 Server logs are written to `stdout` and captured by Passenger. Ensure logs are monitored and rotated on the FreeBSD host.
 
+### Admin Metrics & Dashboard
+
+Operational metrics are protected with basic authentication defined by `ADMIN_USER` and `ADMIN_PASS`.
+
+- **API metrics**: Retrieve raw metrics as JSON:
+
+  ```bash
+  curl -u "$ADMIN_USER:$ADMIN_PASS" https://your-domain/api/admin/metrics
+  ```
+
+  `METRICS_WINDOW_HOURS` controls how many hours of history are returned.
+
+- **Web dashboard**: Open [https://your-domain/admin/dashboard](https://your-domain/admin/dashboard) (or `http://localhost:3000/admin/dashboard` in development). The same credentials are required; if `NEXT_PUBLIC_ADMIN_USER` and `NEXT_PUBLIC_ADMIN_PASS` are unset, the browser will prompt for them.
+
+- **Scheduling**: For automated reports, wrap the curl command in an npm script such as `admin-dashboard` and run it with cron, systemd timers, or CI services like GitHub Actions. Store credentials securely and rotate them regularly.
+
 ### Environment Variables
 
 Configuration is managed through environment variables (see `.env.example`):
@@ -313,6 +336,8 @@ Configuration is managed through environment variables (see `.env.example`):
 | `ANALYTICS_AUTH_TOKEN` | Token for securing analytics endpoints |
 | `ANALYTICS_BASIC_USER` | Basic auth user for analytics endpoints |
 | `ANALYTICS_BASIC_PASS` | Basic auth password for analytics endpoints |
+| `ADMIN_USER`, `ADMIN_PASS` | Basic auth credentials securing admin metrics and dashboard |
+| `METRICS_WINDOW_HOURS` | Hours of history returned by `/api/admin/metrics` (default 24) |
 | `NODE_ENV` | Node.js environment (`development`, `production`, etc.) |
 | `CI` | Set to `true` in CI environments |
 
