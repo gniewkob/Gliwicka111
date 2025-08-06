@@ -37,25 +37,16 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function loadMetrics() {
       try {
-        let user = process.env.NEXT_PUBLIC_ADMIN_USER;
-        let pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
+        const user = process.env.NEXT_PUBLIC_ADMIN_USER;
+        const pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 
-        if (!user || !pass) {
-          user = prompt("Admin username") || "";
-          pass = prompt("Admin password") || "";
+        const headers: HeadersInit = {};
+        if (user && pass) {
+          const auth = btoa(`${user}:${pass}`);
+          headers.Authorization = `Basic ${auth}`;
         }
 
-        if (!user || !pass) {
-          setError("Authentication required");
-          return;
-        }
-
-        const auth = btoa(`${user}:${pass}`);
-        const res = await fetch("/api/admin/metrics", {
-          headers: {
-            Authorization: `Basic ${auth}`,
-          },
-        });
+        const res = await fetch("/api/admin/metrics", { headers });
 
         if (!res.ok) {
           setError(`Request failed: ${res.status}`);
