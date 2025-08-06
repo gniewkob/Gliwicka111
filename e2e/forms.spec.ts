@@ -81,7 +81,35 @@ test.describe("Contact Forms", () => {
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
-    // Fill with invalid email
+    // Fill required fields with valid data
+    await page.fill('[name="companyName"]', "Test Company");
+    await page.fill('[name="firstName"]', "Jan");
+    await page.fill('[name="lastName"]', "Kowalski");
+    await page.fill('[name="phone"]', "+48 123 456 789");
+    await page
+      .locator('label:has-text("Typ działalności") + div')
+      .click();
+    await page
+      .getByRole('option', { name: /Działalność gospodarcza/i })
+      .click();
+    const businessTypeInput = page.locator('input[name="businessType"]');
+    if (await businessTypeInput.count()) {
+      await expect(businessTypeInput).toHaveValue('sole-proprietorship');
+    }
+    await page
+      .locator('label:has-text("Wybierz pakiet") + div')
+      .click();
+    await page
+      .getByRole('option', { name: /Pakiet Podstawowy/i })
+      .click();
+    const packageInput = page.locator('input[name="package"]');
+    if (await packageInput.count()) {
+      await expect(packageInput).toHaveValue('basic');
+    }
+    await page.fill('[name="startDate"]', "2024-12-01");
+    await page.check('[name="gdprConsent"]');
+
+    // Enter invalid email
     await page.fill('[name="email"]', "invalid-email");
     await page.click('button[type="submit"]');
 
