@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdminAuth } from '@/lib/admin-auth'
 
 const securityHeaders: Record<string, string> = {
   'Content-Security-Policy':
@@ -15,6 +16,18 @@ function generateCsrfToken(): string {
 }
 
 export function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname
+
+  if (
+    pathname !== '/api/health' &&
+    (pathname.startsWith('/api/admin') || pathname.startsWith('/admin'))
+  ) {
+    const unauthorized = requireAdminAuth(req)
+    if (unauthorized) {
+      return unauthorized
+    }
+  }
+
   const res = NextResponse.next()
 
   // Apply security headers to all responses
