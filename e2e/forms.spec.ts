@@ -95,6 +95,7 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="firstName"]', "Jan");
     await page.fill('[name="lastName"]', "Kowalski");
     await page.fill('[name="phone"]', "+48 123 456 789");
+    await page.fill('[name="nip"]', "1234567890");
     await page
       .locator('label:has-text("Typ działalności") + div')
       .click();
@@ -117,6 +118,7 @@ test.describe("Contact Forms", () => {
     }
     await page.fill('[name="startDate"]', "2024-12-01");
     await page.check('[name="gdprConsent"]');
+    await page.fill('[name="message"]', "Test message for email validation");
 
     // Enter invalid email
     await page.fill('[name="email"]', "invalid-email");
