@@ -170,17 +170,13 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="email"]', "anna@example.com");
     await page.fill('[name="phone"]', "+48 987 654 321");
     await page.fill('[name="companyName"]', "Coworking Company");
-    await page
-      .locator('label:has-text("Typ przestrzeni") + div')
-      .click();
+    await page.getByTestId("workspaceType-select").click();
     await page.getByRole('option', { name: /Hot Desk/i }).click();
     const workspaceTypeInput = page.locator('input[name="workspaceType"]');
     if (await workspaceTypeInput.count()) {
       await expect(workspaceTypeInput).toHaveValue('hot-desk');
     }
-    await page
-      .locator('label:has-text("Okres wynajmu") + div')
-      .click();
+    await page.getByTestId("duration-select").click();
     await page.getByRole('option', { name: /Miesięcznie/i }).click();
     const durationInput = page.locator('input[name="duration"]');
     if (await durationInput.count()) {
@@ -230,7 +226,7 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="startTime"]', "09:00");
     await page.fill('[name="endTime"]', "17:00");
     await page.fill('[name="attendees"]', "8");
-    await page.locator('label:has-text("Typ sali") + div').click();
+    await page.getByTestId("roomType-select").click();
     await page
       .getByRole('option', { name: /Sala Konferencyjna/i })
       .click();

@@ -368,7 +368,10 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               <div>
                 <Label htmlFor="roomType">{t.fields.roomType} *</Label>
                 <Select onValueChange={(value) => setValue("roomType", value as any)}>
-                  <SelectTrigger className={errors.roomType ? "border-red-500" : ""}>
+                  <SelectTrigger
+                    data-testid="roomType-select"
+                    className={errors.roomType ? "border-red-500" : ""}
+                  >
                     <SelectValue placeholder="Wybierz typ sali" />
                   </SelectTrigger>
                   <SelectContent>
@@ -492,7 +495,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 <div>
                   <Label htmlFor="cateringType">{t.fields.cateringType}</Label>
                   <Select onValueChange={(value) => setValue("cateringType", value as any)}>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="cateringType-select">
                       <SelectValue placeholder="Wybierz typ cateringu" />
                     </SelectTrigger>
                     <SelectContent>
@@ -518,7 +521,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 <div>
                   <Label htmlFor="recurringPattern">{t.fields.recurringPattern}</Label>
                   <Select onValueChange={(value) => setValue("recurringPattern", value as any)}>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="recurringPattern-select">
                       <SelectValue placeholder="Wybierz częstotliwość" />
                     </SelectTrigger>
                     <SelectContent>
