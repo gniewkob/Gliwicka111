@@ -449,6 +449,7 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
               <div className="flex items-start space-x-2">
                 <Checkbox
                   id="gdprConsent"
+                  data-testid="gdpr-checkbox"
                   {...register("gdprConsent")}
                   className={errors.gdprConsent ? "border-red-500" : ""}
                 />

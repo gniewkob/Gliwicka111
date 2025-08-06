@@ -552,6 +552,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               <div className="flex items-start space-x-2">
                 <Checkbox
                   id="gdprConsent"
+                  data-testid="gdpr-checkbox"
                   {...register("gdprConsent")}
                   className={errors.gdprConsent ? "border-red-500" : ""}
                 />

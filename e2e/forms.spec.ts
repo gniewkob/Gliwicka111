@@ -46,7 +46,7 @@ test.describe("Contact Forms", () => {
       await expect(packageInput).toHaveValue('basic');
     }
     await page.fill('[name="startDate"]', "2024-12-01");
-    await page.check('[name="gdprConsent"]');
+    await form.getByTestId("gdpr-checkbox").click();
     await page.fill('[name="message"]', "Test message for virtual office");
 
     // Submit the form
@@ -109,7 +109,7 @@ test.describe("Contact Forms", () => {
       await expect(packageInput).toHaveValue('basic');
     }
     await page.fill('[name="startDate"]', "2024-12-01");
-    await page.check('[name="gdprConsent"]');
+    await form.getByTestId("gdpr-checkbox").click();
     await page.fill('[name="message"]', "Test message for email validation");
 
     // Enter invalid email
@@ -153,7 +153,7 @@ test.describe("Contact Forms", () => {
     }
     await page.fill('[name="startDate"]', "2024-12-01");
     await page.fill('[name="teamSize"]', "3");
-    await page.check('[name="gdprConsent"]');
+    await form.getByTestId("gdpr-checkbox").click();
     await page.fill('[name="message"]', "Test message for coworking");
 
     // Submit the form
@@ -190,7 +190,7 @@ test.describe("Contact Forms", () => {
     }
     await page.check('[name="equipment"][value="projector"]');
     await page.check('[name="catering"]');
-    await page.check('[name="gdprConsent"]');
+    await form.getByTestId("gdpr-checkbox").click();
     await page.fill('[name="message"]', "Test message for meeting room");
 
     // Submit the form
@@ -216,7 +216,7 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="lastName"]', "Kowalski");
     await page.fill('[name="email"]', "jan@example.com");
     await page.fill('[name="phone"]', "+48 123 456 789");
-    await page.check('[name="gdprConsent"]');
+    await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form
     await page.click('button[type="submit"]');
@@ -307,7 +307,7 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="lastName"]', "User");
     await page.fill('[name="email"]', "mobile@example.com");
     await page.fill('[name="phone"]', "+48 123 456 789");
-    await page.check('[name="gdprConsent"]');
+    await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form
     await page.click('button[type="submit"]');
