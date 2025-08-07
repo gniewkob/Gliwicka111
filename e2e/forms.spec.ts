@@ -71,7 +71,7 @@ test.describe("Contact Forms", () => {
     await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+    await expect(page.getByTestId("form-success-alert")).toBeVisible();
   });
 
   test("should validate required fields", async ({ page }) => {
@@ -195,7 +195,7 @@ test.describe("Contact Forms", () => {
     await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+    await expect(page.getByTestId("form-success-alert")).toBeVisible();
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
@@ -249,7 +249,7 @@ test.describe("Contact Forms", () => {
     await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+    await expect(page.getByTestId("form-success-alert")).toBeVisible();
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
@@ -400,6 +400,6 @@ test.describe("Contact Forms", () => {
     await page.click('button[type="submit"]');
 
     // Check for success message
-    await expect(page.getByText(/formularz został wysłany/i)).toBeVisible();
+    await expect(page.getByTestId("form-success-alert")).toBeVisible();
   });
 });

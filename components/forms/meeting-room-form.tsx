@@ -600,13 +600,24 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
             {/* Submit Result */}
             {submitResult && (
-              <Alert className={submitResult.success ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50"}>
+              <Alert
+                data-testid={
+                  submitResult.success ? "form-success-alert" : "form-error-alert"
+                }
+                className={
+                  submitResult.success
+                    ? "border-green-500 bg-green-50"
+                    : "border-red-500 bg-red-50"
+                }
+              >
                 {submitResult.success ? (
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 ) : (
                   <AlertCircle className="h-4 w-4 text-red-600" />
                 )}
-                <AlertDescription className={submitResult.success ? "text-green-800" : "text-red-800"}>
+                <AlertDescription
+                  className={submitResult.success ? "text-green-800" : "text-red-800"}
+                >
                   {submitResult.message}
                 </AlertDescription>
               </Alert>
