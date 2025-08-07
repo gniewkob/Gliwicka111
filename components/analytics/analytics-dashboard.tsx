@@ -31,6 +31,15 @@ interface AnalyticsDashboardProps {
   isAdmin?: boolean
 }
 
+/**
+ * Displays form analytics metrics such as views, starts and completions. The
+ * component uses mock data and is intended as a starting point for integrating
+ * a real analytics backend.
+ *
+ * @param {AnalyticsDashboardProps} props - Component props.
+ * @param {boolean} [props.isAdmin=false] - Whether to render admin-only panels.
+ * @returns {JSX.Element} Dashboard layout with charts and tables.
+ */
 export function AnalyticsDashboard({ isAdmin = false }: AnalyticsDashboardProps) {
   const [timeRange, setTimeRange] = useState("7d")
   const [selectedForm, setSelectedForm] = useState("all")

@@ -57,7 +57,19 @@ const FIELD_LABELS = {
   dealType: { pl: "Typ oferty", en: "Deal type" },
 } as const;
 
-// Generic form submission handler
+/**
+ * Generic form submission handler used by all specific form actions.
+ *
+ * This function performs validation, rate limiting and email dispatching. It
+ * is intentionally verbose to centralise cross-form logic. Individual
+ * `submit*Form` actions simply forward the appropriate schema and form type.
+ *
+ * @template T
+ * @param {FormData} formData - Raw form data from the client request.
+ * @param {z.ZodSchema<T>} schema - Zod validation schema for the form.
+ * @param {string} formType - Identifier of the form variant being processed.
+ * @returns {Promise<{ success: boolean; message: string; errors?: Record<string, string>; status?: number }>} Processing result.
+ */
 async function handleFormSubmission<T>(
   formData: FormData,
   schema: z.ZodSchema<T>,
@@ -195,32 +207,62 @@ async function handleFormSubmission<T>(
   }
 }
 
-// Virtual Office Form Action
+/**
+ * Handles submission for the Virtual Office enquiry form.
+ *
+ * Usage note: call this from the form's `action` attribute in a Server Action
+ * context.
+ *
+ * @param {FormData} formData - Raw form data from the client.
+ */
 export async function submitVirtualOfficeForm(formData: FormData) {
   return handleFormSubmission(formData, virtualOfficeFormSchema, "virtual-office");
 }
 
-// Coworking Form Action
+/**
+ * Handles submission for the Coworking enquiry form.
+ *
+ * @param {FormData} formData - Raw form data from the client.
+ */
 export async function submitCoworkingForm(formData: FormData) {
   return handleFormSubmission(formData, coworkingFormSchema, "coworking");
 }
 
-// Meeting Room Form Action
+/**
+ * Handles submission for the Meeting Room booking form.
+ *
+ * @param {FormData} formData - Raw form data from the client.
+ */
 export async function submitMeetingRoomForm(formData: FormData) {
   return handleFormSubmission(formData, meetingRoomFormSchema, "meeting-room");
 }
 
-// Advertising Form Action
+/**
+ * Handles submission for the Advertising enquiry form.
+ *
+ * @param {FormData} formData - Raw form data from the client.
+ */
 export async function submitAdvertisingForm(formData: FormData) {
   return handleFormSubmission(formData, advertisingFormSchema, "advertising");
 }
 
-// Special Deals Form Action
+/**
+ * Handles submission for the Special Deals enquiry form.
+ *
+ * @param {FormData} formData - Raw form data from the client.
+ */
 export async function submitSpecialDealsForm(formData: FormData) {
   return handleFormSubmission(formData, specialDealsFormSchema, "special-deals");
 }
 
 // Utility functions
+/**
+ * Removes sensitive fields and strips potentially dangerous content from string
+ * values before persisting to the database.
+ *
+ * @param {any} data - Raw validated form data.
+ * @returns {any} Sanitized copy ready for storage.
+ */
 function sanitizeSubmissionData(data: any): any {
   const sanitized = { ...data };
 
@@ -242,15 +284,37 @@ function sanitizeSubmissionData(data: any): any {
   return sanitized;
 }
 
+/**
+ * Generates a pseudo-random identifier for a form submission.
+ *
+ * @returns {string} Unique submission ID.
+ */
 function generateSubmissionId(): string {
   return `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 
+/**
+ * Retrieves the client's IP address.
+ *
+ * In production this should parse the IP from request headers. Here it returns
+ * a placeholder value for demonstration.
+ *
+ * @returns {string} Client IP address.
+ */
 function getClientIP(): string {
   // In a real application, you would extract this from headers
   return "127.0.0.1";
 }
 
+/**
+ * Sends a confirmation email to the user containing a summary of their
+ * submission.
+ *
+ * @param {any} data - Sanitized submission data.
+ * @param {string} formType - Type of form that was submitted.
+ * @param {"pl" | "en"} language - Language for the email content.
+ * @returns {Promise<void>} Resolves when the email is queued.
+ */
 export async function sendConfirmationEmail(
   data: any,
   formType: string,
@@ -263,6 +327,15 @@ export async function sendConfirmationEmail(
   });
 }
 
+/**
+ * Sends a notification email to administrators with a brief summary of the
+ * submission.
+ *
+ * @param {any} data - Sanitized submission data.
+ * @param {string} formType - Type of form that was submitted.
+ * @param {"pl" | "en"} language - Language for the email content.
+ * @returns {Promise<void>} Resolves when the email is queued.
+ */
 export async function sendAdminNotification(
   data: any,
   formType: string,
@@ -295,6 +368,17 @@ export async function sendAdminNotification(
   });
 }
 
+/**
+ * Queues a failed email for later retry while masking any personally
+ * identifiable information.
+ *
+ * @param {"confirmation" | "admin"} type - Category of the email.
+ * @param {any} data - Submission data associated with the email.
+ * @param {string} formType - Type of form submitted.
+ * @param {"pl" | "en"} language - Language the email would have used.
+ * @param {unknown} error - Original error thrown by the mailer.
+ * @returns {Promise<void>} Resolves when the failure is recorded.
+ */
 async function enqueueFailedEmail(
   type: "confirmation" | "admin",
   data: any,
@@ -324,6 +408,15 @@ async function enqueueFailedEmail(
   await saveFailedEmail(type, { data, formType, language }, error);
 }
 
+/**
+ * Builds the body text for confirmation emails summarising key submission
+ * fields.
+ *
+ * @param {any} data - Sanitized submission data.
+ * @param {string} formType - Type of form submitted.
+ * @param {"pl" | "en"} language - Language for the email content.
+ * @returns {string} Localised email body.
+ */
 function getEmailBody(
   data: any,
   formType: string,
@@ -360,6 +453,13 @@ function getEmailBody(
   return [intro, summary, closing].filter(Boolean).join("\n\n");
 }
 
+/**
+ * Generates a localised subject line for confirmation emails.
+ *
+ * @param {string} formType - Type of form submitted.
+ * @param {"pl" | "en"} language - Language for the email content.
+ * @returns {string} Localised email subject.
+ */
 function getEmailSubject(formType: string, language: "pl" | "en"): string {
   const subjects = {
     pl: {
@@ -387,6 +487,13 @@ function getEmailSubject(formType: string, language: "pl" | "en"): string {
 }
 
 // Admin functions
+/**
+ * Retrieves paginated submissions for the admin dashboard.
+ *
+ * @param {number} [page=1] - Page number to fetch.
+ * @param {number} [limit=10] - Number of items per page.
+ * @returns {Promise<{ submissions: any[]; total: number; page: number; totalPages: number }>} Paginated result set.
+ */
 export async function getSubmissions(page = 1, limit = 10) {
   const offset = (page - 1) * limit;
   const result = await db.query(
@@ -408,6 +515,13 @@ export async function getSubmissions(page = 1, limit = 10) {
   };
 }
 
+/**
+ * Updates the status of a stored submission.
+ *
+ * @param {string} id - Submission identifier.
+ * @param {"pending" | "contacted" | "completed" | "cancelled"} status - New status value.
+ * @returns {Promise<{ success: boolean; message?: string }>} Operation result.
+ */
 export async function updateSubmissionStatus(
   id: string,
   status: "pending" | "contacted" | "completed" | "cancelled",
@@ -423,6 +537,12 @@ export async function updateSubmissionStatus(
   return { success: false, message: messages.admin.notFound[language] };
 }
 
+/**
+ * Permanently deletes a submission record.
+ *
+ * @param {string} id - Submission identifier.
+ * @returns {Promise<{ success: boolean; message?: string }>} Operation result.
+ */
 export async function deleteSubmission(id: string) {
   const result = await db.query(`DELETE FROM form_submissions WHERE id=$1`, [
     id,
