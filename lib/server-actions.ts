@@ -200,6 +200,39 @@ async function handleFormSubmission<T>(
   } catch (error) {
     console.error("Form submission error:", error);
     const language = await getCurrentLanguage();
+
+    // If this error came from a failed fetch call, attempt to read the
+    // response body even when the status code indicates failure. This allows
+    // clients to surface more descriptive error messages provided by the
+    // server rather than a generic message.
+    if (error instanceof Response) {
+      let body: any = null;
+      try {
+        body = await error.json();
+      } catch {
+        // ignore JSON parsing errors and fall back to a generic message
+      }
+      return {
+        success: false,
+        message: body?.message || messages.form.serverError[language],
+        status: error.status,
+      };
+    }
+
+    // Next.js server actions propagate non-OK responses as Errors with the
+    // serialized body in the message field. Try to parse it here so we can
+    // return the original payload.
+    if (error instanceof Error) {
+      try {
+        const body = JSON.parse(error.message);
+        if (body && typeof body.message === "string") {
+          return { success: false, message: body.message };
+        }
+      } catch {
+        // fall through to generic error handling
+      }
+    }
+
     return {
       success: false,
       message: messages.form.serverError[language],
