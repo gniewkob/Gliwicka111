@@ -3,8 +3,7 @@
 import { useState } from "react"
 import { useLanguage } from "@/components/language-provider"
 import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button, Card, CardContent, CardHeader, CardTitle } from "@/components/ui"
 import Link from "next/link"
 import { navTranslations, backTranslations } from "@/lib/i18n"
 

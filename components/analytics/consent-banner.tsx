@@ -1,11 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
+import {
+  Button,
+  Card,
+  CardContent,
+  Badge,
+  Checkbox,
+  Label,
+} from "@/components/ui"
 import { Shield, Cookie, BarChart3, X, Settings, CheckCircle } from "lucide-react"
 
 export function ConsentBanner() {

@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import VirtualOfficeForm from "@/components/forms/virtual-office-form"
+import { VirtualOfficeForm } from "@/components/forms"
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { vi } from "vitest"

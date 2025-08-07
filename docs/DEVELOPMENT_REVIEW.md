@@ -183,7 +183,7 @@ export const logger = Logger.getInstance()
 // __tests__/components/forms/virtual-office-form.test.tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
-import VirtualOfficeForm from '@/components/forms/virtual-office-form'
+import { VirtualOfficeForm } from '@/components/forms'
 
 // Mock server actions
 vi.mock('@/lib/server-actions', () => ({
@@ -1171,7 +1171,7 @@ export const monitoring = MonitoringService.getInstance()
 // app/forms/[formType]/page.tsx - Server Component
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
-import FormSkeleton from '@/components/ui/form-skeleton'
+import { FormSkeleton } from '@/components/ui'
 import { getFormConfig } from '@/lib/form-configs'
 
 interface FormPageProps {
@@ -1237,7 +1237,7 @@ export default async function FormPage({ params, searchParams }: FormPageProps) 
 import dynamic from 'next/dynamic'
 
 const DynamicForm = dynamic(
-  () => import('@/components/forms/dynamic-form'),
+  () => import('@/components/forms').then(m => m.DynamicForm),
   {
     loading: () => <FormSkeleton />,
     ssr: false

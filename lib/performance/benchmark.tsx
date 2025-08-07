@@ -193,7 +193,7 @@ export const runFormBenchmarks = async () => {
     "Form Rendering",
     async () => {
       const { render } = await import("@testing-library/react")
-      const { default: VirtualOfficeForm } = await import("@/components/forms/virtual-office-form")
+      const { VirtualOfficeForm } = await import("@/components/forms")
 
       const { unmount } = render(<VirtualOfficeForm />)
       unmount()

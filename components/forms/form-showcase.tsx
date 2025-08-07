@@ -1,17 +1,25 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Badge,
+} from "@/components/ui"
 import VirtualOfficeForm from "./virtual-office-form"
 import CoworkingForm from "./coworking-form"
 import MeetingRoomForm from "./meeting-room-form"
 import AdvertisingForm from "./advertising-form"
 import SpecialDealsForm from "./special-deals-form"
-import { ConsentBanner } from "../analytics/consent-banner"
-import { AnalyticsDashboard } from "../analytics/analytics-dashboard"
+import { ConsentBanner, AnalyticsDashboard } from "@/components/analytics"
 import { Globe, MapPin, Users, Calendar, Megaphone, Gift, BarChart3, Shield } from "lucide-react"
 
 export default function FormShowcase() {

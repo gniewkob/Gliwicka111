@@ -15,9 +15,7 @@ import {
   BarcodeIcon as Billboard,
   ArrowLeft,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from "@/components/ui"
 import Link from "next/link"
 import Image from "next/image"
 import { navTranslations, backTranslations } from "@/lib/i18n"
