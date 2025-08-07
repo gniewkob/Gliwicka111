@@ -1,4 +1,4 @@
-import { db } from "../database/connection-pool";
+import { db } from "@/lib/database/connection-pool";
 
 export async function getSubmissionMetrics() {
   const result = await db.query<{
