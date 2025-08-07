@@ -26,11 +26,20 @@ import {
   TrendingUp,
   ChevronDown,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ConsentBanner } from "@/components/analytics/consent-banner"
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui"
+import { ConsentBanner } from "@/components/analytics"
 import Link from "next/link"
 import Image from "next/image"
 import { navTranslations } from "@/lib/i18n"

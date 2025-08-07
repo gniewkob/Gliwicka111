@@ -5,12 +5,17 @@ import type React from "react"
 import { useState } from "react"
 import { useLanguage } from "@/components/language-provider"
 import { Building2, MapPin, Phone, Mail, Menu, X, Globe, ArrowLeft, Clock, CheckCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  Textarea,
+  Checkbox,
+  Label,
+} from "@/components/ui"
 import Link from "next/link"
 import { navTranslations, backTranslations } from "@/lib/i18n"
 
