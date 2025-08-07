@@ -313,6 +313,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         </CardHeader>
         <CardContent>
           <form
+            noValidate
             data-testid="contact-form-special-deals"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
