@@ -340,8 +340,9 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 <Label htmlFor="workspaceType">{t.fields.workspaceType} *</Label>
                 <Select onValueChange={(value) => setValue("workspaceType", value as any)}>
                   <SelectTrigger
-                    data-testid="workspaceType-select"
+                    id="workspaceType"
                     className={errors.workspaceType ? "border-red-500" : ""}
+                    data-testid="workspaceType-select"
                   >
                     <SelectValue placeholder="Wybierz typ przestrzeni" />
                   </SelectTrigger>
@@ -358,8 +359,9 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 <Label htmlFor="duration">{t.fields.duration} *</Label>
                 <Select onValueChange={(value) => setValue("duration", value as any)}>
                   <SelectTrigger
-                    data-testid="duration-select"
+                    id="duration"
                     className={errors.duration ? "border-red-500" : ""}
+                    data-testid="duration-select"
                   >
                     <SelectValue placeholder="Wybierz okres" />
                   </SelectTrigger>

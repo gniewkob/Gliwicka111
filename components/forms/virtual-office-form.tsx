@@ -377,6 +377,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Select onValueChange={(value) => setValue("businessType", value as any)}>
                   <SelectTrigger
                     id="businessType"
+                    data-testid="businessType-select"
                     className={errors.businessType ? "border-red-500" : ""}
                   >
                     <SelectValue placeholder="Wybierz typ działalności" />
@@ -397,6 +398,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Select onValueChange={(value) => setValue("package", value as any)}>
                   <SelectTrigger
                     id="package"
+                    data-testid="package-select"
                     className={errors.package ? "border-red-500" : ""}
                   >
                     <SelectValue placeholder="Wybierz pakiet" />
