@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { messages } from "../lib/i18n";
+import { messages } from "@/lib/i18n";
 
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {

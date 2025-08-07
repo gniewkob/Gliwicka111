@@ -1,5 +1,5 @@
 import { getPendingFailedEmails, markEmailFailed, markEmailSent } from "./failed-email-store";
-import { sendConfirmationEmail, sendAdminNotification } from "../server-actions";
+import { sendConfirmationEmail, sendAdminNotification } from "@/lib/server-actions";
 import { emailClient } from "./smtp-client";
 
 export async function processFailedEmails() {

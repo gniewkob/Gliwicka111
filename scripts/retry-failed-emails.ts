@@ -1,4 +1,4 @@
-import { processFailedEmails } from "../lib/email/retry";
+import { processFailedEmails } from "@/lib/email/retry";
 
 processFailedEmails().catch((err) => {
   console.error("Retry worker encountered an error", err);
