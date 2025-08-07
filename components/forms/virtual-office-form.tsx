@@ -334,7 +334,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                     className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+                {errors.email && (
+                  <p
+                    className="text-red-500 text-sm mt-1"
+                    data-testid="email-error"
+                  >
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <div>
