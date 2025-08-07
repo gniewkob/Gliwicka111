@@ -26,6 +26,7 @@ import { virtualOfficeFormSchema, type VirtualOfficeFormData } from "@/lib/valid
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
+import { messages } from "@/lib/i18n"
 import { Building2, Phone, Mail, FileText, Calendar, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
 interface VirtualOfficeFormProps {
@@ -218,8 +219,17 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
         analytics.trackSubmissionError(result.message)
       }
     } catch (error) {
-      const errorMessage =
-        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
+      let errorMessage = messages.form.serverError[language]
+      if (error instanceof Error) {
+        try {
+          const parsed = JSON.parse(error.message)
+          if (typeof parsed.message === "string") {
+            errorMessage = parsed.message
+          }
+        } catch {
+          // ignore JSON parse errors and fall back to default message
+        }
+      }
       setSubmitResult({ success: false, message: errorMessage })
       analytics.trackSubmissionError(errorMessage)
     } finally {
