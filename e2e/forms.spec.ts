@@ -27,7 +27,8 @@ test.describe("Contact Forms", () => {
           status: 200,
           contentType: "application/json",
           body: JSON.stringify({
-            result: { success: true, message: messages.form.success.pl },
+            success: true,
+            message: messages.form.success.pl,
           }),
         });
       } else {
@@ -50,19 +51,17 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="nip"]', "1234567890");
     await page.getByTestId("businessType-select").click();
     await page
-      .getByRole('option', { name: /Działalność gospodarcza/i })
+      .getByRole("option", { name: /Działalność gospodarcza/i })
       .click();
     const businessTypeInput = page.locator('input[name="businessType"]');
     if (await businessTypeInput.count()) {
-      await expect(businessTypeInput).toHaveValue('sole-proprietorship');
+      await expect(businessTypeInput).toHaveValue("sole-proprietorship");
     }
     await page.getByTestId("package-select").click();
-    await page
-      .getByRole('option', { name: /Pakiet Podstawowy/i })
-      .click();
+    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
     const packageInput = page.locator('input[name="package"]');
     if (await packageInput.count()) {
-      await expect(packageInput).toHaveValue('basic');
+      await expect(packageInput).toHaveValue("basic");
     }
     await page.fill('[name="startDate"]', "2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
@@ -113,19 +112,17 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="nip"]', "1234567890");
     await page.getByTestId("businessType-select").click();
     await page
-      .getByRole('option', { name: /Działalność gospodarcza/i })
+      .getByRole("option", { name: /Działalność gospodarcza/i })
       .click();
     const businessTypeInput = page.locator('input[name="businessType"]');
     if (await businessTypeInput.count()) {
-      await expect(businessTypeInput).toHaveValue('sole-proprietorship');
+      await expect(businessTypeInput).toHaveValue("sole-proprietorship");
     }
     await page.getByTestId("package-select").click();
-    await page
-      .getByRole('option', { name: /Pakiet Podstawowy/i })
-      .click();
+    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
     const packageInput = page.locator('input[name="package"]');
     if (await packageInput.count()) {
-      await expect(packageInput).toHaveValue('basic');
+      await expect(packageInput).toHaveValue("basic");
     }
     await page.fill('[name="startDate"]', "2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
@@ -156,7 +153,8 @@ test.describe("Contact Forms", () => {
           status: 200,
           contentType: "application/json",
           body: JSON.stringify({
-            result: { success: true, message: messages.form.success.pl },
+            success: true,
+            message: messages.form.success.pl,
           }),
         });
       } else {
@@ -177,16 +175,16 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="phone"]', "+48 987 654 321");
     await page.fill('[name="companyName"]', "Coworking Company");
     await page.getByTestId("workspaceType-select").click();
-    await page.getByRole('option', { name: /Hot Desk/i }).click();
+    await page.getByRole("option", { name: /Hot Desk/i }).click();
     const workspaceTypeInput = page.locator('input[name="workspaceType"]');
     if (await workspaceTypeInput.count()) {
-      await expect(workspaceTypeInput).toHaveValue('hot-desk');
+      await expect(workspaceTypeInput).toHaveValue("hot-desk");
     }
     await page.getByTestId("duration-select").click();
-    await page.getByRole('option', { name: /Miesięcznie/i }).click();
+    await page.getByRole("option", { name: /Miesięcznie/i }).click();
     const durationInput = page.locator('input[name="duration"]');
     if (await durationInput.count()) {
-      await expect(durationInput).toHaveValue('monthly');
+      await expect(durationInput).toHaveValue("monthly");
     }
     await page.fill('[name="startDate"]', "2024-12-01");
     await page.fill('[name="teamSize"]', "3");
@@ -211,7 +209,8 @@ test.describe("Contact Forms", () => {
           status: 200,
           contentType: "application/json",
           body: JSON.stringify({
-            result: { success: true, message: messages.form.success.pl },
+            success: true,
+            message: messages.form.success.pl,
           }),
         });
       } else {
@@ -236,12 +235,10 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="endTime"]', "17:00");
     await page.fill('[name="attendees"]', "8");
     await page.getByTestId("roomType-select").click();
-    await page
-      .getByRole('option', { name: /Sala Konferencyjna/i })
-      .click();
+    await page.getByRole("option", { name: /Sala Konferencyjna/i }).click();
     const roomTypeInput = page.locator('input[name="roomType"]');
     if (await roomTypeInput.count()) {
-      await expect(roomTypeInput).toHaveValue('conference');
+      await expect(roomTypeInput).toHaveValue("conference");
     }
     await page.check('[name="equipment"][value="projector"]');
     await page.check('[name="catering"]');
@@ -266,10 +263,8 @@ test.describe("Contact Forms", () => {
           status: 500,
           contentType: "application/json",
           body: JSON.stringify({
-            result: {
-              success: false,
-              message: messages.form.serverError.pl,
-            },
+            success: false,
+            message: messages.form.serverError.pl,
           }),
         });
       } else {
@@ -377,7 +372,8 @@ test.describe("Contact Forms", () => {
           status: 200,
           contentType: "application/json",
           body: JSON.stringify({
-            result: { success: true, message: messages.form.success.pl },
+            success: true,
+            message: messages.form.success.pl,
           }),
         });
       } else {
