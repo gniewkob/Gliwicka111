@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useLanguage } from "@/components/language-provider"
+import { ErrorBoundary } from "@/components/error-boundary"
 import {
   Building2,
   MapPin,
@@ -174,7 +175,8 @@ export default function PropertiesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <ErrorBoundary fallback={<p>Unable to load properties.</p>}>
+      <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -440,6 +442,7 @@ export default function PropertiesPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }
