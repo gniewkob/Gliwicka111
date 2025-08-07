@@ -293,6 +293,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
         </CardHeader>
         <CardContent>
           <form
+            noValidate
             data-testid="contact-form-advertising"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"

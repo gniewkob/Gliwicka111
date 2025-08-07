@@ -302,6 +302,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
         </CardHeader>
         <CardContent>
           <form
+            noValidate
             data-testid="contact-form-meeting-room"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
