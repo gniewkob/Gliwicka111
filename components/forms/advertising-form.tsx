@@ -529,7 +529,16 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
             {/* Submit Result */}
             {submitResult && (
-              <Alert className={submitResult.success ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50"}>
+              <Alert
+                data-testid={
+                  submitResult.success ? "form-success-alert" : "form-error-alert"
+                }
+                className={
+                  submitResult.success
+                    ? "border-green-500 bg-green-50"
+                    : "border-red-500 bg-red-50"
+                }
+              >
                 {submitResult.success ? (
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 ) : (

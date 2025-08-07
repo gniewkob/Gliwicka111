@@ -377,6 +377,7 @@ test.describe("Contact Forms", () => {
 
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
+    await page.waitForLoadState("networkidle");
 
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
@@ -394,6 +395,7 @@ test.describe("Contact Forms", () => {
 
     // Submit the form
     await page.click('button[type="submit"]');
+    await page.waitForLoadState("networkidle");
 
     // Check for success message
     await expect(page.getByTestId("form-success-alert")).toBeVisible();

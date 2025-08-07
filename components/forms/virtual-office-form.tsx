@@ -51,6 +51,9 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
   } = useForm<VirtualOfficeFormData>({
     resolver: zodResolver(virtualOfficeFormSchema),
     defaultValues: {
+      package: "basic",
+      businessType: "sole-proprietorship",
+      startDate: new Date().toISOString().split("T")[0],
       gdprConsent: false,
       marketingConsent: false,
       additionalServices: [],
