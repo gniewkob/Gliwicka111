@@ -11,6 +11,14 @@ import {
 } from "@/components/ui"
 import { Shield, Cookie, BarChart3, X, Settings, CheckCircle } from "lucide-react"
 
+/**
+ * Renders a GDPR-compliant consent banner allowing users to control analytics
+ * tracking. The banner persists the user's choice in `localStorage` and emits a
+ * `consentUpdated` event for analytics initialization.
+ *
+ * @returns {JSX.Element | null} A consent UI or `null` if consent was already
+ * granted.
+ */
 export function ConsentBanner() {
   const [isVisible, setIsVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)

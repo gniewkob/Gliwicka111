@@ -20,6 +20,27 @@ interface FormAnalyticsHook {
   trackAbandonment: () => void
 }
 
+/**
+ * Provides utilities for tracking detailed form interaction events.
+ *
+ * This hook wraps calls to the `analyticsClient` and keeps internal state so
+ * events such as abandonment or repeated views are only sent once. Call the
+ * returned helpers at the appropriate points in your form lifecycle.
+ *
+ * @param {UseFormAnalyticsOptions} options - Configuration for the hook.
+ * @param {string} options.formType - Identifier of the form being tracked.
+ * @param {boolean} [options.enabled=true] - Whether analytics should be sent.
+ * @returns {FormAnalyticsHook} Collection of tracking functions.
+ *
+ * @example
+ * const {
+ *   trackFormView,
+ *   trackFormStart,
+ *   trackSubmissionSuccess,
+ * } = useFormAnalytics({ formType: "virtual-office" });
+ *
+ * trackFormView(); // record that the form was displayed
+ */
 export function useFormAnalytics({ formType, enabled = true }: UseFormAnalyticsOptions): FormAnalyticsHook {
   const hasTrackedView = useRef(false)
   const hasTrackedStart = useRef(false)
@@ -132,7 +153,12 @@ export function useFormAnalytics({ formType, enabled = true }: UseFormAnalyticsO
   }
 }
 
-// Hook for tracking page-level analytics
+/**
+ * Sends a single page view event when the component mounts.
+ *
+ * @param {string} pageName - Name of the page being viewed.
+ * @param {boolean} [enabled=true] - Set to `false` to disable analytics.
+ */
 export function usePageAnalytics(pageName: string, enabled = true) {
   useEffect(() => {
     if (enabled && typeof window !== "undefined") {
@@ -142,7 +168,15 @@ export function usePageAnalytics(pageName: string, enabled = true) {
   }, [pageName, enabled])
 }
 
-// Hook for tracking user engagement
+/**
+ * Tracks whether the user stays engaged with the page and measures the
+ * engagement duration. Helpful for analytics dashboards that need to know how
+ * long users actively view a page.
+ *
+ * @param {boolean} [enabled=true] - When `false`, no listeners are attached.
+ * @returns {{ isEngaged: boolean; getEngagementTime: () => number }} Current
+ * engagement state helpers.
+ */
 export function useEngagementTracking(enabled = true) {
   const engagementStartTime = useRef<number>(Date.now())
   const isEngaged = useRef<boolean>(true)
