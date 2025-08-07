@@ -262,10 +262,8 @@ test.describe("Contact Forms", () => {
         await route.fulfill({
           status: 500,
           contentType: "application/json",
-          body: JSON.stringify({
-            success: false,
-            message: messages.form.serverError.pl,
-          }),
+          // prettier-ignore
+          body: JSON.stringify({ success: false, message: messages.form.serverError.pl }),
         });
       } else {
         await route.continue();
