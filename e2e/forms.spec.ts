@@ -280,7 +280,9 @@ test.describe("Contact Forms", () => {
     await page.click('button[type="submit"]');
 
     // Check for error message
-    await expect(page.getByText(/błąd podczas wysyłania/i)).toBeVisible();
+    const errorAlert = page.locator('[data-testid="form-error-alert"]');
+    await expect(errorAlert).toBeVisible();
+    await expect(errorAlert).toHaveText(messages.form.serverError.pl);
   });
 
   test("should track analytics events", async ({ page }) => {
