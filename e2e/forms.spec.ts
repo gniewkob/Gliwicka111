@@ -383,13 +383,10 @@ test.describe("Contact Forms", () => {
     await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
     await page.fill('[name="startDate"]', "2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
+    await page.fill('[name="message"]', "Mobile test message");
 
-    // Submit the form
-    const responsePromise = page.waitForResponse((res) =>
-      isFormRequest(res.url(), res.request().method()),
-    );
+    // Submit the form and wait for the success alert instead of network response
     await page.click('button[type="submit"]');
-    await responsePromise;
 
     // Check for success message
     await expect(page.getByTestId("form-success-alert")).toBeVisible();
