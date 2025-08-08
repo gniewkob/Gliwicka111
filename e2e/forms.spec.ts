@@ -1,6 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { messages } from "@/lib/i18n";
 
+// Helper used in tests to match the actual form submission request. In
+// production the server action endpoint includes various build identifiers, so
+// instead of matching the exact URL we intercept any POST request targeting the
+// `/forms` route.
+const isFormRequest = (url: string, method: string) =>
+  method === "POST" && url.includes("/forms");
+
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/forms");
@@ -17,15 +24,20 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit virtual office form successfully", async ({ page }) => {
-    await page.route(/\/_actions\/submit.*Form/, async (route) => {
-      const response = new Response(
-        `0:${JSON.stringify({
-          success: true,
-          message: messages.form.success.pl,
-        })}\n`,
-        { headers: { "content-type": "text/x-component" } },
-      );
-      await route.fulfill({ response });
+    await page.route("**", async (route) => {
+      const req = route.request();
+      if (isFormRequest(req.url(), req.method())) {
+        const response = new Response(
+          `0:${JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          })}\n`,
+          { headers: { "content-type": "text/x-component" } },
+        );
+        await route.fulfill({ response });
+      } else {
+        await route.continue();
+      }
     });
 
     // Navigate to virtual office form
@@ -122,15 +134,20 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
-    await page.route(/\/_actions\/submit.*Form/, async (route) => {
-      const response = new Response(
-        `0:${JSON.stringify({
-          success: true,
-          message: messages.form.success.pl,
-        })}\n`,
-        { headers: { "content-type": "text/x-component" } },
-      );
-      await route.fulfill({ response });
+    await page.route("**", async (route) => {
+      const req = route.request();
+      if (isFormRequest(req.url(), req.method())) {
+        const response = new Response(
+          `0:${JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          })}\n`,
+          { headers: { "content-type": "text/x-component" } },
+        );
+        await route.fulfill({ response });
+      } else {
+        await route.continue();
+      }
     });
 
     // Navigate to coworking form
@@ -170,15 +187,20 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
-    await page.route(/\/_actions\/submit.*Form/, async (route) => {
-      const response = new Response(
-        `0:${JSON.stringify({
-          success: true,
-          message: messages.form.success.pl,
-        })}\n`,
-        { headers: { "content-type": "text/x-component" } },
-      );
-      await route.fulfill({ response });
+    await page.route("**", async (route) => {
+      const req = route.request();
+      if (isFormRequest(req.url(), req.method())) {
+        const response = new Response(
+          `0:${JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          })}\n`,
+          { headers: { "content-type": "text/x-component" } },
+        );
+        await route.fulfill({ response });
+      } else {
+        await route.continue();
+      }
     });
 
     // Navigate to meeting room form
@@ -216,15 +238,20 @@ test.describe("Contact Forms", () => {
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
-    await page.route(/\/_actions\/submit.*Form/, async (route) => {
-      const response = new Response(
-        `0:${JSON.stringify({
-          success: false,
-          message: messages.form.serverError.pl,
-        })}\n`,
-        { headers: { "content-type": "text/x-component" } },
-      );
-      await route.fulfill({ response });
+    await page.route("**", async (route) => {
+      const req = route.request();
+      if (isFormRequest(req.url(), req.method())) {
+        const response = new Response(
+          `0:${JSON.stringify({
+            success: false,
+            message: messages.form.serverError.pl,
+          })}\n`,
+          { headers: { "content-type": "text/x-component" } },
+        );
+        await route.fulfill({ response });
+      } else {
+        await route.continue();
+      }
     });
 
     // Navigate to virtual office form
@@ -317,15 +344,20 @@ test.describe("Contact Forms", () => {
   });
 
   test("should work on mobile devices", async ({ page }) => {
-    await page.route(/\/_actions\/submit.*Form/, async (route) => {
-      const response = new Response(
-        `0:${JSON.stringify({
-          success: true,
-          message: messages.form.success.pl,
-        })}\n`,
-        { headers: { "content-type": "text/x-component" } },
-      );
-      await route.fulfill({ response });
+    await page.route("**", async (route) => {
+      const req = route.request();
+      if (isFormRequest(req.url(), req.method())) {
+        const response = new Response(
+          `0:${JSON.stringify({
+            success: true,
+            message: messages.form.success.pl,
+          })}\n`,
+          { headers: { "content-type": "text/x-component" } },
+        );
+        await route.fulfill({ response });
+      } else {
+        await route.continue();
+      }
     });
 
     // Set mobile viewport
@@ -352,7 +384,9 @@ test.describe("Contact Forms", () => {
     await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form
-    const responsePromise = page.waitForResponse(/\/_actions\/submit.*Form/);
+    const responsePromise = page.waitForResponse((res) =>
+      isFormRequest(res.url(), res.request().method()),
+    );
     await page.click('button[type="submit"]');
     await responsePromise;
 
