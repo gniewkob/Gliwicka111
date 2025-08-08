@@ -115,7 +115,8 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.locator('[name="nip"]').fill("1234567890");
     // Enter invalid email for validation early
-    await page.fill('[data-testid="contact-form-virtual-office"] [name="email"]', "invalid-email");
+    await form.locator('[name="email"]').fill("invalid-email");
+    await form.locator('[name="email"]').blur();
     await form.getByTestId("businessType-select").click();
     await page
       .getByRole("option", { name: /Działalność gospodarcza/i })
