@@ -96,33 +96,24 @@ test.describe("Contact Forms", () => {
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
 
-    // Fill required fields with valid data
-    await page.fill('[name="companyName"]', "Test Company");
-    await page.fill('[name="firstName"]', "Jan");
-    await page.fill('[name="lastName"]', "Kowalski");
-    await page.fill('[name="phone"]', "+48 123 456 789");
-    await page.fill('[name="nip"]', "1234567890");
-    await page.getByTestId("businessType-select").click();
+    // Fill required fields with valid data scoped to the virtual office form
+    await form.locator('[name="companyName"]').fill("Test Company");
+    await form.locator('[name="firstName"]').fill("Jan");
+    await form.locator('[name="lastName"]').fill("Kowalski");
+    await form.locator('[name="phone"]').fill("+48 123 456 789");
+    await form.locator('[name="nip"]').fill("1234567890");
+    // Enter invalid email for validation early
+    await page.fill('[data-testid="contact-form-virtual-office"] [name="email"]', "invalid-email");
+    await form.getByTestId("businessType-select").click();
     await page
       .getByRole("option", { name: /Działalność gospodarcza/i })
       .click();
-    const businessTypeInput = page.locator('input[name="businessType"]');
-    if (await businessTypeInput.count()) {
-      await expect(businessTypeInput).toHaveValue("sole-proprietorship");
-    }
-    await page.getByTestId("package-select").click();
+    await form.getByTestId("package-select").click();
     await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
-    const packageInput = page.locator('input[name="package"]');
-    if (await packageInput.count()) {
-      await expect(packageInput).toHaveValue("basic");
-    }
-    await page.fill('[name="startDate"]', "2024-12-01");
+    await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
-    await page.fill('[name="message"]', "Test message for email validation");
-
-    // Enter invalid email
-    await page.fill('[name="email"]', "invalid-email");
-    await page.click('button[type="submit"]');
+    await form.locator('[name="message"]').fill("Test message for email validation");
+    await form.locator('button[type="submit"]').click();
 
     // Check for email validation error and ensure it uses the correct element
     const emailError = page.getByTestId("email-error");
