@@ -344,11 +344,17 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="lastName"]', "User");
     await page.fill('[name="email"]', "mobile@example.com");
     await page.fill('[name="phone"]', "+48 123 456 789");
+    await page.getByTestId("businessType-select").click();
+    await page.getByRole("option", { name: /Działalność gospodarcza/i }).click();
+    await page.getByTestId("package-select").click();
+    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
+    await page.fill('[name="startDate"]', "2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form
+    const responsePromise = page.waitForResponse(/\/_actions\/submit.*Form/);
     await page.click('button[type="submit"]');
-    await page.waitForLoadState("networkidle");
+    await responsePromise;
 
     // Check for success message
     await expect(page.getByTestId("form-success-alert")).toBeVisible();
