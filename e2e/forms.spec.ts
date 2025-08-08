@@ -1,12 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Request } from "@playwright/test";
 import { messages } from "@/lib/i18n";
 
-// Helper used in tests to match the actual form submission request. In
-// production the server action endpoint includes various build identifiers, so
-// instead of matching the exact URL we intercept any POST request targeting the
-// `/forms` route.
-const isFormRequest = (url: string, method: string) =>
-  method === "POST" && url.includes("/forms");
+// Helper used in tests to match Next.js server action requests. The server
+// action endpoint includes various build identifiers, so instead of matching
+// the exact URL we detect requests with the `x-next-action` header or the
+// `/_next/data` path.
+const isServerActionRequest = (req: Request) =>
+  req.method() === "POST" &&
+  (Boolean(req.headers()["x-next-action"]) ||
+    req.url().includes("/_next/data"));
 
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
@@ -26,7 +28,7 @@ test.describe("Contact Forms", () => {
   test("should submit virtual office form successfully", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
-      if (isFormRequest(req.url(), req.method())) {
+      if (isServerActionRequest(req)) {
         const response = new Response(
           `0:${JSON.stringify({
             success: true,
@@ -125,7 +127,9 @@ test.describe("Contact Forms", () => {
     await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
-    await form.locator('[name="message"]').fill("Test message for email validation");
+    await form
+      .locator('[name="message"]')
+      .fill("Test message for email validation");
     await form.locator('button[type="submit"]').click();
 
     // Check for email validation error and ensure it uses the correct element
@@ -137,7 +141,7 @@ test.describe("Contact Forms", () => {
   test("should submit coworking form successfully", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
-      if (isFormRequest(req.url(), req.method())) {
+      if (isServerActionRequest(req)) {
         const response = new Response(
           `0:${JSON.stringify({
             success: true,
@@ -190,7 +194,7 @@ test.describe("Contact Forms", () => {
   test("should submit meeting room form successfully", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
-      if (isFormRequest(req.url(), req.method())) {
+      if (isServerActionRequest(req)) {
         const response = new Response(
           `0:${JSON.stringify({
             success: true,
@@ -241,7 +245,7 @@ test.describe("Contact Forms", () => {
   test("should handle form submission errors gracefully", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
-      if (isFormRequest(req.url(), req.method())) {
+      if (isServerActionRequest(req)) {
         const response = new Response(
           `0:${JSON.stringify({
             success: false,
@@ -347,7 +351,7 @@ test.describe("Contact Forms", () => {
   test("should work on mobile devices", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
-      if (isFormRequest(req.url(), req.method())) {
+      if (isServerActionRequest(req)) {
         const response = new Response(
           `0:${JSON.stringify({
             success: true,
@@ -378,7 +382,9 @@ test.describe("Contact Forms", () => {
     await page.fill('[name="email"]', "mobile@example.com");
     await page.fill('[name="phone"]', "+48 123 456 789");
     await page.getByTestId("businessType-select").click();
-    await page.getByRole("option", { name: /Działalność gospodarcza/i }).click();
+    await page
+      .getByRole("option", { name: /Działalność gospodarcza/i })
+      .click();
     await page.getByTestId("package-select").click();
     await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
     await page.fill('[name="startDate"]', "2024-12-01");
