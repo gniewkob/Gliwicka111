@@ -237,7 +237,7 @@ test.describe("Contact Forms", () => {
       await expect(roomTypeInput).toHaveValue("conference");
     }
     await page.getByLabel(/projektor/i).check();
-    await page.check('[name="catering"]');
+    await page.getByLabel(/catering/i).check({ force: true });
     await form.getByTestId("gdpr-checkbox").click();
     await page.fill('[name="message"]', "Test message for meeting room");
 
