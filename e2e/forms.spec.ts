@@ -17,23 +17,15 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit virtual office form successfully", async ({ page }) => {
-    await page.route("**/*", async (route) => {
-      const req = route.request();
-      const isServerAction =
-        req.method() === "POST" && req.headers()["next-action"];
-
-      if (isServerAction) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            success: true,
-            message: messages.form.success.pl,
-          }),
-        });
-      } else {
-        await route.continue();
-      }
+    await page.route(/\/_actions\/submit.*Form/, async (route) => {
+      const response = new Response(
+        `0:${JSON.stringify({
+          success: true,
+          message: messages.form.success.pl,
+        })}\n`,
+        { headers: { "content-type": "text/x-component" } },
+      );
+      await route.fulfill({ response });
     });
 
     // Navigate to virtual office form
@@ -139,23 +131,15 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
-    await page.route("**/*", async (route) => {
-      const req = route.request();
-      const isServerAction =
-        req.method() === "POST" && req.headers()["next-action"];
-
-      if (isServerAction) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            success: true,
-            message: messages.form.success.pl,
-          }),
-        });
-      } else {
-        await route.continue();
-      }
+    await page.route(/\/_actions\/submit.*Form/, async (route) => {
+      const response = new Response(
+        `0:${JSON.stringify({
+          success: true,
+          message: messages.form.success.pl,
+        })}\n`,
+        { headers: { "content-type": "text/x-component" } },
+      );
+      await route.fulfill({ response });
     });
 
     // Navigate to coworking form
@@ -195,23 +179,15 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
-    await page.route("**/*", async (route) => {
-      const req = route.request();
-      const isServerAction =
-        req.method() === "POST" && req.headers()["next-action"];
-
-      if (isServerAction) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            success: true,
-            message: messages.form.success.pl,
-          }),
-        });
-      } else {
-        await route.continue();
-      }
+    await page.route(/\/_actions\/submit.*Form/, async (route) => {
+      const response = new Response(
+        `0:${JSON.stringify({
+          success: true,
+          message: messages.form.success.pl,
+        })}\n`,
+        { headers: { "content-type": "text/x-component" } },
+      );
+      await route.fulfill({ response });
     });
 
     // Navigate to meeting room form
@@ -249,21 +225,15 @@ test.describe("Contact Forms", () => {
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
-    await page.route("**/*", async (route) => {
-      const req = route.request();
-      const isServerAction =
-        req.method() === "POST" && req.headers()["next-action"];
-
-      if (isServerAction) {
-        await route.fulfill({
-          status: 500,
-          contentType: "application/json",
-          // prettier-ignore
-          body: JSON.stringify({ success: false, message: messages.form.serverError.pl }),
-        });
-      } else {
-        await route.continue();
-      }
+    await page.route(/\/_actions\/submit.*Form/, async (route) => {
+      const response = new Response(
+        `0:${JSON.stringify({
+          success: false,
+          message: messages.form.serverError.pl,
+        })}\n`,
+        { headers: { "content-type": "text/x-component" } },
+      );
+      await route.fulfill({ response });
     });
 
     // Navigate to virtual office form
@@ -356,23 +326,15 @@ test.describe("Contact Forms", () => {
   });
 
   test("should work on mobile devices", async ({ page }) => {
-    await page.route("**/*", async (route) => {
-      const req = route.request();
-      const isServerAction =
-        req.method() === "POST" && req.headers()["next-action"];
-
-      if (isServerAction) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            success: true,
-            message: messages.form.success.pl,
-          }),
-        });
-      } else {
-        await route.continue();
-      }
+    await page.route(/\/_actions\/submit.*Form/, async (route) => {
+      const response = new Response(
+        `0:${JSON.stringify({
+          success: true,
+          message: messages.form.success.pl,
+        })}\n`,
+        { headers: { "content-type": "text/x-component" } },
+      );
+      await route.fulfill({ response });
     });
 
     // Set mobile viewport
