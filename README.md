@@ -62,9 +62,10 @@ Migrations are orchestrated by `scripts/migrate.ts` which executes all SQL files
 
 ## Testing & CI/CD
 
-- **Unit & Integration Tests**: `npm test`, `npm run test:integration` (Vitest).  
-- **End-to-End Tests**: `npm run test:e2e` (Playwright).  
-- **Linting**: `npm run lint` (Next.js ESLint).  
+- **Playwright setup**: run `npx playwright install --with-deps` before executing Playwright tests.
+- **Unit & Integration Tests**: `npm test`, `npm run test:integration` (Vitest).
+- **End-to-End Tests**: `npm run test:e2e` (Playwright).
+- **Linting**: `npm run lint` (Next.js ESLint).
 - **Continuous Integration**: GitHub Actions workflow `ci.yml` runs lint, tests, and build on every push/PR.  
 - **End-to-End & Deployment Pipelines**: `e2e.yml` executes Playwright tests, while `deploy.yml` ships builds to MyDevil (FreeBSD) after successful E2E runs.
 
