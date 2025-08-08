@@ -338,9 +338,8 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   <Input
                     id="email"
                     type="email"
-                    {...register("email")}
+                    {...register("email", { onBlur: () => handleFieldBlur("email") })}
                     onFocus={() => handleFieldFocus("email")}
-                    onBlur={() => handleFieldBlur("email")}
                     className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
                   />
                 </div>
