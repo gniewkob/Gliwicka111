@@ -496,13 +496,16 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
             {/* Catering Options */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-2">
+              <Label
+                htmlFor="catering"
+                className="cursor-pointer"
+              >
                 <Checkbox id="catering" {...register("catering")} />
-                <Label htmlFor="catering" className="flex items-center">
-                  <Coffee className="w-4 h-4 mr-1" />
+                <span className="flex items-center">
+                  <Coffee className="w-4 h-4 mr-1 pointer-events-none" />
                   {t.fields.catering}
-                </Label>
-              </div>
+                </span>
+              </Label>
 
               {watch("catering") && (
                 <div>
