@@ -131,7 +131,7 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.locator('[name="nip"]').fill("1234567890");
     // Enter invalid email for validation early
-    await form.locator('[name="email"]').fill("invalid@invalid");
+    await form.locator('[name="email"]').fill("invalid-email");
     await form.getByTestId("businessType-select").click();
     await page
       .getByRole("option", { name: /Działalność gospodarcza/i })
@@ -146,14 +146,14 @@ test.describe("Contact Forms", () => {
 
     // Ensure the email field remains unchanged before submission
     await expect(form.locator('[name="email"]').first()).toHaveValue(
-      "invalid@invalid",
+      "invalid-email",
     );
 
     await form.locator('button[type="submit"]').click();
 
     // Confirm the invalid email value persists after submission
     await expect(form.locator('[name="email"]').first()).toHaveValue(
-      "invalid@invalid",
+      "invalid-email",
     );
 
     // Check for email validation error and ensure a single element is targeted
