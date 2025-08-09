@@ -356,7 +356,14 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   onBlur={() => handleFieldBlur("email")}
                   className={errors.email ? "border-red-500" : ""}
                 />
-                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+                {errors.email && (
+                  <p
+                    data-testid="special-deals-email-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <div>

@@ -158,7 +158,10 @@ test.describe("Contact Forms", () => {
     );
 
     // Check for email validation error and ensure a single element is targeted
-    const emailError = form.locator('[data-testid="email-error"]').first();
+    const emailError = form
+      .locator('[data-testid="virtual-office-email-error"]')
+      .filter({ hasText: /Nieprawidłowy format adresu email/ })
+      .first();
     await expect(emailError).toBeVisible();
     await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
   });
