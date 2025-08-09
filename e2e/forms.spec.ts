@@ -29,14 +29,14 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
-        const response = new Response(
-          `0:${JSON.stringify({
+        await route.fulfill({
+          status: 200,
+          headers: { "content-type": "text/x-component" },
+          body: `0:${JSON.stringify({
             success: true,
             message: messages.form.success.pl,
           })}\n`,
-          { headers: { "content-type": "text/x-component" } },
-        );
-        await route.fulfill({ response });
+        });
       } else {
         await route.continue();
       }
@@ -150,14 +150,14 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
-        const response = new Response(
-          `0:${JSON.stringify({
+        await route.fulfill({
+          status: 200,
+          headers: { "content-type": "text/x-component" },
+          body: `0:${JSON.stringify({
             success: true,
             message: messages.form.success.pl,
           })}\n`,
-          { headers: { "content-type": "text/x-component" } },
-        );
-        await route.fulfill({ response });
+        });
       } else {
         await route.continue();
       }
@@ -203,14 +203,14 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
-        const response = new Response(
-          `0:${JSON.stringify({
+        await route.fulfill({
+          status: 200,
+          headers: { "content-type": "text/x-component" },
+          body: `0:${JSON.stringify({
             success: true,
             message: messages.form.success.pl,
           })}\n`,
-          { headers: { "content-type": "text/x-component" } },
-        );
-        await route.fulfill({ response });
+        });
       } else {
         await route.continue();
       }
@@ -256,14 +256,14 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
-        const response = new Response(
-          `0:${JSON.stringify({
+        await route.fulfill({
+          status: 200,
+          headers: { "content-type": "text/x-component" },
+          body: `0:${JSON.stringify({
             success: false,
             message: messages.form.serverError.pl,
           })}\n`,
-          { headers: { "content-type": "text/x-component" } },
-        );
-        await route.fulfill({ response });
+        });
       } else {
         await route.continue();
       }
@@ -362,14 +362,14 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
-        const response = new Response(
-          `0:${JSON.stringify({
+        await route.fulfill({
+          status: 200,
+          headers: { "content-type": "text/x-component" },
+          body: `0:${JSON.stringify({
             success: true,
             message: messages.form.success.pl,
           })}\n`,
-          { headers: { "content-type": "text/x-component" } },
-        );
-        await route.fulfill({ response });
+        });
       } else {
         await route.continue();
       }
