@@ -1,20 +1,19 @@
 import { test, expect, type Request } from "@playwright/test";
 import { messages } from "@/lib/i18n";
 
-// Helper used in tests to match Next.js server action requests. Instead of
-// relying on dynamic build identifiers in the URL, we detect requests via the
-// `next-action` header or known server action URL patterns, including
-// `__next_action` or `?__ACTION__`.
+// Helper used in tests to match Next.js server action form submissions while
+// excluding analytics and other unrelated requests. We require the
+// `next-action` header and a known URL segment (either `/_actions/` or the
+// `/forms` page path) to ensure the request is a genuine form submission.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
 
-  if (req.headerValue("next-action")) return true;
-
   const url = req.url();
+  if (url.includes("/api/analytics")) return false;
+
   return (
-    /\/[_]next\/data\/|\/_actions\//.test(url) ||
-    url.includes("__next_action") ||
-    url.includes("?__ACTION__")
+    !!req.headerValue("next-action") &&
+    (url.includes("/_actions/") || url.includes("/forms"))
   );
 };
 
