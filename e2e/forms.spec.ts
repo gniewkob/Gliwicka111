@@ -3,14 +3,19 @@ import { messages } from "@/lib/i18n";
 
 // Helper used in tests to match Next.js server action requests. Instead of
 // relying on dynamic build identifiers in the URL, we detect requests via the
-// `next-action` header or known server action URL patterns.
+// `next-action` header or known server action URL patterns, including
+// `__next_action` or `?__ACTION__`.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
 
   if (req.headerValue("next-action")) return true;
 
   const url = req.url();
-  return /\/[_]next\/data\/|\/_actions\//.test(url);
+  return (
+    /\/[_]next\/data\/|\/_actions\//.test(url) ||
+    url.includes("__next_action") ||
+    url.includes("?__ACTION__")
+  );
 };
 
 test.describe("Contact Forms", () => {
@@ -32,6 +37,7 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
+        console.log(req.url());
         await route.fulfill({
           status: 200,
           headers: { "content-type": "text/x-component" },
@@ -79,10 +85,11 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and wait for server action response
-    await form.locator('button[type="submit"]').click();
-    await page.waitForResponse((res) =>
-      isServerActionRequest(res.request()),
-    );
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -151,19 +158,16 @@ test.describe("Contact Forms", () => {
     );
 
     // Check for email validation error and ensure a single element is targeted
-    const emailError = form
-      .locator('[data-testid="email-error"]')
-      .first();
+    const emailError = form.locator('[data-testid="email-error"]').first();
     await expect(emailError).toBeVisible();
-    await expect(emailError).toHaveText(
-      "Nieprawidłowy format adresu email",
-    );
+    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
+        console.log(req.url());
         await route.fulfill({
           status: 200,
           headers: { "content-type": "text/x-component" },
@@ -207,10 +211,11 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and wait for server action response
-    await form.locator('button[type="submit"]').click();
-    await page.waitForResponse((res) =>
-      isServerActionRequest(res.request()),
-    );
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -220,6 +225,7 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
+        console.log(req.url());
         await route.fulfill({
           status: 200,
           headers: { "content-type": "text/x-component" },
@@ -263,10 +269,11 @@ test.describe("Contact Forms", () => {
       .fill("Test message for meeting room");
 
     // Submit the form and wait for server action response
-    await form.locator('button[type="submit"]').click();
-    await page.waitForResponse((res) =>
-      isServerActionRequest(res.request()),
-    );
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -276,6 +283,7 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
+        console.log(req.url());
         await route.fulfill({
           status: 200,
           headers: { "content-type": "text/x-component" },
@@ -304,10 +312,11 @@ test.describe("Contact Forms", () => {
     await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form and wait for server action response
-    await form.locator('button[type="submit"]').click();
-    await page.waitForResponse((res) =>
-      isServerActionRequest(res.request()),
-    );
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
 
     // Check for error message
     const errorAlert = form.getByTestId("form-error-alert");
@@ -385,6 +394,7 @@ test.describe("Contact Forms", () => {
     await page.route("**", async (route) => {
       const req = route.request();
       if (isServerActionRequest(req)) {
+        console.log(req.url());
         await route.fulfill({
           status: 200,
           headers: { "content-type": "text/x-component" },
@@ -425,10 +435,11 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Mobile test message");
 
     // Submit the form and wait for server action response
-    await form.locator('button[type="submit"]').click();
-    await page.waitForResponse((res) =>
-      isServerActionRequest(res.request()),
-    );
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
