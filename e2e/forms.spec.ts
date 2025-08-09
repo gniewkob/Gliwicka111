@@ -10,7 +10,7 @@ const isServerActionRequest = (req: Request) => {
   if (req.headerValue("next-action")) return true;
 
   const url = req.url();
-  return url.includes("/_next/data") || url.includes("/_actions/");
+  return /\/[_]next\/data\/|\/_actions\//.test(url);
 };
 
 test.describe("Contact Forms", () => {
@@ -79,11 +79,10 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and wait for server action response
-    const responsePromise = page.waitForResponse((res) =>
+    await form.locator('button[type="submit"]').click();
+    await page.waitForResponse((res) =>
       isServerActionRequest(res.request()),
     );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -208,11 +207,10 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and wait for server action response
-    const responsePromise = page.waitForResponse((res) =>
+    await form.locator('button[type="submit"]').click();
+    await page.waitForResponse((res) =>
       isServerActionRequest(res.request()),
     );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -265,11 +263,10 @@ test.describe("Contact Forms", () => {
       .fill("Test message for meeting room");
 
     // Submit the form and wait for server action response
-    const responsePromise = page.waitForResponse((res) =>
+    await form.locator('button[type="submit"]').click();
+    await page.waitForResponse((res) =>
       isServerActionRequest(res.request()),
     );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -307,11 +304,10 @@ test.describe("Contact Forms", () => {
     await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form and wait for server action response
-    const responsePromise = page.waitForResponse((res) =>
+    await form.locator('button[type="submit"]').click();
+    await page.waitForResponse((res) =>
       isServerActionRequest(res.request()),
     );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
 
     // Check for error message
     const errorAlert = form.getByTestId("form-error-alert");
@@ -429,11 +425,10 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Mobile test message");
 
     // Submit the form and wait for server action response
-    const responsePromise = page.waitForResponse((res) =>
+    await form.locator('button[type="submit"]').click();
+    await page.waitForResponse((res) =>
       isServerActionRequest(res.request()),
     );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
