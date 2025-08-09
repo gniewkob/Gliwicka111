@@ -2,7 +2,6 @@ import { z } from "zod"
 
 // Common validation patterns
 const phoneRegex = /^(\+48\s?)?(\d{3}\s?\d{3}\s?\d{3}|\d{2}\s?\d{3}\s?\d{2}\s?\d{2})$/
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const nipRegex = /^\d{10}$/
 
 // Base form schema
@@ -14,7 +13,7 @@ const baseFormSchema = z.object({
     .max(50, "Nazwisko nie może być dłuższe niż 50 znaków"),
   email: z
     .string({ required_error: "Adres email jest wymagany" })
-    .regex(emailRegex, "Nieprawidłowy format adresu email"),
+    .email("Nieprawidłowy format adresu email"),
   phone: z.string().regex(phoneRegex, "Nieprawidłowy format numeru telefonu"),
   companyName: z
     .string()
@@ -112,7 +111,7 @@ export const specialDealsFormSchema = baseFormSchema.extend({
 })
 
 // Export all schemas
-export { baseFormSchema, phoneRegex, emailRegex, nipRegex }
+export { baseFormSchema, phoneRegex, nipRegex }
 
 // Type exports
 export type VirtualOfficeFormData = z.infer<typeof virtualOfficeFormSchema>

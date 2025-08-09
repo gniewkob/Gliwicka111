@@ -130,11 +130,17 @@ test.describe("Contact Forms", () => {
     await form
       .locator('[name="message"]')
       .fill("Test message for email validation");
+
+    // Ensure the email field remains unchanged before submission
+    await expect(form.locator('[name="email"]').first()).toHaveValue(
+      "invalid-email",
+    );
+
     await form.locator('button[type="submit"]').click();
 
     // Check for email validation error and ensure it uses the correct element
-    const emailError = page.getByTestId("email-error");
-    await expect(emailError).toHaveText(/nieprawidłowy format adresu email/i);
+    const emailError = form.getByTestId("email-error");
+    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
     await expect(emailError).toBeVisible();
   });
 
