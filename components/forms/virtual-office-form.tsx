@@ -370,7 +370,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 {errors.email && (
                   <p
                     className="text-red-500 text-sm mt-1"
-                    data-testid="email-error"
+                    data-testid="virtual-office-email-error"
                   >
                     {errors.email.message}
                   </p>
