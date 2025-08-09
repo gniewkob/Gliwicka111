@@ -71,13 +71,15 @@ test.describe("Contact Forms", () => {
     }
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
-    await form.locator('[name="message"]').fill("Test message for virtual office");
+    await form
+      .locator('[name="message"]')
+      .fill("Test message for virtual office");
 
     // Submit the form
     await form.locator('button[type="submit"]').click();
 
     // Check for success message
-    await expect(page.getByTestId("form-success-alert")).toBeVisible();
+    await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
   test("should validate required fields", async ({ page }) => {
@@ -194,7 +196,7 @@ test.describe("Contact Forms", () => {
     await form.locator('button[type="submit"]').click();
 
     // Check for success message
-    await expect(page.getByTestId("form-success-alert")).toBeVisible();
+    await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
@@ -239,13 +241,15 @@ test.describe("Contact Forms", () => {
     await form.getByLabel(/projektor/i).check();
     await form.getByLabel(/catering/i).check({ force: true });
     await form.getByTestId("gdpr-checkbox").click();
-    await form.locator('[name="message"]').fill("Test message for meeting room");
+    await form
+      .locator('[name="message"]')
+      .fill("Test message for meeting room");
 
     // Submit the form
     await form.locator('button[type="submit"]').click();
 
     // Check for success message
-    await expect(page.getByTestId("form-success-alert")).toBeVisible();
+    await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
@@ -283,7 +287,7 @@ test.describe("Contact Forms", () => {
     await form.locator('button[type="submit"]').click();
 
     // Check for error message
-    const errorAlert = page.getByTestId("form-error-alert");
+    const errorAlert = form.getByTestId("form-error-alert");
     await expect(errorAlert).toBeVisible();
     await expect(errorAlert).toHaveText(messages.form.serverError.pl);
   });
@@ -401,6 +405,6 @@ test.describe("Contact Forms", () => {
     await form.locator('button[type="submit"]').click();
 
     // Check for success message
-    await expect(page.getByTestId("form-success-alert")).toBeVisible();
+    await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 });
