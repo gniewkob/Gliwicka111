@@ -52,6 +52,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
   } = useForm<VirtualOfficeFormData>({
     resolver: zodResolver(virtualOfficeFormSchema),
     defaultValues: {
+      email: "",
       gdprConsent: false,
       marketingConsent: false,
       additionalServices: [],
@@ -335,13 +336,22 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Label htmlFor="email">{t.fields.email} *</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    {...register("email", { onBlur: () => handleFieldBlur("email") })}
-                    onFocus={() => handleFieldFocus("email")}
-                    className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
-                  />
+                  {(() => {
+                    const emailRegister = register("email")
+                    return (
+                      <Input
+                        id="email"
+                        type="email"
+                        {...emailRegister}
+                        onBlur={(e) => {
+                          emailRegister.onBlur(e)
+                          handleFieldBlur("email")
+                        }}
+                        onFocus={() => handleFieldFocus("email")}
+                        className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
+                      />
+                    )
+                  })()}
                 </div>
                 {errors.email && (
                   <p
