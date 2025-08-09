@@ -3,12 +3,19 @@ import { messages } from "@/lib/i18n";
 
 // Helper used in tests to match Next.js server action requests. The server
 // action endpoint includes various build identifiers, so instead of matching
-// the exact URL we detect requests with the `x-next-action` header or the
-// `/_next/data` path.
-const isServerActionRequest = (req: Request) =>
-  req.method() === "POST" &&
-  (Boolean(req.headers()["x-next-action"]) ||
-    req.url().includes("/_next/data"));
+// the exact URL we detect requests with the `next-action` header or the
+// `/_next/data` path. Header names are case-insensitive so we normalise them
+// before checking.
+const isServerActionRequest = (req: Request) => {
+  if (req.method() !== "POST") return false;
+
+  const headers = req.headers();
+  const hasNextActionHeader = Object.keys(headers).some(
+    (key) => key.toLowerCase() === "next-action" && Boolean(headers[key]),
+  );
+
+  return hasNextActionHeader || req.url().includes("/_next/data");
+};
 
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
