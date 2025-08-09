@@ -1,20 +1,16 @@
 import { test, expect, type Request } from "@playwright/test";
 import { messages } from "@/lib/i18n";
 
-// Helper used in tests to match Next.js server action requests. The server
-// action endpoint includes various build identifiers, so instead of matching
-// the exact URL we detect requests with the `next-action` header or the
-// `/_next/data` path. Header names are case-insensitive so we normalise them
-// before checking.
+// Helper used in tests to match Next.js server action requests. Instead of
+// relying on dynamic build identifiers in the URL, we detect requests via the
+// `next-action` header or known server action URL patterns.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
 
-  const headers = req.headers();
-  const hasNextActionHeader = Object.keys(headers).some(
-    (key) => key.toLowerCase() === "next-action" && Boolean(headers[key]),
-  );
+  if (req.headerValue("next-action")) return true;
 
-  return hasNextActionHeader || req.url().includes("/_next/data");
+  const url = req.url();
+  return url.includes("/_next/data") || url.includes("/_actions/");
 };
 
 test.describe("Contact Forms", () => {
@@ -82,8 +78,12 @@ test.describe("Contact Forms", () => {
       .locator('[name="message"]')
       .fill("Test message for virtual office");
 
-    // Submit the form
+    // Submit the form and wait for server action response
+    const responsePromise = page.waitForResponse((res) =>
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -198,8 +198,12 @@ test.describe("Contact Forms", () => {
     await form.getByTestId("gdpr-checkbox").click();
     await form.locator('[name="message"]').fill("Test message for coworking");
 
-    // Submit the form
+    // Submit the form and wait for server action response
+    const responsePromise = page.waitForResponse((res) =>
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -251,8 +255,12 @@ test.describe("Contact Forms", () => {
       .locator('[name="message"]')
       .fill("Test message for meeting room");
 
-    // Submit the form
+    // Submit the form and wait for server action response
+    const responsePromise = page.waitForResponse((res) =>
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
@@ -289,8 +297,12 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.getByTestId("gdpr-checkbox").click();
 
-    // Submit the form
+    // Submit the form and wait for server action response
+    const responsePromise = page.waitForResponse((res) =>
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
 
     // Check for error message
     const errorAlert = form.getByTestId("form-error-alert");
@@ -407,8 +419,12 @@ test.describe("Contact Forms", () => {
     await form.getByTestId("gdpr-checkbox").click();
     await form.locator('[name="message"]').fill("Mobile test message");
 
-    // Submit the form and wait for the success alert instead of network response
+    // Submit the form and wait for server action response
+    const responsePromise = page.waitForResponse((res) =>
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
 
     // Check for success message
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
