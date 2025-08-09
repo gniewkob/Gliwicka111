@@ -315,7 +315,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   onBlur={() => handleFieldBlur("firstName")}
                   className={errors.firstName ? "border-red-500" : ""}
                 />
-                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+                  {errors.firstName && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="firstName-error"
+                    >
+                      {errors.firstName.message}
+                    </p>
+                  )}
               </div>
 
               <div>
@@ -327,7 +334,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   onBlur={() => handleFieldBlur("lastName")}
                   className={errors.lastName ? "border-red-500" : ""}
                 />
-                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+                  {errors.lastName && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="lastName-error"
+                    >
+                      {errors.lastName.message}
+                    </p>
+                  )}
               </div>
             </div>
 
@@ -377,7 +391,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                     placeholder="+48 123 456 789"
                   />
                 </div>
-                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
+                  {errors.phone && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="phone-error"
+                    >
+                      {errors.phone.message}
+                    </p>
+                  )}
               </div>
             </div>
 
@@ -392,7 +413,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   onBlur={() => handleFieldBlur("companyName")}
                   className={errors.companyName ? "border-red-500" : ""}
                 />
-                {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>}
+                  {errors.companyName && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="companyName-error"
+                    >
+                      {errors.companyName.message}
+                    </p>
+                  )}
               </div>
 
               <div>
@@ -405,7 +433,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   className={errors.nip ? "border-red-500" : ""}
                   placeholder="1234567890"
                 />
-                {errors.nip && <p className="text-red-500 text-sm mt-1">{errors.nip.message}</p>}
+                  {errors.nip && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="nip-error"
+                    >
+                      {errors.nip.message}
+                    </p>
+                  )}
               </div>
             </div>
 
@@ -428,7 +463,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.businessType && <p className="text-red-500 text-sm mt-1">{errors.businessType.message}</p>}
+                  {errors.businessType && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="businessType-error"
+                    >
+                      {errors.businessType.message}
+                    </p>
+                  )}
               </div>
 
               <div>
@@ -447,7 +489,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                     <SelectItem value="premium">Pakiet Premium (249 zł/miesiąc)</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.package && <p className="text-red-500 text-sm mt-1">{errors.package.message}</p>}
+                  {errors.package && (
+                    <p
+                      className="text-red-500 text-sm mt-1"
+                      data-testid="package-error"
+                    >
+                      {errors.package.message}
+                    </p>
+                  )}
               </div>
             </div>
 
@@ -464,7 +513,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   className={`pl-10 ${errors.startDate ? "border-red-500" : ""}`}
                 />
               </div>
-              {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>}
+                {errors.startDate && (
+                  <p
+                    className="text-red-500 text-sm mt-1"
+                    data-testid="startDate-error"
+                  >
+                    {errors.startDate.message}
+                  </p>
+                )}
             </div>
 
             {/* Additional Services */}
@@ -506,7 +562,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 rows={4}
                 placeholder="Opisz swoje potrzeby, zadaj pytania..."
               />
-              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+                {errors.message && (
+                  <p
+                    className="text-red-500 text-sm mt-1"
+                    data-testid="message-error"
+                  >
+                    {errors.message.message}
+                  </p>
+                )}
             </div>
 
             {/* GDPR Consent */}
@@ -528,7 +591,14 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   </p>
                 </div>
               </div>
-              {errors.gdprConsent && <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>}
+                {errors.gdprConsent && (
+                  <p
+                    className="text-red-500 text-sm"
+                    data-testid="gdprConsent-error"
+                  >
+                    {errors.gdprConsent.message}
+                  </p>
+                )}
 
               <div className="flex items-start space-x-2">
                 <Checkbox id="marketingConsent" {...register("marketingConsent")} />
