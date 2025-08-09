@@ -146,10 +146,19 @@ test.describe("Contact Forms", () => {
 
     await form.locator('button[type="submit"]').click();
 
-    // Check for email validation error and ensure it uses the correct element
-    const emailError = form.getByTestId("email-error");
-    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
+    // Confirm the invalid email value persists after submission
+    await expect(form.locator('[name="email"]').first()).toHaveValue(
+      "invalid@invalid",
+    );
+
+    // Check for email validation error and ensure a single element is targeted
+    const emailError = form
+      .locator('[data-testid="email-error"]')
+      .first();
     await expect(emailError).toBeVisible();
+    await expect(emailError).toHaveText(
+      "Nieprawidłowy format adresu email",
+    );
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
