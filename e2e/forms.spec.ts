@@ -33,23 +33,6 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit virtual office form successfully", async ({ page }) => {
-    await page.route("**", async (route) => {
-      const req = route.request();
-      if (isServerActionRequest(req)) {
-        console.log(req.url(), req.headers());
-        await route.fulfill({
-          status: 200,
-          headers: { "content-type": "text/x-component" },
-          body: `0:${JSON.stringify({
-            success: true,
-            message: messages.form.success.pl,
-          })}\n`,
-        });
-      } else {
-        await route.continue();
-      }
-    });
-
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
@@ -84,12 +67,10 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and check for success message
-    const [response] = await Promise.all([
-      page.waitForResponse((res) => isServerActionRequest(res.request())),
-      form.locator('button[type="submit"]').click(),
-    ]);
-    expect(response.ok()).toBeTruthy();
-    await expect(form.getByTestId("form-success-alert")).toBeVisible();
+    await form.locator('button[type="submit"]').click();
+    await expect(form.getByTestId("form-success-alert")).toHaveText(
+      messages.form.success.pl,
+    );
   });
 
   test("should validate required fields", async ({ page }) => {
