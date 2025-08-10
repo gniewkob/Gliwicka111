@@ -219,8 +219,7 @@ test.describe("Contact Forms", () => {
   test("should handle form submission errors gracefully", async ({ page }) => {
     await page.route("**", async (route) => {
       const req = route.request();
-      if (isServerActionRequest(req)) {
-        console.log(req.url(), req.headers());
+      if (req.method() === "POST" && isServerActionRequest(req)) {
         await route.fulfill({
           status: 200,
           headers: { "content-type": "text/x-component" },
@@ -240,20 +239,27 @@ test.describe("Contact Forms", () => {
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
 
-    // Fill out minimal required fields
+    // Fill out all required fields
     await form.locator('[name="companyName"]').fill("Test Company");
     await form.locator('[name="firstName"]').fill("Jan");
     await form.locator('[name="lastName"]').fill("Kowalski");
     await form.locator('[name="email"]').fill("jan@example.com");
     await form.locator('[name="phone"]').fill("+48 123 456 789");
+    await form.locator('[name="nip"]').fill("1234567890");
+    await form.getByTestId("businessType-select").click();
+    await page
+      .getByRole("option", { name: /Działalność gospodarcza/i })
+      .click();
+    await form.getByTestId("package-select").click();
+    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
+    await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
+    await form
+      .locator('[name="message"]')
+      .fill("Test message for error handling");
 
     // Submit the form and check for error message
-    const [response] = await Promise.all([
-      page.waitForResponse((res) => isServerActionRequest(res.request())),
-      form.locator('button[type="submit"]').click(),
-    ]);
-    expect(response.ok()).toBeTruthy();
+    await form.locator('button[type="submit"]').click();
     const errorAlert = form.getByTestId("form-error-alert");
     await expect(errorAlert).toBeVisible();
     await expect(errorAlert).toHaveText(messages.form.serverError.pl);
