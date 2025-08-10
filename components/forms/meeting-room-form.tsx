@@ -345,7 +345,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                   onBlur={() => handleFieldBlur("email")}
                   className={errors.email ? "border-red-500" : ""}
                 />
-                {errors.email && (
+                {errors.email?.message && (
                   <p
                     data-testid="meeting-room-email-error"
                     className="text-red-500 text-sm mt-1"

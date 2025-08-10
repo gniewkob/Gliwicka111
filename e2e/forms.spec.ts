@@ -149,13 +149,12 @@ test.describe("Contact Forms", () => {
       "invalid-email",
     );
 
-    // Check for email validation error and ensure a single element is targeted
-    const emailError = form
-      .locator('[data-testid="virtual-office-email-error"]')
-      .filter({ hasText: /Nieprawidłowy format adresu email/ })
-      .first();
+    // Check for email validation error
+    const emailError = form.getByTestId("virtual-office-email-error");
     await expect(emailError).toBeVisible();
-    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
+    await expect(emailError).toHaveText(
+      "Nieprawidłowy format adresu email",
+    );
   });
 
   test("should submit coworking form successfully", async ({ page }) => {

@@ -336,7 +336,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                   onBlur={() => handleFieldBlur("email")}
                   className={errors.email ? "border-red-500" : ""}
                 />
-                {errors.email && (
+                {errors.email?.message && (
                   <p
                     data-testid="advertising-email-error"
                     className="text-red-500 text-sm mt-1"
