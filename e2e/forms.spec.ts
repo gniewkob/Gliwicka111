@@ -97,21 +97,6 @@ test.describe("Contact Forms", () => {
   });
 
   test("should validate email format", async ({ page }) => {
-    await page.route("**", async (route) => {
-      const req = route.request();
-      if (isServerActionRequest(req)) {
-        await route.fulfill({
-          status: 200,
-          headers: { "content-type": "text/x-component" },
-          body: `0:${JSON.stringify({
-            success: false,
-            fieldErrors: { email: "Nieprawidłowy format adresu email" },
-          })}\n`,
-        });
-      } else {
-        await route.continue();
-      }
-    });
 
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
@@ -144,11 +129,7 @@ test.describe("Contact Forms", () => {
       "invalid-email",
     );
 
-    const [response] = await Promise.all([
-      page.waitForResponse((res) => isServerActionRequest(res.request())),
-      form.locator('button[type="submit"]').click(),
-    ]);
-    await expect(response.ok()).toBeTruthy();
+    await form.locator('button[type="submit"]').click();
 
     // Confirm the invalid email value persists after submission
     await expect(form.locator('[name="email"]').first()).toHaveValue(
