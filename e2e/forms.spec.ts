@@ -3,15 +3,20 @@ import { messages } from "@/lib/i18n";
 
 // Helper used in tests to match Next.js server action form submissions while
 // excluding analytics and other unrelated requests. It matches POST requests
-// that include the `next-action` header and expect a server component response.
+// that include the `next-action` header or special action URLs and expect a
+// server component response.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
 
   const url = req.url();
   if (url.includes("/api/analytics")) return false;
 
+  const hasActionHeader = !!req.headerValue("next-action");
+  const hasActionUrl =
+    url.includes("__next_action") || url.includes("?__NEXT_ACTION__");
+
   return (
-    !!req.headerValue("next-action") &&
+    (hasActionHeader || hasActionUrl) &&
     req.headerValue("accept") === "text/x-component"
   );
 };
@@ -83,7 +88,13 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and check for success message
-    await form.locator('button[type="submit"]').click();
+    const [response] = await Promise.all([
+      page.waitForResponse((res) =>
+        isServerActionRequest(res.request()),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    await expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
@@ -201,11 +212,17 @@ test.describe("Contact Forms", () => {
     }
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.locator('[name="teamSize"]').fill("3");
-    await form.getByTestId("gdpr-checkbox").click();
-    await form.locator('[name="message"]').fill("Test message for coworking");
+   await form.getByTestId("gdpr-checkbox").click();
+   await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and check for success message
-    await form.locator('button[type="submit"]').click();
+    const [response] = await Promise.all([
+      page.waitForResponse((res) =>
+        isServerActionRequest(res.request()),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    await expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
@@ -257,7 +274,13 @@ test.describe("Contact Forms", () => {
       .fill("Test message for meeting room");
 
     // Submit the form and check for success message
-    await form.locator('button[type="submit"]').click();
+    const [response] = await Promise.all([
+      page.waitForResponse((res) =>
+        isServerActionRequest(res.request()),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    await expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
@@ -294,7 +317,13 @@ test.describe("Contact Forms", () => {
     await form.getByTestId("gdpr-checkbox").click();
 
     // Submit the form and check for error message
-    await form.locator('button[type="submit"]').click();
+    const [response] = await Promise.all([
+      page.waitForResponse((res) =>
+        isServerActionRequest(res.request()),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    await expect(response.ok()).toBeTruthy();
     const errorAlert = form.getByTestId("form-error-alert");
     await expect(errorAlert).toBeVisible();
     await expect(errorAlert).toHaveText(messages.form.serverError.pl);
@@ -411,7 +440,13 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Mobile test message");
 
     // Submit the form and check for success message
-    await form.locator('button[type="submit"]').click();
+    const [response] = await Promise.all([
+      page.waitForResponse((res) =>
+        isServerActionRequest(res.request()),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    await expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 });
