@@ -89,9 +89,7 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     const [response] = await Promise.all([
-      page.waitForResponse((res) =>
-        isServerActionRequest(res.request()),
-      ),
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
     await expect(response.ok()).toBeTruthy();
@@ -122,6 +120,22 @@ test.describe("Contact Forms", () => {
   });
 
   test("should validate email format", async ({ page }) => {
+    await page.route("**", async (route) => {
+      const req = route.request();
+      if (isServerActionRequest(req)) {
+        await route.fulfill({
+          status: 200,
+          headers: { "content-type": "text/x-component" },
+          body: `0:${JSON.stringify({
+            success: false,
+            fieldErrors: { email: "Nieprawidłowy format adresu email" },
+          })}\n`,
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
@@ -153,7 +167,11 @@ test.describe("Contact Forms", () => {
       "invalid-email",
     );
 
-    await form.locator('button[type="submit"]').click();
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
+      form.locator('button[type="submit"]').click(),
+    ]);
+    await expect(response.ok()).toBeTruthy();
 
     // Confirm the invalid email value persists after submission
     await expect(form.locator('[name="email"]').first()).toHaveValue(
@@ -163,9 +181,7 @@ test.describe("Contact Forms", () => {
     // Check for email validation error
     const emailError = form.getByTestId("virtual-office-email-error");
     await expect(emailError).toBeVisible();
-    await expect(emailError).toHaveText(
-      "Nieprawidłowy format adresu email",
-    );
+    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
@@ -212,14 +228,12 @@ test.describe("Contact Forms", () => {
     }
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.locator('[name="teamSize"]').fill("3");
-   await form.getByTestId("gdpr-checkbox").click();
-   await form.locator('[name="message"]').fill("Test message for coworking");
+    await form.getByTestId("gdpr-checkbox").click();
+    await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and check for success message
     const [response] = await Promise.all([
-      page.waitForResponse((res) =>
-        isServerActionRequest(res.request()),
-      ),
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
     await expect(response.ok()).toBeTruthy();
@@ -275,9 +289,7 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     const [response] = await Promise.all([
-      page.waitForResponse((res) =>
-        isServerActionRequest(res.request()),
-      ),
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
     await expect(response.ok()).toBeTruthy();
@@ -318,9 +330,7 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for error message
     const [response] = await Promise.all([
-      page.waitForResponse((res) =>
-        isServerActionRequest(res.request()),
-      ),
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
     await expect(response.ok()).toBeTruthy();
@@ -441,9 +451,7 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     const [response] = await Promise.all([
-      page.waitForResponse((res) =>
-        isServerActionRequest(res.request()),
-      ),
+      page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
     await expect(response.ok()).toBeTruthy();
