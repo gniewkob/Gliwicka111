@@ -3,8 +3,7 @@ import { messages } from "@/lib/i18n";
 
 // Helper used in tests to match Next.js server action form submissions while
 // excluding analytics and other unrelated requests. It matches POST requests
-// that include the `next-action` header or special action URLs and expect a
-// server component response.
+// that include the `next-action` header or special action URLs.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
 
@@ -13,12 +12,9 @@ const isServerActionRequest = (req: Request) => {
 
   const hasActionHeader = !!req.headerValue("next-action");
   const hasActionUrl =
-    url.includes("__next_action") || url.includes("?__NEXT_ACTION__");
+    url.includes("__next_action") || url.includes("?__ACTION__");
 
-  return (
-    (hasActionHeader || hasActionUrl) &&
-    req.headerValue("accept") === "text/x-component"
-  );
+  return hasActionHeader || hasActionUrl;
 };
 
 test.describe("Contact Forms", () => {
@@ -92,7 +88,7 @@ test.describe("Contact Forms", () => {
       page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
-    await expect(response.ok()).toBeTruthy();
+    expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
@@ -236,7 +232,7 @@ test.describe("Contact Forms", () => {
       page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
-    await expect(response.ok()).toBeTruthy();
+    expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
@@ -292,7 +288,7 @@ test.describe("Contact Forms", () => {
       page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
-    await expect(response.ok()).toBeTruthy();
+    expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 
@@ -333,7 +329,7 @@ test.describe("Contact Forms", () => {
       page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
-    await expect(response.ok()).toBeTruthy();
+    expect(response.ok()).toBeTruthy();
     const errorAlert = form.getByTestId("form-error-alert");
     await expect(errorAlert).toBeVisible();
     await expect(errorAlert).toHaveText(messages.form.serverError.pl);
@@ -454,7 +450,7 @@ test.describe("Contact Forms", () => {
       page.waitForResponse((res) => isServerActionRequest(res.request())),
       form.locator('button[type="submit"]').click(),
     ]);
-    await expect(response.ok()).toBeTruthy();
+    expect(response.ok()).toBeTruthy();
     await expect(form.getByTestId("form-success-alert")).toBeVisible();
   });
 });
