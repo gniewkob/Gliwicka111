@@ -143,23 +143,6 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
-    await page.route("**", async (route) => {
-      const req = route.request();
-      if (isServerActionRequest(req)) {
-        console.log(req.url(), req.headers());
-        await route.fulfill({
-          status: 200,
-          headers: { "content-type": "text/x-component" },
-          body: `0:${JSON.stringify({
-            success: true,
-            message: messages.form.success.pl,
-          })}\n`,
-        });
-      } else {
-        await route.continue();
-      }
-    });
-
     // Navigate to coworking form
     await page.getByTestId("tab-coworking").click();
 
@@ -190,12 +173,10 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and check for success message
-    const [response] = await Promise.all([
-      page.waitForResponse((res) => isServerActionRequest(res.request())),
-      form.locator('button[type="submit"]').click(),
-    ]);
-    expect(response.ok()).toBeTruthy();
-    await expect(form.getByTestId("form-success-alert")).toBeVisible();
+    await form.locator('button[type="submit"]').click();
+    const successAlert = form.getByTestId("form-success-alert");
+    await expect(successAlert).toBeVisible();
+    await expect(successAlert).toHaveText(messages.form.success.pl);
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
