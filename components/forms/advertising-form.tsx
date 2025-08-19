@@ -26,6 +26,7 @@ import { advertisingFormSchema, type AdvertisingFormData } from "@/lib/validatio
 import { submitAdvertisingForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
+import { messages } from "@/lib/i18n"
 import { Megaphone, Truck, Monitor, Target, Calendar, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
 interface AdvertisingFormProps {
@@ -195,6 +196,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
   const onSubmit = async (data: AdvertisingFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -209,13 +211,18 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
       formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitAdvertisingForm(formData)
-      setSubmitResult(result)
+      const message =
+        result.message ??
+        (result.success
+          ? messages.form.success[language]
+          : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
 
       if (result.success) {
         analytics.trackSubmissionSuccess()
         reset()
       } else {
-        analytics.trackSubmissionError(result.message)
+        analytics.trackSubmissionError(message)
       }
     } catch (error) {
       const errorMessage =

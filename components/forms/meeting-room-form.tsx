@@ -26,6 +26,7 @@ import { meetingRoomFormSchema, type MeetingRoomFormData } from "@/lib/validatio
 import { submitMeetingRoomForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
+import { messages } from "@/lib/i18n"
 import { Calendar, Clock, Users, Coffee, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
 interface MeetingRoomFormProps {
@@ -209,6 +210,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
   const onSubmit = async (data: MeetingRoomFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -223,13 +225,18 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
       formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitMeetingRoomForm(formData)
-      setSubmitResult(result)
+      const message =
+        result.message ??
+        (result.success
+          ? messages.form.success[language]
+          : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
 
       if (result.success) {
         analytics.trackSubmissionSuccess()
         reset()
       } else {
-        analytics.trackSubmissionError(result.message)
+        analytics.trackSubmissionError(message)
       }
     } catch (error) {
       const errorMessage =
