@@ -1,6 +1,6 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react"
-import { VirtualOfficeForm } from "@/components/forms"
-import { submitVirtualOfficeForm } from "@/lib/server-actions"
+import { MeetingRoomForm } from "@/components/forms"
+import { submitMeetingRoomForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { messages } from "@/lib/i18n"
 import { vi } from "vitest"
@@ -39,19 +39,19 @@ vi.mock("@/lib/analytics-client", () => ({
     getSessionId: vi.fn(() => "test-session"),
   },
 }))
-vi.mock("@/lib/server-actions", () => ({ submitVirtualOfficeForm: vi.fn() }))
+vi.mock("@/lib/server-actions", () => ({ submitMeetingRoomForm: vi.fn() }))
 
-const mockSubmit = submitVirtualOfficeForm as unknown as vi.Mock
+const mockSubmit = submitMeetingRoomForm as unknown as vi.Mock
 
-describe("VirtualOfficeForm", () => {
+describe("MeetingRoomForm", () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   it("clears submitResult before a new attempt", async () => {
     mockSubmit.mockResolvedValueOnce({ success: true, message: "OK" })
-    render(<VirtualOfficeForm />)
-    const form = screen.getByTestId("contact-form-virtual-office")
+    render(<MeetingRoomForm />)
+    const form = screen.getByTestId("contact-form-meeting-room")
     await fireEvent.submit(form)
     await screen.findByTestId("submit-result")
     expect(screen.getByTestId("submit-result")).toHaveTextContent("OK")
@@ -65,8 +65,8 @@ describe("VirtualOfficeForm", () => {
 
   it("shows success message and resets form", async () => {
     mockSubmit.mockResolvedValue({ success: true, message: "Success" })
-    render(<VirtualOfficeForm />)
-    await fireEvent.submit(screen.getByTestId("contact-form-virtual-office"))
+    render(<MeetingRoomForm />)
+    await fireEvent.submit(screen.getByTestId("contact-form-meeting-room"))
     await waitFor(() =>
       expect(screen.getByTestId("submit-result")).toHaveTextContent("Success"),
     )
@@ -75,14 +75,14 @@ describe("VirtualOfficeForm", () => {
 
   it("uses fallback message and tracks errors", async () => {
     mockSubmit.mockResolvedValue({ success: false })
-    render(<VirtualOfficeForm />)
-    await fireEvent.submit(screen.getByTestId("contact-form-virtual-office"))
+    render(<MeetingRoomForm />)
+    await fireEvent.submit(screen.getByTestId("contact-form-meeting-room"))
     const fallback = messages.form.serverError.pl
     await waitFor(() =>
       expect(screen.getByTestId("submit-result")).toHaveTextContent(fallback),
     )
     expect(analyticsClient.trackSubmissionError).toHaveBeenCalledWith(
-      "virtual-office",
+      "meeting-room",
       fallback,
     )
   })

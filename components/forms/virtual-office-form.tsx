@@ -34,6 +34,7 @@ interface VirtualOfficeFormProps {
 
 export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "virtual-office",
@@ -191,6 +192,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
   const t = content[language]
 
   const onSubmit = async (data: VirtualOfficeFormData) => {
+    setSubmitResult(null)
     setIsSubmitting(true)
     analytics.trackSubmissionAttempt()
 
@@ -214,10 +216,12 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       if (result.success) {
         analytics.trackSubmissionSuccess()
         toast.success(message)
+        setSubmitResult({ success: true, message })
         reset()
       } else {
         analytics.trackSubmissionError(message)
         toast.error(message)
+        setSubmitResult({ success: false, message })
       }
     } catch (error) {
       let errorMessage = messages.form.serverError[language]
@@ -233,6 +237,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       }
       analytics.trackSubmissionError(errorMessage)
       toast.error(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
     } finally {
       setIsSubmitting(false)
     }
@@ -616,6 +621,9 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
+          {submitResult && (
+            <p data-testid="submit-result">{submitResult.message}</p>
+          )}
         </CardContent>
       </Card>
     </div>
