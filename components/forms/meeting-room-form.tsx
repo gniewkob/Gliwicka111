@@ -34,6 +34,7 @@ interface MeetingRoomFormProps {
 
 export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "meeting-room",
@@ -207,6 +208,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
   const t = content[language]
 
   const onSubmit = async (data: MeetingRoomFormData) => {
+    setSubmitResult(null)
     setIsSubmitting(true)
     analytics.trackSubmissionAttempt()
 
@@ -230,16 +232,19 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
       if (result.success) {
         analytics.trackSubmissionSuccess()
         toast.success(message)
+        setSubmitResult({ success: true, message })
         reset()
       } else {
         analytics.trackSubmissionError(message)
         toast.error(message)
+        setSubmitResult({ success: false, message })
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       analytics.trackSubmissionError(errorMessage)
       toast.error(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
     } finally {
       setIsSubmitting(false)
     }
@@ -617,6 +622,9 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
+          {submitResult && (
+            <p data-testid="submit-result">{submitResult.message}</p>
+          )}
         </CardContent>
       </Card>
     </div>
