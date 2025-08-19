@@ -20,15 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
   Badge,
-  Alert,
-  AlertDescription,
+  toast,
 } from "@/components/ui"
 import { specialDealsFormSchema, type SpecialDealsFormData } from "@/lib/validation-schemas"
 import { submitSpecialDealsForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { messages } from "@/lib/i18n"
-import { Gift, Percent, Star, Shield, CheckCircle, AlertCircle } from "lucide-react"
+import { Gift, Percent, Star, Shield, CheckCircle } from "lucide-react"
 
 interface SpecialDealsFormProps {
   language?: "pl" | "en"
@@ -36,7 +35,6 @@ interface SpecialDealsFormProps {
 
 export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "special-deals",
@@ -216,7 +214,6 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
 
   const onSubmit = async (data: SpecialDealsFormData) => {
     setIsSubmitting(true)
-    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -236,19 +233,19 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
-
       if (result.success) {
         analytics.trackSubmissionSuccess()
+        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
+        toast.error(message)
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
-      setSubmitResult({ success: false, message: errorMessage })
       analytics.trackSubmissionError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -556,29 +553,6 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 </Label>
               </div>
             </div>
-
-            {/* Submit Result */}
-            {submitResult && (
-              <Alert
-                data-testid={
-                  submitResult.success ? "form-success-alert" : "form-error-alert"
-                }
-                className={
-                  submitResult.success
-                    ? "border-green-500 bg-green-50"
-                    : "border-red-500 bg-red-50"
-                }
-              >
-                {submitResult.success ? (
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                ) : (
-                  <AlertCircle className="h-4 w-4 text-red-600" />
-                )}
-                <AlertDescription className={submitResult.success ? "text-green-800" : "text-red-800"}>
-                  {submitResult.message}
-                </AlertDescription>
-              </Alert>
-            )}
 
             {/* Submit Button */}
             <Button type="submit" disabled={isSubmitting} className="w-full bg-red-600 hover:bg-red-700">

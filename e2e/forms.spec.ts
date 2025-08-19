@@ -68,9 +68,10 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
-    await expect(form.getByTestId("form-success-alert")).toHaveText(
-      messages.form.success.pl,
-    );
+    const successToast = page
+      .locator('[data-sonner-toast]')
+      .filter({ hasText: messages.form.success.pl });
+    await expect(successToast).toBeVisible();
   });
 
   test("should validate required fields", async ({ page }) => {
@@ -174,9 +175,10 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
-    const successAlert = form.getByTestId("form-success-alert");
-    await expect(successAlert).toBeVisible();
-    await expect(successAlert).toHaveText(messages.form.success.pl);
+    const successToast = page
+      .locator('[data-sonner-toast]')
+      .filter({ hasText: messages.form.success.pl });
+    await expect(successToast).toBeVisible();
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
@@ -211,9 +213,10 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
-    const successAlert = form.getByTestId("form-success-alert");
-    await expect(successAlert).toBeVisible();
-    await expect(successAlert).toHaveText(messages.form.success.pl);
+    const successToast = page
+      .locator('[data-sonner-toast]')
+      .filter({ hasText: messages.form.success.pl });
+    await expect(successToast).toBeVisible();
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
@@ -260,9 +263,10 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for error message
     await form.locator('button[type="submit"]').click();
-    const errorAlert = form.getByTestId("form-error-alert");
-    await expect(errorAlert).toBeVisible();
-    await expect(errorAlert).toHaveText(messages.form.serverError.pl);
+    const errorToast = page
+      .locator('[data-sonner-toast]')
+      .filter({ hasText: messages.form.serverError.pl });
+    await expect(errorToast).toBeVisible();
   });
 
   test("should track analytics events", async ({ page }) => {
@@ -360,8 +364,9 @@ test.describe("Contact Forms", () => {
 
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
-    const successAlert = form.getByTestId("form-success-alert");
-    await expect(successAlert).toBeVisible();
-    await expect(successAlert).toHaveText(messages.form.success.pl);
+    const successToast = page
+      .locator('[data-sonner-toast]')
+      .filter({ hasText: messages.form.success.pl });
+    await expect(successToast).toBeVisible();
   });
 });

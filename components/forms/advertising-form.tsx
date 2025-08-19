@@ -19,15 +19,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Alert,
-  AlertDescription,
+  toast,
 } from "@/components/ui"
 import { advertisingFormSchema, type AdvertisingFormData } from "@/lib/validation-schemas"
 import { submitAdvertisingForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { messages } from "@/lib/i18n"
-import { Megaphone, Truck, Monitor, Target, Calendar, Shield, CheckCircle, AlertCircle } from "lucide-react"
+import { Megaphone, Truck, Monitor, Target, Calendar, Shield, CheckCircle } from "lucide-react"
 
 interface AdvertisingFormProps {
   language?: "pl" | "en"
@@ -35,7 +34,6 @@ interface AdvertisingFormProps {
 
 export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "advertising",
@@ -196,7 +194,6 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
   const onSubmit = async (data: AdvertisingFormData) => {
     setIsSubmitting(true)
-    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -216,19 +213,19 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
-
       if (result.success) {
         analytics.trackSubmissionSuccess()
+        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
+        toast.error(message)
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
-      setSubmitResult({ success: false, message: errorMessage })
       analytics.trackSubmissionError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -540,29 +537,6 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 </Label>
               </div>
             </div>
-
-            {/* Submit Result */}
-            {submitResult && (
-              <Alert
-                data-testid={
-                  submitResult.success ? "form-success-alert" : "form-error-alert"
-                }
-                className={
-                  submitResult.success
-                    ? "border-green-500 bg-green-50"
-                    : "border-red-500 bg-red-50"
-                }
-              >
-                {submitResult.success ? (
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                ) : (
-                  <AlertCircle className="h-4 w-4 text-red-600" />
-                )}
-                <AlertDescription className={submitResult.success ? "text-green-800" : "text-red-800"}>
-                  {submitResult.message}
-                </AlertDescription>
-              </Alert>
-            )}
 
             {/* Submit Button */}
             <Button type="submit" disabled={isSubmitting} className="w-full bg-orange-600 hover:bg-orange-700">
