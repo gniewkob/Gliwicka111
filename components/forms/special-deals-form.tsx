@@ -27,6 +27,7 @@ import { specialDealsFormSchema, type SpecialDealsFormData } from "@/lib/validat
 import { submitSpecialDealsForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
+import { messages } from "@/lib/i18n"
 import { Gift, Percent, Star, Shield, CheckCircle, AlertCircle } from "lucide-react"
 
 interface SpecialDealsFormProps {
@@ -215,6 +216,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
 
   const onSubmit = async (data: SpecialDealsFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -229,13 +231,18 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
 
       formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitSpecialDealsForm(formData)
-      setSubmitResult(result)
+      const message =
+        result.message ??
+        (result.success
+          ? messages.form.success[language]
+          : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
 
       if (result.success) {
         analytics.trackSubmissionSuccess()
         reset()
       } else {
-        analytics.trackSubmissionError(result.message)
+        analytics.trackSubmissionError(message)
       }
     } catch (error) {
       const errorMessage =

@@ -194,6 +194,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
 
   const onSubmit = async (data: VirtualOfficeFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -208,13 +209,18 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
 
       formData.append("sessionId", analyticsClient.getSessionId())
       const result = await submitVirtualOfficeForm(formData)
-      setSubmitResult(result)
+      const message =
+        result.message ??
+        (result.success
+          ? messages.form.success[language]
+          : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
 
       if (result.success) {
         analytics.trackSubmissionSuccess()
         reset()
       } else {
-        analytics.trackSubmissionError(result.message)
+        analytics.trackSubmissionError(message)
       }
     } catch (error) {
       let errorMessage = messages.form.serverError[language]
