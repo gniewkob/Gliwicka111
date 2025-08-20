@@ -5,6 +5,9 @@ import { messages } from "@/lib/i18n";
 // excluding analytics and other unrelated requests.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
+  const headers = req.headers();
+  // Next.js server actions include this header
+  if (!headers["next-action"]) return false;
 
   const url = req.url();
   if (url.includes("/api/analytics")) return false;
@@ -16,15 +19,15 @@ const mockServerAction = async (
   page: Page,
   result: { success: boolean; message: string },
 ) => {
-  const matcher = (url: URL) =>
-    url.pathname.startsWith("/app/") || url.pathname.startsWith("/_next/data/");
+  const matcher = (url: URL) => url.pathname === "/forms";
   await page.route(matcher, async (route) => {
     const req = route.request();
     if (isServerActionRequest(req)) {
       await route.fulfill({
         status: 200,
         headers: { "content-type": "text/x-component" },
-        body: `0:${JSON.stringify(result)}\n`,
+        // Next.js server action responses use the RSC streaming format
+        body: `0:${JSON.stringify(result)}\n1:0{}\n`,
       });
     } else {
       await route.continue();
