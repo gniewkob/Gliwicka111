@@ -3,6 +3,7 @@ import { SpecialDealsForm } from "@/components/forms"
 import { submitSpecialDealsForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { messages } from "@/lib/i18n"
+import { toast } from "@/components/ui"
 import { vi } from "vitest"
 
 const resetMock = vi.fn()
@@ -48,28 +49,23 @@ describe("SpecialDealsForm", () => {
     vi.clearAllMocks()
   })
 
-  it("clears submitResult before a new attempt", async () => {
+  it("does not reuse toast between submissions", async () => {
     mockSubmit.mockResolvedValueOnce({ success: true, message: "OK" })
     render(<SpecialDealsForm />)
     const form = screen.getByTestId("contact-form-special-deals")
     await fireEvent.submit(form)
-    await screen.findByTestId("submit-result")
-    expect(screen.getByTestId("submit-result")).toHaveTextContent("OK")
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("OK"))
 
     mockSubmit.mockImplementation(() => new Promise(() => {}))
     await fireEvent.submit(form)
-    await waitFor(() => {
-      expect(screen.queryByTestId("submit-result")).not.toBeInTheDocument()
-    })
+    await waitFor(() => expect(toast.success).toHaveBeenCalledTimes(1))
   })
 
   it("shows success message and resets form", async () => {
     mockSubmit.mockResolvedValue({ success: true, message: "Success" })
     render(<SpecialDealsForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-special-deals"))
-    await waitFor(() =>
-      expect(screen.getByTestId("submit-result")).toHaveTextContent("Success"),
-    )
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Success"))
     expect(resetMock).toHaveBeenCalled()
   })
 
@@ -78,9 +74,7 @@ describe("SpecialDealsForm", () => {
     render(<SpecialDealsForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-special-deals"))
     const fallback = messages.form.serverError.pl
-    await waitFor(() =>
-      expect(screen.getByTestId("submit-result")).toHaveTextContent(fallback),
-    )
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(fallback))
     expect(analyticsClient.trackSubmissionError).toHaveBeenCalledWith(
       "special-deals",
       fallback,

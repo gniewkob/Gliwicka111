@@ -564,9 +564,6 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
-          {submitResult && (
-            <p data-testid="submit-result">{submitResult.message}</p>
-          )}
         </CardContent>
       </Card>
     </div>
