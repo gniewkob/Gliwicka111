@@ -16,7 +16,9 @@ const mockServerAction = async (
   page: Page,
   result: { success: boolean; message: string },
 ) => {
-  await page.route("**", async (route) => {
+  const matcher = (url: URL) =>
+    url.pathname.startsWith("/app/") || url.pathname.startsWith("/_next/data/");
+  await page.route(matcher, async (route) => {
     const req = route.request();
     if (isServerActionRequest(req)) {
       await route.fulfill({
@@ -28,6 +30,7 @@ const mockServerAction = async (
       await route.continue();
     }
   });
+  return () => page.unroute(matcher);
 };
 
 test.describe("Contact Forms", () => {
@@ -45,8 +48,8 @@ test.describe("Contact Forms", () => {
     await expect(page.getByTestId("tab-special-deals")).toBeVisible();
   });
 
-test("should submit virtual office form successfully", async ({ page }) => {
-    await mockServerAction(page, {
+  test("should submit virtual office form successfully", async ({ page }) => {
+    const unroute = await mockServerAction(page, {
       success: true,
       message: messages.form.success.pl,
     });
@@ -90,6 +93,8 @@ test("should submit virtual office form successfully", async ({ page }) => {
       .locator('[data-sonner-toast]')
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
+
+    await unroute();
   });
 
   test("should validate required fields", async ({ page }) => {
@@ -162,7 +167,7 @@ test("should submit virtual office form successfully", async ({ page }) => {
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
-    await mockServerAction(page, {
+    const unroute = await mockServerAction(page, {
       success: true,
       message: messages.form.success.pl,
     });
@@ -202,10 +207,12 @@ test("should submit virtual office form successfully", async ({ page }) => {
       .locator('[data-sonner-toast]')
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
+
+    await unroute();
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
-    await mockServerAction(page, {
+    const unroute = await mockServerAction(page, {
       success: true,
       message: messages.form.success.pl,
     });
@@ -245,10 +252,12 @@ test("should submit virtual office form successfully", async ({ page }) => {
       .locator('[data-sonner-toast]')
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
+
+    await unroute();
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
-    await mockServerAction(page, {
+    const unroute = await mockServerAction(page, {
       success: false,
       message: messages.form.serverError.pl,
     });
@@ -284,6 +293,8 @@ test("should submit virtual office form successfully", async ({ page }) => {
       .locator('[data-sonner-toast]')
       .filter({ hasText: messages.form.serverError.pl });
     await expect(errorToast).toBeVisible();
+
+    await unroute();
   });
 
   test("should track analytics events", async ({ page }) => {
@@ -353,7 +364,7 @@ test("should submit virtual office form successfully", async ({ page }) => {
   });
 
   test("should work on mobile devices", async ({ page }) => {
-    await mockServerAction(page, {
+    const unroute = await mockServerAction(page, {
       success: true,
       message: messages.form.success.pl,
     });
@@ -390,5 +401,7 @@ test("should submit virtual office form successfully", async ({ page }) => {
       .locator('[data-sonner-toast]')
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
+
+    await unroute();
   });
 });
