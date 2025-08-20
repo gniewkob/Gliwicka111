@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { cookies } from "next/headers"
 import { LanguageProvider } from "@/components/language-provider"
 import { ErrorBoundary } from "@/components/error-boundary"
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -115,6 +116,7 @@ export default function RootLayout({
         {/* End Matomo Code */}
       </head>
       <body className={inter.className}>
+        <Toaster />
         <LanguageProvider initialLanguage={currentLanguage}>
           <ErrorBoundary fallback={<p>Something went wrong</p>}>
             {children}
