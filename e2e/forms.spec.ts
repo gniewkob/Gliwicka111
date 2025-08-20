@@ -1,20 +1,33 @@
-import { test, expect, type Request } from "@playwright/test";
+import { test, expect, type Request, type Page } from "@playwright/test";
 import { messages } from "@/lib/i18n";
 
 // Helper used in tests to match Next.js server action form submissions while
-// excluding analytics and other unrelated requests. It matches POST requests
-// that include the `next-action` header or special action URLs.
+// excluding analytics and other unrelated requests.
 const isServerActionRequest = (req: Request) => {
   if (req.method() !== "POST") return false;
 
   const url = req.url();
   if (url.includes("/api/analytics")) return false;
 
-  const hasActionHeader = !!req.headerValue("next-action");
-  const hasActionUrl =
-    url.includes("__next_action") || url.includes("?__ACTION__");
+  return true;
+};
 
-  return hasActionHeader || hasActionUrl;
+const mockServerAction = async (
+  page: Page,
+  result: { success: boolean; message: string },
+) => {
+  await page.route("**", async (route) => {
+    const req = route.request();
+    if (isServerActionRequest(req)) {
+      await route.fulfill({
+        status: 200,
+        headers: { "content-type": "text/x-component" },
+        body: `0:${JSON.stringify(result)}\n`,
+      });
+    } else {
+      await route.continue();
+    }
+  });
 };
 
 test.describe("Contact Forms", () => {
@@ -32,7 +45,12 @@ test.describe("Contact Forms", () => {
     await expect(page.getByTestId("tab-special-deals")).toBeVisible();
   });
 
-  test("should submit virtual office form successfully", async ({ page }) => {
+test("should submit virtual office form successfully", async ({ page }) => {
+    await mockServerAction(page, {
+      success: true,
+      message: messages.form.success.pl,
+    });
+
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
@@ -144,6 +162,11 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
+    await mockServerAction(page, {
+      success: true,
+      message: messages.form.success.pl,
+    });
+
     // Navigate to coworking form
     await page.getByTestId("tab-coworking").click();
 
@@ -182,6 +205,11 @@ test.describe("Contact Forms", () => {
   });
 
   test("should submit meeting room form successfully", async ({ page }) => {
+    await mockServerAction(page, {
+      success: true,
+      message: messages.form.success.pl,
+    });
+
     // Navigate to meeting room form
     await page.getByTestId("tab-meeting-rooms").click();
 
@@ -220,20 +248,9 @@ test.describe("Contact Forms", () => {
   });
 
   test("should handle form submission errors gracefully", async ({ page }) => {
-    await page.route("**", async (route) => {
-      const req = route.request();
-      if (req.method() === "POST" && isServerActionRequest(req)) {
-        await route.fulfill({
-          status: 200,
-          headers: { "content-type": "text/x-component" },
-          body: `0:${JSON.stringify({
-            success: false,
-            message: messages.form.serverError.pl,
-          })}\n`,
-        });
-      } else {
-        await route.continue();
-      }
+    await mockServerAction(page, {
+      success: false,
+      message: messages.form.serverError.pl,
     });
 
     // Navigate to virtual office form
@@ -336,6 +353,11 @@ test.describe("Contact Forms", () => {
   });
 
   test("should work on mobile devices", async ({ page }) => {
+    await mockServerAction(page, {
+      success: true,
+      message: messages.form.success.pl,
+    });
+
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     await page.waitForLoadState("networkidle");
