@@ -139,6 +139,8 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="nip"]').fill("1234567890");
     // Enter invalid email for validation early
     await form.locator('[name="email"]').fill("invalid-email");
+    // Blur the email field to trigger validation
+    await form.locator('[name="email"]').blur();
     await form.getByTestId("businessType-select").click();
     await page
       .getByRole("option", { name: /Działalność gospodarcza/i })
@@ -166,7 +168,7 @@ test.describe("Contact Forms", () => {
     // Check for email validation error
     const emailError = form.getByTestId("virtual-office-email-error");
     await expect(emailError).toBeVisible();
-    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
+    await expect(emailError).toHaveText("Adres email jest wymagany");
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
