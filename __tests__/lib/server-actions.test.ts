@@ -29,6 +29,9 @@ import {
   submitSpecialDealsForm,
 } from "@/lib/server-actions";
 import { getCurrentLanguage } from "@/lib/get-current-language";
+import { messages } from "@/lib/i18n";
+
+const originalNodeEnv = process.env.NODE_ENV;
 
 const SERVICE_NAMES = {
   "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
@@ -79,6 +82,11 @@ async function expectEmailCalls(
 describe("Server Actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.NODE_ENV = "development";
+  });
+
+  afterAll(() => {
+    process.env.NODE_ENV = originalNodeEnv;
   });
 
   describe("submitVirtualOfficeForm", () => {
@@ -218,6 +226,21 @@ describe("Server Actions", () => {
         expect.any(Object),
         expect.any(Error),
       );
+    });
+
+    it("skips external operations in test environment", async () => {
+      process.env.NODE_ENV = "test";
+      (getCurrentLanguage as any).mockResolvedValue("pl");
+      const formData = new FormData();
+      const result = await submitVirtualOfficeForm(formData);
+      const { emailClient } = await import("@/lib/email/smtp-client");
+      const { db } = await import("@/lib/database/connection-pool");
+      expect(result).toEqual({
+        success: true,
+        message: messages.form.success.pl,
+      });
+      expect(emailClient.sendEmail).not.toHaveBeenCalled();
+      expect(db.query).not.toHaveBeenCalled();
     });
   });
 
