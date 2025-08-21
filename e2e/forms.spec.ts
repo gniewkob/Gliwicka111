@@ -168,7 +168,7 @@ test.describe("Contact Forms", () => {
     // Check for email validation error
     const emailError = form.getByTestId("virtual-office-email-error");
     await expect(emailError).toBeVisible();
-    await expect(emailError).toHaveText("Adres email jest wymagany");
+    await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
   });
 
   test("should submit coworking form successfully", async ({ page }) => {
