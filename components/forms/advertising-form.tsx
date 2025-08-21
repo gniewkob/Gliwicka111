@@ -242,6 +242,10 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
     analytics.trackFieldBlur(fieldName)
   }
 
+  const handleFieldError = (fieldName: string, error: string) => {
+    analytics.trackFieldError(fieldName, error)
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
@@ -313,7 +317,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                   onBlur={() => handleFieldBlur("firstName")}
                   className={errors.firstName ? "border-red-500" : ""}
                 />
-                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+                {errors.firstName && (
+                  <>
+                    {handleFieldError("firstName", errors.firstName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -325,7 +334,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                   onBlur={() => handleFieldBlur("lastName")}
                   className={errors.lastName ? "border-red-500" : ""}
                 />
-                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+                {errors.lastName && (
+                  <>
+                    {handleFieldError("lastName", errors.lastName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -341,12 +355,15 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                   className={errors.email ? "border-red-500" : ""}
                 />
                 {errors.email?.message && (
-                  <p
-                    data-testid="advertising-email-error"
-                    className="text-red-500 text-sm mt-1"
-                  >
-                    {errors.email.message}
-                  </p>
+                  <>
+                    {handleFieldError("email", errors.email.message)}
+                    <p
+                      data-testid="advertising-email-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.email.message}
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -361,7 +378,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                   className={errors.phone ? "border-red-500" : ""}
                   placeholder="+48 123 456 789"
                 />
-                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
+                {errors.phone && (
+                  <>
+                    {handleFieldError("phone", errors.phone.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -374,7 +396,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 onBlur={() => handleFieldBlur("companyName")}
                 className={errors.companyName ? "border-red-500" : ""}
               />
-              {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>}
+              {errors.companyName && (
+                <>
+                  {handleFieldError("companyName", errors.companyName.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                </>
+              )}
             </div>
 
             {/* Campaign Details */}
@@ -391,7 +418,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                     <SelectItem value="digital">Reklama Cyfrowa (500 zł/tydzień)</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.campaignType && <p className="text-red-500 text-sm mt-1">{errors.campaignType.message}</p>}
+                {errors.campaignType && (
+                  <>
+                    {handleFieldError("campaignType", errors.campaignType.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.campaignType.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -408,7 +440,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.duration && <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>}
+                {errors.duration && (
+                  <>
+                    {handleFieldError("duration", errors.duration.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -426,7 +463,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                     className={`pl-10 ${errors.startDate ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>}
+                {errors.startDate && (
+                  <>
+                    {handleFieldError("startDate", errors.startDate.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -443,7 +485,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.budget && <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>}
+                {errors.budget && (
+                  <>
+                    {handleFieldError("budget", errors.budget.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -458,7 +505,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 rows={3}
                 placeholder="Opisz swoją grupę docelową: wiek, zainteresowania, lokalizacja..."
               />
-              {errors.targetAudience && <p className="text-red-500 text-sm mt-1">{errors.targetAudience.message}</p>}
+              {errors.targetAudience && (
+                <>
+                  {handleFieldError("targetAudience", errors.targetAudience.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.targetAudience.message}</p>
+                </>
+              )}
             </div>
 
             {/* Campaign Goals */}
@@ -505,7 +557,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 rows={4}
                 placeholder="Opisz swoją kampanię, cele, oczekiwania..."
               />
-              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+              {errors.message && (
+                <>
+                  {handleFieldError("message", errors.message.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                </>
+              )}
             </div>
 
             {/* GDPR Consent */}
@@ -528,7 +585,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                   </p>
                 </div>
               </div>
-              {errors.gdprConsent && <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>}
+              {errors.gdprConsent && (
+                <>
+                  {handleFieldError("gdprConsent", errors.gdprConsent.message)}
+                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                </>
+              )}
 
               <div className="flex items-start space-x-2">
                 <Checkbox id="marketingConsent" {...register("marketingConsent")} />

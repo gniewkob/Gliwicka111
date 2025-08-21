@@ -212,6 +212,10 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
     analytics.trackFieldBlur(fieldName)
   }
 
+  const handleFieldError = (fieldName: string, error: string) => {
+    analytics.trackFieldError(fieldName, error)
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
@@ -293,7 +297,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                   onBlur={() => handleFieldBlur("firstName")}
                   className={errors.firstName ? "border-red-500" : ""}
                 />
-                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+                {errors.firstName && (
+                  <>
+                    {handleFieldError("firstName", errors.firstName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -305,7 +314,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                   onBlur={() => handleFieldBlur("lastName")}
                   className={errors.lastName ? "border-red-500" : ""}
                 />
-                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+                {errors.lastName && (
+                  <>
+                    {handleFieldError("lastName", errors.lastName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -321,12 +335,15 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                   className={errors.email ? "border-red-500" : ""}
                 />
                 {errors.email?.message && (
-                  <p
-                    data-testid="coworking-email-error"
-                    className="text-red-500 text-sm mt-1"
-                  >
-                    {errors.email.message}
-                  </p>
+                  <>
+                    {handleFieldError("email", errors.email.message)}
+                    <p
+                      data-testid="coworking-email-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.email.message}
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -341,7 +358,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                   className={errors.phone ? "border-red-500" : ""}
                   placeholder="+48 123 456 789"
                 />
-                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
+                {errors.phone && (
+                  <>
+                    {handleFieldError("phone", errors.phone.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -354,7 +376,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 onBlur={() => handleFieldBlur("companyName")}
                 className={errors.companyName ? "border-red-500" : ""}
               />
-              {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>}
+              {errors.companyName && (
+                <>
+                  {handleFieldError("companyName", errors.companyName.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                </>
+              )}
             </div>
 
             {/* Workspace Configuration */}
@@ -375,7 +402,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     <SelectItem value="private-office">Prywatne Biuro (800 zł/miesiąc)</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.workspaceType && <p className="text-red-500 text-sm mt-1">{errors.workspaceType.message}</p>}
+                {errors.workspaceType && (
+                  <>
+                    {handleFieldError("workspaceType", errors.workspaceType.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.workspaceType.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -396,7 +428,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.duration && <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>}
+                {errors.duration && (
+                  <>
+                    {handleFieldError("duration", errors.duration.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -414,7 +451,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     className={`pl-10 ${errors.startDate ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>}
+                {errors.startDate && (
+                  <>
+                    {handleFieldError("startDate", errors.startDate.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -432,7 +474,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     className={`pl-10 ${errors.teamSize ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.teamSize && <p className="text-red-500 text-sm mt-1">{errors.teamSize.message}</p>}
+                {errors.teamSize && (
+                  <>
+                    {handleFieldError("teamSize", errors.teamSize.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.teamSize.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -448,7 +495,15 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 placeholder="Opisz specjalne wymagania, np. dostęp 24/7, dodatkowe wyposażenie..."
               />
               {errors.specialRequirements && (
-                <p className="text-red-500 text-sm mt-1">{errors.specialRequirements.message}</p>
+                <>
+                  {handleFieldError(
+                    "specialRequirements",
+                    errors.specialRequirements.message,
+                  )}
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.specialRequirements.message}
+                  </p>
+                </>
               )}
             </div>
 
@@ -463,7 +518,14 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 rows={4}
                 placeholder="Dodatkowe informacje, pytania..."
               />
-              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+              {errors.message && (
+                <>
+                  {handleFieldError("message", errors.message.message)}
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.message.message}
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Trial Day Option */}
@@ -494,7 +556,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                   </p>
                 </div>
               </div>
-              {errors.gdprConsent && <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>}
+              {errors.gdprConsent && (
+                <>
+                  {handleFieldError("gdprConsent", errors.gdprConsent.message)}
+                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                </>
+              )}
 
               <div className="flex items-start space-x-2">
                 <Checkbox id="marketingConsent" {...register("marketingConsent")} />

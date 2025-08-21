@@ -262,6 +262,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
     analytics.trackFieldBlur(fieldName)
   }
 
+  const handleFieldError = (fieldName: string, error: string) => {
+    analytics.trackFieldError(fieldName, error)
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
@@ -333,7 +337,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   onBlur={() => handleFieldBlur("firstName")}
                   className={errors.firstName ? "border-red-500" : ""}
                 />
-                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+                {errors.firstName && (
+                  <>
+                    {handleFieldError("firstName", errors.firstName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -345,7 +354,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   onBlur={() => handleFieldBlur("lastName")}
                   className={errors.lastName ? "border-red-500" : ""}
                 />
-                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+                {errors.lastName && (
+                  <>
+                    {handleFieldError("lastName", errors.lastName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -361,12 +375,15 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   className={errors.email ? "border-red-500" : ""}
                 />
                 {errors.email?.message && (
-                  <p
-                    data-testid="special-deals-email-error"
-                    className="text-red-500 text-sm mt-1"
-                  >
-                    {errors.email.message}
-                  </p>
+                  <>
+                    {handleFieldError("email", errors.email.message)}
+                    <p
+                      data-testid="special-deals-email-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.email.message}
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -381,7 +398,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   className={errors.phone ? "border-red-500" : ""}
                   placeholder="+48 123 456 789"
                 />
-                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
+                {errors.phone && (
+                  <>
+                    {handleFieldError("phone", errors.phone.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -394,7 +416,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 onBlur={() => handleFieldBlur("companyName")}
                 className={errors.companyName ? "border-red-500" : ""}
               />
-              {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>}
+              {errors.companyName && (
+                <>
+                  {handleFieldError("companyName", errors.companyName.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                </>
+              )}
             </div>
 
             {/* Deal Configuration */}
@@ -412,7 +439,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   <SelectItem value="long-term">Umowa Długoterminowa (-50%)</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.dealType && <p className="text-red-500 text-sm mt-1">{errors.dealType.message}</p>}
+              {errors.dealType && (
+                <>
+                  {handleFieldError("dealType", errors.dealType.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.dealType.message}</p>
+                </>
+              )}
             </div>
 
             {/* Interested Services */}
@@ -442,7 +474,13 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 ))}
               </div>
               {errors.interestedServices && (
-                <p className="text-red-500 text-sm mt-1">{errors.interestedServices.message}</p>
+                <>
+                  {handleFieldError(
+                    "interestedServices",
+                    errors.interestedServices.message,
+                  )}
+                  <p className="text-red-500 text-sm mt-1">{errors.interestedServices.message}</p>
+                </>
               )}
             </div>
 
@@ -462,7 +500,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   </SelectContent>
                 </Select>
                 {errors.currentSituation && (
-                  <p className="text-red-500 text-sm mt-1">{errors.currentSituation.message}</p>
+                  <>
+                    {handleFieldError("currentSituation", errors.currentSituation.message)}
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.currentSituation.message}
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -480,7 +523,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.timeline && <p className="text-red-500 text-sm mt-1">{errors.timeline.message}</p>}
+                {errors.timeline && (
+                  <>
+                    {handleFieldError("timeline", errors.timeline.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.timeline.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -494,7 +542,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 className={errors.referralSource ? "border-red-500" : ""}
                 placeholder="Skąd dowiedziałeś się o nas?"
               />
-              {errors.referralSource && <p className="text-red-500 text-sm mt-1">{errors.referralSource.message}</p>}
+              {errors.referralSource && (
+                <>
+                  {handleFieldError("referralSource", errors.referralSource.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.referralSource.message}</p>
+                </>
+              )}
             </div>
 
             <div>
@@ -508,7 +561,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 rows={3}
                 placeholder="Opisz swoje szczególne potrzeby i oczekiwania..."
               />
-              {errors.specificNeeds && <p className="text-red-500 text-sm mt-1">{errors.specificNeeds.message}</p>}
+              {errors.specificNeeds && (
+                <>
+                  {handleFieldError("specificNeeds", errors.specificNeeds.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.specificNeeds.message}</p>
+                </>
+              )}
             </div>
 
             <div>
@@ -522,7 +580,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 rows={4}
                 placeholder="Dodatkowe informacje, pytania..."
               />
-              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+              {errors.message && (
+                <>
+                  {handleFieldError("message", errors.message.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                </>
+              )}
             </div>
 
             {/* GDPR Consent */}
@@ -544,7 +607,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                   </p>
                 </div>
               </div>
-              {errors.gdprConsent && <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>}
+              {errors.gdprConsent && (
+                <>
+                  {handleFieldError("gdprConsent", errors.gdprConsent.message)}
+                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                </>
+              )}
 
               <div className="flex items-start space-x-2">
                 <Checkbox id="marketingConsent" {...register("marketingConsent")} />
