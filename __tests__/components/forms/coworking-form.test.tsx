@@ -61,7 +61,7 @@ describe("CoworkingForm", () => {
     await waitFor(() => expect(toast.success).toHaveBeenCalledTimes(1))
   })
 
-  it("shows success message and resets form", async () => {
+  it("shows success toast and resets form", async () => {
     mockSubmit.mockResolvedValue({ success: true, message: "Success" })
     render(<CoworkingForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-coworking"))
@@ -69,7 +69,7 @@ describe("CoworkingForm", () => {
     expect(resetMock).toHaveBeenCalled()
   })
 
-  it("uses fallback message and tracks errors", async () => {
+  it("uses fallback toast message and tracks errors", async () => {
     mockSubmit.mockResolvedValue({ success: false })
     render(<CoworkingForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-coworking"))
