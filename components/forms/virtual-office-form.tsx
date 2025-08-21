@@ -19,8 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  toast,
 } from "@/components/ui"
+import { toast } from "@/components/ui/sonner"
 import { virtualOfficeFormSchema, type VirtualOfficeFormData } from "@/lib/validation-schemas"
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
