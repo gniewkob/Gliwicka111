@@ -19,10 +19,10 @@ const mockServerAction = async (
   page: Page,
   result: { success: boolean; message: string },
 ) => {
-  const pattern = "**/*";
+  const pattern = "**/*"; // match all requests
   await page.route(pattern, async (route) => {
     const req = route.request();
-    if (req.method() === "POST" && isServerActionRequest(req)) {
+    if (isServerActionRequest(req)) {
       await route.fulfill({
         status: 200,
         headers: { "content-type": "text/x-component" },
