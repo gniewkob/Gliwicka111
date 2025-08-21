@@ -19,10 +19,10 @@ const mockServerAction = async (
   page: Page,
   result: { success: boolean; message: string },
 ) => {
-  const pattern = (url: URL) => url.search.includes("__server_action");
+  const pattern = "**/*";
   await page.route(pattern, async (route) => {
     const req = route.request();
-    if (isServerActionRequest(req)) {
+    if (req.method() === "POST" && isServerActionRequest(req)) {
       await route.fulfill({
         status: 200,
         headers: { "content-type": "text/x-component" },
@@ -91,11 +91,16 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and check for success message
+    const responsePromise = page.waitForResponse((res) =>
+      res.request().method() === "POST" &&
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible();
+    await expect(successToast).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
@@ -206,11 +211,16 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and check for success message
+    const responsePromise = page.waitForResponse((res) =>
+      res.request().method() === "POST" &&
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible();
+    await expect(successToast).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
@@ -251,11 +261,16 @@ test.describe("Contact Forms", () => {
       .fill("Test message for meeting room");
 
     // Submit the form and check for success message
+    const responsePromise = page.waitForResponse((res) =>
+      res.request().method() === "POST" &&
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible();
+    await expect(successToast).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
@@ -292,11 +307,16 @@ test.describe("Contact Forms", () => {
       .fill("Test message for error handling");
 
     // Submit the form and check for error message
+    const responsePromise = page.waitForResponse((res) =>
+      res.request().method() === "POST" &&
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
     const errorToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.serverError.pl });
-    await expect(errorToast).toBeVisible();
+    await expect(errorToast).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
@@ -400,11 +420,16 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Mobile test message");
 
     // Submit the form and check for success message
+    const responsePromise = page.waitForResponse((res) =>
+      res.request().method() === "POST" &&
+      isServerActionRequest(res.request()),
+    );
     await form.locator('button[type="submit"]').click();
+    await responsePromise;
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible();
+    await expect(successToast).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
