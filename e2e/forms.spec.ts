@@ -19,7 +19,9 @@ const mockServerAction = async (
   page: Page,
   result: { success: boolean; message: string },
 ) => {
-  const matcher = (url: URL) => url.pathname === "/forms";
+  const matcher = (url: URL) =>
+    url.pathname.includes("/_next/data/") ||
+    url.search.includes("__server_action=");
   await page.route(matcher, async (route) => {
     const req = route.request();
     if (isServerActionRequest(req)) {
@@ -33,7 +35,7 @@ const mockServerAction = async (
       await route.continue();
     }
   });
-  return () => page.unroute(matcher);
+  return async () => page.unroute(matcher);
 };
 
 test.describe("Contact Forms", () => {
@@ -93,7 +95,7 @@ test.describe("Contact Forms", () => {
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
     const successToast = page
-      .locator('[data-sonner-toast]')
+      .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
 
@@ -124,7 +126,6 @@ test.describe("Contact Forms", () => {
   });
 
   test("should validate email format", async ({ page }) => {
-
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
 
@@ -209,7 +210,7 @@ test.describe("Contact Forms", () => {
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
     const successToast = page
-      .locator('[data-sonner-toast]')
+      .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
 
@@ -254,7 +255,7 @@ test.describe("Contact Forms", () => {
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
     const successToast = page
-      .locator('[data-sonner-toast]')
+      .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
 
@@ -295,7 +296,7 @@ test.describe("Contact Forms", () => {
     // Submit the form and check for error message
     await form.locator('button[type="submit"]').click();
     const errorToast = page
-      .locator('[data-sonner-toast]')
+      .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.serverError.pl });
     await expect(errorToast).toBeVisible();
 
@@ -403,7 +404,7 @@ test.describe("Contact Forms", () => {
     // Submit the form and check for success message
     await form.locator('button[type="submit"]').click();
     const successToast = page
-      .locator('[data-sonner-toast]')
+      .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
     await expect(successToast).toBeVisible();
 
