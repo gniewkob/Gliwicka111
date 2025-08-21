@@ -30,6 +30,9 @@ import {
 } from "@/lib/server-actions";
 import { getCurrentLanguage } from "@/lib/get-current-language";
 import { messages } from "@/lib/i18n";
+import { emailClient } from "@/lib/email/smtp-client";
+import { db } from "@/lib/database/connection-pool";
+import { saveFailedEmail } from "@/lib/email/failed-email-store";
 
 const originalNodeEnv = process.env.NODE_ENV;
 
@@ -230,15 +233,9 @@ describe("Server Actions", () => {
 
     it("skips external operations in test environment", async () => {
       process.env.NODE_ENV = "test";
-      (getCurrentLanguage as any).mockResolvedValue("pl");
       const formData = new FormData();
       const result = await submitVirtualOfficeForm(formData);
-      const { emailClient } = await import("@/lib/email/smtp-client");
-      const { db } = await import("@/lib/database/connection-pool");
-      expect(result).toEqual({
-        success: true,
-        message: messages.form.success.pl,
-      });
+      expect(result).toEqual({ success: true, message: "Test submission" });
       expect(emailClient.sendEmail).not.toHaveBeenCalled();
       expect(db.query).not.toHaveBeenCalled();
     });
@@ -394,6 +391,28 @@ describe("Server Actions", () => {
         "Potwierdzenie zapytania o oferty specjalne - Gliwicka 111",
         "Dziękujemy za zgłoszenie dotyczące oferty specjalne.\n\nNazwa firmy: Test Company\nHarmonogram: immediate\nTyp oferty: welcome-package\n\nSkontaktujemy się wkrótce.",
       );
+    });
+  });
+
+  describe("test environment shortcut", () => {
+    it("returns test submission without side effects", async () => {
+      process.env.NODE_ENV = "test";
+      const formData = new FormData();
+      const result = await submitVirtualOfficeForm(formData);
+      expect(result).toEqual({ success: true, message: "Test submission" });
+      expect(emailClient.sendEmail).not.toHaveBeenCalled();
+      expect(db.query).not.toHaveBeenCalled();
+      expect(saveFailedEmail).not.toHaveBeenCalled();
+    });
+
+    it("can simulate failure in test mode", async () => {
+      process.env.NODE_ENV = "test";
+      const formData = new FormData();
+      formData.append("__testFail", "true");
+      const result = await submitVirtualOfficeForm(formData);
+      expect(result).toEqual({ success: false, message: "Test submission" });
+      expect(emailClient.sendEmail).not.toHaveBeenCalled();
+      expect(db.query).not.toHaveBeenCalled();
     });
   });
 });

@@ -81,8 +81,8 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   if (process.env.NODE_ENV === "test") {
-    const language = await getCurrentLanguage();
-    return { success: true, message: messages.form.success[language] };
+    const shouldFail = formData.get("__testFail") === "true";
+    return { success: !shouldFail, message: "Test submission" };
   }
 
   try {
