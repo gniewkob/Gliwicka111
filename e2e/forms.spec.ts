@@ -19,10 +19,8 @@ const mockServerAction = async (
   page: Page,
   result: { success: boolean; message: string },
 ) => {
-  const matcher = (url: URL) =>
-    url.pathname.includes("/_next/data/") ||
-    url.search.includes("__server_action=");
-  await page.route(matcher, async (route) => {
+  const pattern = (url: URL) => url.search.includes("__server_action");
+  await page.route(pattern, async (route) => {
     const req = route.request();
     if (isServerActionRequest(req)) {
       await route.fulfill({
@@ -35,7 +33,7 @@ const mockServerAction = async (
       await route.continue();
     }
   });
-  return async () => page.unroute(matcher);
+  return async () => page.unroute(pattern);
 };
 
 test.describe("Contact Forms", () => {
