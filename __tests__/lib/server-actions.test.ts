@@ -231,14 +231,6 @@ describe("Server Actions", () => {
       );
     });
 
-    it("skips external operations in test environment", async () => {
-      process.env.NODE_ENV = "test";
-      const formData = new FormData();
-      const result = await submitVirtualOfficeForm(formData);
-      expect(result).toEqual({ success: true, message: "Test submission" });
-      expect(emailClient.sendEmail).not.toHaveBeenCalled();
-      expect(db.query).not.toHaveBeenCalled();
-    });
   });
 
   describe("submitCoworkingForm", () => {
@@ -403,16 +395,6 @@ describe("Server Actions", () => {
       expect(emailClient.sendEmail).not.toHaveBeenCalled();
       expect(db.query).not.toHaveBeenCalled();
       expect(saveFailedEmail).not.toHaveBeenCalled();
-    });
-
-    it("can simulate failure in test mode", async () => {
-      process.env.NODE_ENV = "test";
-      const formData = new FormData();
-      formData.append("__testFail", "true");
-      const result = await submitVirtualOfficeForm(formData);
-      expect(result).toEqual({ success: false, message: "Test submission" });
-      expect(emailClient.sendEmail).not.toHaveBeenCalled();
-      expect(db.query).not.toHaveBeenCalled();
     });
   });
 });

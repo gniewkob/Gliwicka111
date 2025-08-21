@@ -81,8 +81,7 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   if (process.env.NODE_ENV === "test") {
-    const shouldFail = formData.get("__testFail") === "true";
-    return { success: !shouldFail, message: "Test submission" };
+    return { success: true, message: "Test submission" };
   }
 
   try {
