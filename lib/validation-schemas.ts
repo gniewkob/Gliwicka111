@@ -12,7 +12,9 @@ const baseFormSchema = z.object({
     .min(2, "Nazwisko musi mieć co najmniej 2 znaki")
     .max(50, "Nazwisko nie może być dłuższe niż 50 znaków"),
   email: z
-    .string({ required_error: "Adres email jest wymagany" })
+    .string()
+    .trim()
+    .min(1, "Adres email jest wymagany")
     .email("Nieprawidłowy format adresu email"),
   phone: z.string().regex(phoneRegex, "Nieprawidłowy format numeru telefonu"),
   companyName: z
