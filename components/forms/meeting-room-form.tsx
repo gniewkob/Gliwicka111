@@ -256,6 +256,10 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
     analytics.trackFieldBlur(fieldName)
   }
 
+  const handleFieldError = (fieldName: string, error: string) => {
+    analytics.trackFieldError(fieldName, error)
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
@@ -322,7 +326,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                   onBlur={() => handleFieldBlur("firstName")}
                   className={errors.firstName ? "border-red-500" : ""}
                 />
-                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+                {errors.firstName && (
+                  <>
+                    {handleFieldError("firstName", errors.firstName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -334,7 +343,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                   onBlur={() => handleFieldBlur("lastName")}
                   className={errors.lastName ? "border-red-500" : ""}
                 />
-                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+                {errors.lastName && (
+                  <>
+                    {handleFieldError("lastName", errors.lastName.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -350,12 +364,15 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                   className={errors.email ? "border-red-500" : ""}
                 />
                 {errors.email?.message && (
-                  <p
-                    data-testid="meeting-room-email-error"
-                    className="text-red-500 text-sm mt-1"
-                  >
-                    {errors.email.message}
-                  </p>
+                  <>
+                    {handleFieldError("email", errors.email.message)}
+                    <p
+                      data-testid="meeting-room-email-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.email.message}
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -370,7 +387,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                   className={errors.phone ? "border-red-500" : ""}
                   placeholder="+48 123 456 789"
                 />
-                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
+                {errors.phone && (
+                  <>
+                    {handleFieldError("phone", errors.phone.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -383,7 +405,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 onBlur={() => handleFieldBlur("companyName")}
                 className={errors.companyName ? "border-red-500" : ""}
               />
-              {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>}
+              {errors.companyName && (
+                <>
+                  {handleFieldError("companyName", errors.companyName.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                </>
+              )}
             </div>
 
             {/* Meeting Details */}
@@ -405,7 +432,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     <SelectItem value="conference">Sala Konferencyjna (20-50 osób) - 150 zł/h</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.roomType && <p className="text-red-500 text-sm mt-1">{errors.roomType.message}</p>}
+                {errors.roomType && (
+                  <>
+                    {handleFieldError("roomType", errors.roomType.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.roomType.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -423,7 +455,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     className={`pl-10 ${errors.attendees ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.attendees && <p className="text-red-500 text-sm mt-1">{errors.attendees.message}</p>}
+                {errors.attendees && (
+                  <>
+                    {handleFieldError("attendees", errors.attendees.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.attendees.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -441,7 +478,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     className={`pl-10 ${errors.date ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>}
+                {errors.date && (
+                  <>
+                    {handleFieldError("date", errors.date.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -457,7 +499,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     className={`pl-10 ${errors.startTime ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.startTime && <p className="text-red-500 text-sm mt-1">{errors.startTime.message}</p>}
+                {errors.startTime && (
+                  <>
+                    {handleFieldError("startTime", errors.startTime.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.startTime.message}</p>
+                  </>
+                )}
               </div>
 
               <div>
@@ -473,7 +520,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     className={`pl-10 ${errors.endTime ? "border-red-500" : ""}`}
                   />
                 </div>
-                {errors.endTime && <p className="text-red-500 text-sm mt-1">{errors.endTime.message}</p>}
+                {errors.endTime && (
+                  <>
+                    {handleFieldError("endTime", errors.endTime.message)}
+                    <p className="text-red-500 text-sm mt-1">{errors.endTime.message}</p>
+                  </>
+                )}
               </div>
             </div>
 
@@ -580,7 +632,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 rows={4}
                 placeholder="Dodatkowe wymagania, agenda spotkania..."
               />
-              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+              {errors.message && (
+                <>
+                  {handleFieldError("message", errors.message.message)}
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                </>
+              )}
             </div>
 
             {/* GDPR Consent */}
@@ -602,7 +659,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                   </p>
                 </div>
               </div>
-              {errors.gdprConsent && <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>}
+              {errors.gdprConsent && (
+                <>
+                  {handleFieldError("gdprConsent", errors.gdprConsent.message)}
+                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                </>
+              )}
 
               <div className="flex items-start space-x-2">
                 <Checkbox id="marketingConsent" {...register("marketingConsent")} />
