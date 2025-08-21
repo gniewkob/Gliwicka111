@@ -23,8 +23,10 @@ describe("email field validation", () => {
   it("shows message for invalid email", async () => {
     render(<EmailForm />)
     const form = screen.getByTestId("email-form")
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: "invalid-email" } })
+    const input = screen.getByLabelText(/email/i)
+    fireEvent.change(input, { target: { value: "invalid-email" } })
     fireEvent.submit(form)
     expect(await screen.findByText("Nieprawidłowy format adresu email")).toBeInTheDocument()
+    expect(input).toHaveValue("invalid-email")
   })
 })
