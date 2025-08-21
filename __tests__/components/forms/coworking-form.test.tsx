@@ -3,7 +3,7 @@ import { CoworkingForm } from "@/components/forms"
 import { submitCoworkingForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { messages } from "@/lib/i18n"
-import { toast } from "@/components/ui"
+import { toast } from "@/components/ui/sonner"
 import { vi } from "vitest"
 
 const resetMock = vi.fn()
@@ -22,7 +22,7 @@ vi.mock("react-hook-form", async (importActual) => {
     }),
   }
 })
-vi.mock("@/components/ui", async (importActual) => {
+vi.mock("@/components/ui/sonner", async (importActual) => {
   const actual = (await importActual()) as any
   return { ...actual, toast: { success: vi.fn(), error: vi.fn() } }
 })

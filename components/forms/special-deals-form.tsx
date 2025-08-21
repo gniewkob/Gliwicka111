@@ -20,8 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
   Badge,
-  toast,
 } from "@/components/ui"
+import { toast } from "@/components/ui/sonner"
 import { specialDealsFormSchema, type SpecialDealsFormData } from "@/lib/validation-schemas"
 import { submitSpecialDealsForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
