@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import {
   Button,
   Card,
@@ -19,12 +20,17 @@ import CoworkingForm from "./coworking-form"
 import MeetingRoomForm from "./meeting-room-form"
 import AdvertisingForm from "./advertising-form"
 import SpecialDealsForm from "./special-deals-form"
-import { ConsentBanner, AnalyticsDashboard } from "@/components/analytics"
+import { ConsentBanner } from "@/components/analytics"
 import { Globe, MapPin, Users, Calendar, Megaphone, Gift, BarChart3, Shield } from "lucide-react"
+
+const AnalyticsDashboard = dynamic(
+  () => import("@/components/analytics/analytics-dashboard"),
+  { ssr: false }
+)
 
 export default function FormShowcase() {
   const [language, setLanguage] = useState<"pl" | "en">("pl")
-  const [showAnalytics, setShowAnalytics] = useState(false)
+  const showAnalytics = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true"
 
   const toggleLanguage = () => {
     setLanguage(language === "pl" ? "en" : "pl")
@@ -48,15 +54,6 @@ export default function FormShowcase() {
                 <Globe className="w-4 h-4" />
                 <span>{language === "pl" ? "EN" : "PL"}</span>
               </Button>
-              <Button
-                onClick={() => setShowAnalytics(!showAnalytics)}
-                variant="outline"
-                size="sm"
-                className="flex items-center space-x-2"
-              >
-                <BarChart3 className="w-4 h-4" />
-                <span>{language === "pl" ? "Analityka" : "Analytics"}</span>
-              </Button>
             </div>
           </div>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -76,10 +73,7 @@ export default function FormShowcase() {
           </div>
         </div>
 
-        {showAnalytics ? (
-          <AnalyticsDashboard isAdmin={true} />
-        ) : (
-          <Tabs defaultValue="virtual-office" className="w-full">
+        <Tabs defaultValue="virtual-office" className="w-full" data-testid="forms-tabs">
             <TabsList className="grid w-full grid-cols-5 mb-8">
               <TabsTrigger
                 value="virtual-office"
@@ -100,7 +94,7 @@ export default function FormShowcase() {
               <TabsTrigger
                 value="meeting-rooms"
                 className="flex items-center space-x-2"
-                data-testid="tab-meeting-rooms"
+                data-testid="tab-meeting-room"
               >
                 <Calendar className="w-4 h-4" />
                 <span className="hidden sm:inline">{language === "pl" ? "Sale" : "Rooms"}</span>
@@ -211,8 +205,8 @@ export default function FormShowcase() {
               </div>
               <SpecialDealsForm language={language} />
             </TabsContent>
-          </Tabs>
-        )}
+        </Tabs>
+        {showAnalytics && <AnalyticsDashboard />}
 
         <Card className="mt-12">
           <CardHeader>
