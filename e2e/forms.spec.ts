@@ -36,9 +36,18 @@ const mockServerAction = async (
   return async () => page.unroute(pattern);
 };
 
+const dismissBanner = async (page: Page) => {
+  const closeButton = page.locator("button:has(svg.lucide-x)");
+  if (await closeButton.isVisible()) {
+    await closeButton.click();
+    await expect(closeButton).not.toBeVisible();
+  }
+};
+
 test.describe("Contact Forms", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/forms");
+    await dismissBanner(page);
     const consent = page.getByRole("button", { name: /accept/i });
     if (await consent.isVisible()) await consent.click();
   });
@@ -91,9 +100,10 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse((res) =>
-      res.request().method() === "POST" &&
-      isServerActionRequest(res.request()),
+    const responsePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        isServerActionRequest(res.request()),
     );
     await form.locator('button[type="submit"]').click();
     await responsePromise;
@@ -211,9 +221,10 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse((res) =>
-      res.request().method() === "POST" &&
-      isServerActionRequest(res.request()),
+    const responsePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        isServerActionRequest(res.request()),
     );
     await form.locator('button[type="submit"]').click();
     await responsePromise;
@@ -261,9 +272,10 @@ test.describe("Contact Forms", () => {
       .fill("Test message for meeting room");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse((res) =>
-      res.request().method() === "POST" &&
-      isServerActionRequest(res.request()),
+    const responsePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        isServerActionRequest(res.request()),
     );
     await form.locator('button[type="submit"]').click();
     await responsePromise;
@@ -307,9 +319,10 @@ test.describe("Contact Forms", () => {
       .fill("Test message for error handling");
 
     // Submit the form and check for error message
-    const responsePromise = page.waitForResponse((res) =>
-      res.request().method() === "POST" &&
-      isServerActionRequest(res.request()),
+    const responsePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        isServerActionRequest(res.request()),
     );
     await form.locator('button[type="submit"]').click();
     await responsePromise;
@@ -343,6 +356,7 @@ test.describe("Contact Forms", () => {
       );
     });
     await page.reload();
+    await dismissBanner(page);
     const consent = page.getByRole("button", { name: /accept/i });
     if (await consent.isVisible()) await consent.click();
 
@@ -420,9 +434,10 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Mobile test message");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse((res) =>
-      res.request().method() === "POST" &&
-      isServerActionRequest(res.request()),
+    const responsePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        isServerActionRequest(res.request()),
     );
     await form.locator('button[type="submit"]').click();
     await responsePromise;
