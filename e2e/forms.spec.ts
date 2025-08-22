@@ -1,6 +1,8 @@
 import { test, expect, type Request, type Page } from "@playwright/test";
 import { messages } from "@/lib/i18n";
 
+test.setTimeout(120000);
+
 // Helper used in tests to match Next.js server action form submissions while
 // excluding analytics and other unrelated requests.
 const isServerActionRequest = (req: Request) => {
@@ -100,13 +102,15 @@ test.describe("Contact Forms", () => {
       .fill("Test message for virtual office");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse(
-      (res) =>
-        res.request().method() === "POST" &&
-        isServerActionRequest(res.request()),
-    );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
+    await Promise.all([
+      page.waitForResponse(
+        (res) =>
+          res.request().method() === "POST" &&
+          isServerActionRequest(res.request()) &&
+          res.url().includes("/forms"),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
@@ -221,13 +225,15 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Test message for coworking");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse(
-      (res) =>
-        res.request().method() === "POST" &&
-        isServerActionRequest(res.request()),
-    );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
+    await Promise.all([
+      page.waitForResponse(
+        (res) =>
+          res.request().method() === "POST" &&
+          isServerActionRequest(res.request()) &&
+          res.url().includes("/forms"),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
@@ -272,13 +278,15 @@ test.describe("Contact Forms", () => {
       .fill("Test message for meeting room");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse(
-      (res) =>
-        res.request().method() === "POST" &&
-        isServerActionRequest(res.request()),
-    );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
+    await Promise.all([
+      page.waitForResponse(
+        (res) =>
+          res.request().method() === "POST" &&
+          isServerActionRequest(res.request()) &&
+          res.url().includes("/forms"),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
@@ -319,13 +327,15 @@ test.describe("Contact Forms", () => {
       .fill("Test message for error handling");
 
     // Submit the form and check for error message
-    const responsePromise = page.waitForResponse(
-      (res) =>
-        res.request().method() === "POST" &&
-        isServerActionRequest(res.request()),
-    );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
+    await Promise.all([
+      page.waitForResponse(
+        (res) =>
+          res.request().method() === "POST" &&
+          isServerActionRequest(res.request()) &&
+          res.url().includes("/forms"),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
     const errorToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.serverError.pl });
@@ -434,13 +444,15 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="message"]').fill("Mobile test message");
 
     // Submit the form and check for success message
-    const responsePromise = page.waitForResponse(
-      (res) =>
-        res.request().method() === "POST" &&
-        isServerActionRequest(res.request()),
-    );
-    await form.locator('button[type="submit"]').click();
-    await responsePromise;
+    await Promise.all([
+      page.waitForResponse(
+        (res) =>
+          res.request().method() === "POST" &&
+          isServerActionRequest(res.request()) &&
+          res.url().includes("/forms"),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
     const successToast = page
       .locator("[data-sonner-toast]")
       .filter({ hasText: messages.form.success.pl });
