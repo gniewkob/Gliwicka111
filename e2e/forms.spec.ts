@@ -82,15 +82,21 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.locator('[name="nip"]').fill("1234567890");
     await form.getByTestId("businessType-select").click();
-    await page
-      .getByRole("option", { name: /Działalność gospodarcza/i })
-      .click();
+    const businessTypeOption = page.getByRole("option", {
+      name: /Działalność gospodarcza/i,
+    });
+    await businessTypeOption.scrollIntoViewIfNeeded();
+    await businessTypeOption.click();
     const businessTypeInput = form.locator('input[name="businessType"]');
     if (await businessTypeInput.count()) {
       await expect(businessTypeInput).toHaveValue("sole-proprietorship");
     }
     await form.getByTestId("package-select").click();
-    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
+    const packageOption = page.getByRole("option", {
+      name: /Pakiet Podstawowy/i,
+    });
+    await packageOption.scrollIntoViewIfNeeded();
+    await packageOption.click();
     const packageInput = form.locator('input[name="package"]');
     if (await packageInput.count()) {
       await expect(packageInput).toHaveValue("basic");
@@ -160,11 +166,17 @@ test.describe("Contact Forms", () => {
     // Blur the email field to trigger validation
     await form.locator('[name="email"]').blur();
     await form.getByTestId("businessType-select").click();
-    await page
-      .getByRole("option", { name: /Działalność gospodarcza/i })
-      .click();
+    const businessTypeOption = page.getByRole("option", {
+      name: /Działalność gospodarcza/i,
+    });
+    await businessTypeOption.scrollIntoViewIfNeeded();
+    await businessTypeOption.click();
     await form.getByTestId("package-select").click();
-    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
+    const packageOption = page.getByRole("option", {
+      name: /Pakiet Podstawowy/i,
+    });
+    await packageOption.scrollIntoViewIfNeeded();
+    await packageOption.click();
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
     await form
@@ -208,13 +220,19 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="phone"]').fill("+48 987 654 321");
     await form.locator('[name="companyName"]').fill("Coworking Company");
     await form.getByTestId("workspaceType-select").click();
-    await page.getByRole("option", { name: /Hot Desk/i }).click();
+    const workspaceTypeOption = page.getByRole("option", {
+      name: /Hot Desk/i,
+    });
+    await workspaceTypeOption.scrollIntoViewIfNeeded();
+    await workspaceTypeOption.click();
     const workspaceTypeInput = form.locator('input[name="workspaceType"]');
     if (await workspaceTypeInput.count()) {
       await expect(workspaceTypeInput).toHaveValue("hot-desk");
     }
     await form.getByTestId("duration-select").click();
-    await page.getByRole("option", { name: /Miesięcznie/i }).click();
+    const durationOption = page.getByRole("option", { name: /Miesięcznie/i });
+    await durationOption.scrollIntoViewIfNeeded();
+    await durationOption.click();
     const durationInput = form.locator('input[name="duration"]');
     if (await durationInput.count()) {
       await expect(durationInput).toHaveValue("monthly");
@@ -265,7 +283,11 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="endTime"]').fill("17:00");
     await form.locator('[name="attendees"]').fill("8");
     await form.getByTestId("roomType-select").click();
-    await page.getByRole("option", { name: /Sala Konferencyjna/i }).click();
+    const roomTypeOption = page.getByRole("option", {
+      name: /Sala Konferencyjna/i,
+    });
+    await roomTypeOption.scrollIntoViewIfNeeded();
+    await roomTypeOption.click();
     const roomTypeInput = form.locator('input[name="roomType"]');
     if (await roomTypeInput.count()) {
       await expect(roomTypeInput).toHaveValue("conference");
@@ -315,11 +337,17 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.locator('[name="nip"]').fill("1234567890");
     await form.getByTestId("businessType-select").click();
-    await page
-      .getByRole("option", { name: /Działalność gospodarcza/i })
-      .click();
+    const businessTypeOption = page.getByRole("option", {
+      name: /Działalność gospodarcza/i,
+    });
+    await businessTypeOption.scrollIntoViewIfNeeded();
+    await businessTypeOption.click();
     await form.getByTestId("package-select").click();
-    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
+    const packageOption = page.getByRole("option", {
+      name: /Pakiet Podstawowy/i,
+    });
+    await packageOption.scrollIntoViewIfNeeded();
+    await packageOption.click();
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
     await form
@@ -434,11 +462,17 @@ test.describe("Contact Forms", () => {
     await form.locator('[name="email"]').fill("mobile@example.com");
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.getByTestId("businessType-select").click();
-    await page
-      .getByRole("option", { name: /Działalność gospodarcza/i })
-      .click();
+    const businessTypeOption = page.getByRole("option", {
+      name: /Działalność gospodarcza/i,
+    });
+    await businessTypeOption.scrollIntoViewIfNeeded();
+    await businessTypeOption.click();
     await form.getByTestId("package-select").click();
-    await page.getByRole("option", { name: /Pakiet Podstawowy/i }).click();
+    const packageOption = page.getByRole("option", {
+      name: /Pakiet Podstawowy/i,
+    });
+    await packageOption.scrollIntoViewIfNeeded();
+    await packageOption.click();
     await form.locator('[name="startDate"]').fill("2024-12-01");
     await form.getByTestId("gdpr-checkbox").click();
     await form.locator('[name="message"]').fill("Mobile test message");
