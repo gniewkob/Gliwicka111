@@ -19,6 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Alert,
+  AlertDescription,
 } from "@/components/ui"
 import { toast } from "@/components/ui/sonner"
 import { advertisingFormSchema, type AdvertisingFormData } from "@/lib/validation-schemas"
@@ -34,6 +36,10 @@ interface AdvertisingFormProps {
 
 export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{
+    success: boolean
+    message: string
+  } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "advertising",
@@ -194,6 +200,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
   const onSubmit = async (data: AdvertisingFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -213,6 +220,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
         toast.success(message)
@@ -225,6 +233,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       analytics.trackSubmissionError(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
       toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
@@ -300,6 +309,16 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
           <CardDescription>Opisz swoją kampanię, a przygotujemy dla Ciebie spersonalizowaną ofertę</CardDescription>
         </CardHeader>
         <CardContent>
+          {submitResult && (
+            <Alert
+              data-testid={
+                submitResult.success ? "form-success-alert" : "form-error-alert"
+              }
+              variant={submitResult.success ? "default" : "destructive"}
+            >
+              <AlertDescription>{submitResult.message}</AlertDescription>
+            </Alert>
+          )}
           <form
             noValidate
             data-testid="contact-form-advertising"
@@ -320,7 +339,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.firstName && (
                   <>
                     {handleFieldError("firstName", errors.firstName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                    <p
+                      data-testid="advertising-firstName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.firstName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -337,7 +361,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.lastName && (
                   <>
                     {handleFieldError("lastName", errors.lastName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                    <p
+                      data-testid="advertising-lastName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.lastName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -381,7 +410,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.phone && (
                   <>
                     {handleFieldError("phone", errors.phone.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    <p
+                      data-testid="advertising-phone-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.phone.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -399,7 +433,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
               {errors.companyName && (
                 <>
                   {handleFieldError("companyName", errors.companyName.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                  <p
+                    data-testid="advertising-companyName-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.companyName.message}
+                  </p>
                 </>
               )}
             </div>
@@ -421,7 +460,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.campaignType && (
                   <>
                     {handleFieldError("campaignType", errors.campaignType.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.campaignType.message}</p>
+                    <p
+                      data-testid="advertising-campaignType-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.campaignType.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -443,7 +487,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.duration && (
                   <>
                     {handleFieldError("duration", errors.duration.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
+                    <p
+                      data-testid="advertising-duration-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.duration.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -466,7 +515,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.startDate && (
                   <>
                     {handleFieldError("startDate", errors.startDate.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>
+                    <p
+                      data-testid="advertising-startDate-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.startDate.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -488,7 +542,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                 {errors.budget && (
                   <>
                     {handleFieldError("budget", errors.budget.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
+                    <p
+                      data-testid="advertising-budget-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.budget.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -508,7 +567,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
               {errors.targetAudience && (
                 <>
                   {handleFieldError("targetAudience", errors.targetAudience.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.targetAudience.message}</p>
+                  <p
+                    data-testid="advertising-targetAudience-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.targetAudience.message}
+                  </p>
                 </>
               )}
             </div>
@@ -560,7 +624,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
               {errors.message && (
                 <>
                   {handleFieldError("message", errors.message.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                  <p
+                    data-testid="advertising-message-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.message.message}
+                  </p>
                 </>
               )}
             </div>
@@ -588,7 +657,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
               {errors.gdprConsent && (
                 <>
                   {handleFieldError("gdprConsent", errors.gdprConsent.message)}
-                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                  <p
+                    data-testid="advertising-gdprConsent-error"
+                    className="text-red-500 text-sm"
+                  >
+                    {errors.gdprConsent.message}
+                  </p>
                 </>
               )}
 
