@@ -19,8 +19,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Alert,
+  AlertDescription,
 } from "@/components/ui"
-import { toast } from "@/components/ui/sonner"
 import { meetingRoomFormSchema, type MeetingRoomFormData } from "@/lib/validation-schemas"
 import { submitMeetingRoomForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
@@ -34,6 +35,9 @@ interface MeetingRoomFormProps {
 
 export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(
+    null,
+  )
 
   const analytics = useFormAnalytics({
     formType: "meeting-room",
@@ -208,6 +212,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
   const onSubmit = async (data: MeetingRoomFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -227,19 +232,18 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
-        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
-        toast.error(message)
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       analytics.trackSubmissionError(errorMessage)
-      toast.error(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
     } finally {
       setIsSubmitting(false)
     }
@@ -309,6 +313,16 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
           <CardDescription>Zarezerwuj salę konferencyjną dostosowaną do Twoich potrzeb</CardDescription>
         </CardHeader>
         <CardContent>
+          {submitResult && (
+            <Alert
+              data-testid={
+                submitResult.success ? "form-success-alert" : "form-error-alert"
+              }
+              variant={submitResult.success ? "default" : "destructive"}
+            >
+              <AlertDescription>{submitResult.message}</AlertDescription>
+            </Alert>
+          )}
           <form
             noValidate
             data-testid="contact-form-meeting-room"
@@ -329,7 +343,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.firstName && (
                   <>
                     {handleFieldError("firstName", errors.firstName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                    <p
+                      data-testid="meeting-room-firstName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.firstName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -346,7 +365,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.lastName && (
                   <>
                     {handleFieldError("lastName", errors.lastName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                    <p
+                      data-testid="meeting-room-lastName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.lastName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -390,7 +414,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.phone && (
                   <>
                     {handleFieldError("phone", errors.phone.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    <p
+                      data-testid="meeting-room-phone-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.phone.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -408,7 +437,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               {errors.companyName && (
                 <>
                   {handleFieldError("companyName", errors.companyName.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                  <p
+                    data-testid="meeting-room-companyName-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.companyName.message}
+                  </p>
                 </>
               )}
             </div>
@@ -435,7 +469,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.roomType && (
                   <>
                     {handleFieldError("roomType", errors.roomType.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.roomType.message}</p>
+                    <p
+                      data-testid="meeting-room-roomType-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.roomType.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -458,7 +497,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.attendees && (
                   <>
                     {handleFieldError("attendees", errors.attendees.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.attendees.message}</p>
+                    <p
+                      data-testid="meeting-room-attendees-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.attendees.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -481,7 +525,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.date && (
                   <>
                     {handleFieldError("date", errors.date.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>
+                    <p
+                      data-testid="meeting-room-date-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.date.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -502,7 +551,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.startTime && (
                   <>
                     {handleFieldError("startTime", errors.startTime.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.startTime.message}</p>
+                    <p
+                      data-testid="meeting-room-startTime-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.startTime.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -523,7 +577,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                 {errors.endTime && (
                   <>
                     {handleFieldError("endTime", errors.endTime.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.endTime.message}</p>
+                    <p
+                      data-testid="meeting-room-endTime-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.endTime.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -635,7 +694,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               {errors.message && (
                 <>
                   {handleFieldError("message", errors.message.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                  <p
+                    data-testid="meeting-room-message-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.message.message}
+                  </p>
                 </>
               )}
             </div>
@@ -662,7 +726,12 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               {errors.gdprConsent && (
                 <>
                   {handleFieldError("gdprConsent", errors.gdprConsent.message)}
-                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                  <p
+                    data-testid="meeting-room-gdprConsent-error"
+                    className="text-red-500 text-sm"
+                  >
+                    {errors.gdprConsent.message}
+                  </p>
                 </>
               )}
 

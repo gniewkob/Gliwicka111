@@ -3,7 +3,6 @@ import { MeetingRoomForm } from "@/components/forms"
 import { submitMeetingRoomForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { messages } from "@/lib/i18n"
-import { toast } from "@/components/ui/sonner"
 import { vi } from "vitest"
 
 const resetMock = vi.fn()
@@ -21,10 +20,6 @@ vi.mock("react-hook-form", async (importActual) => {
       reset: resetMock,
     }),
   }
-})
-vi.mock("@/components/ui/sonner", async (importActual) => {
-  const actual = (await importActual()) as any
-  return { ...actual, toast: { success: vi.fn(), error: vi.fn() } }
 })
 vi.mock("@/lib/analytics-client", () => ({
   analyticsClient: {
@@ -49,32 +44,44 @@ describe("MeetingRoomForm", () => {
     vi.clearAllMocks()
   })
 
-  it("does not reuse toast between submissions", async () => {
+  it("clears previous result between submissions", async () => {
     mockSubmit.mockResolvedValueOnce({ success: true, message: "OK" })
     render(<MeetingRoomForm />)
     const form = screen.getByTestId("contact-form-meeting-room")
     await fireEvent.submit(form)
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("OK"))
+    await waitFor(() =>
+      expect(screen.getByTestId("form-success-alert")).toHaveTextContent("OK"),
+    )
 
     mockSubmit.mockImplementation(() => new Promise(() => {}))
     await fireEvent.submit(form)
-    await waitFor(() => expect(toast.success).toHaveBeenCalledTimes(1))
+    await waitFor(() =>
+      expect(screen.queryByTestId("form-success-alert")).not.toBeInTheDocument(),
+    )
   })
 
-  it("shows success toast and resets form", async () => {
+  it("shows success message and resets form", async () => {
     mockSubmit.mockResolvedValue({ success: true, message: "Success" })
     render(<MeetingRoomForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-meeting-room"))
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Success"))
+    await waitFor(() =>
+      expect(screen.getByTestId("form-success-alert")).toHaveTextContent(
+        "Success",
+      ),
+    )
     expect(resetMock).toHaveBeenCalled()
   })
 
-  it("uses fallback toast message and tracks errors", async () => {
+  it("uses fallback message and tracks errors", async () => {
     mockSubmit.mockResolvedValue({ success: false })
     render(<MeetingRoomForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-meeting-room"))
     const fallback = messages.form.serverError.pl
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(fallback))
+    await waitFor(() =>
+      expect(screen.getByTestId("form-error-alert")).toHaveTextContent(
+        fallback,
+      ),
+    )
     expect(analyticsClient.trackSubmissionError).toHaveBeenCalledWith(
       "meeting-room",
       fallback,
