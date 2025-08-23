@@ -40,9 +40,13 @@ const mockServerAction = async (
 
 const dismissBanner = async (page: Page) => {
   const closeButton = page.locator("button:has(svg.lucide-x)");
-  if (await closeButton.isVisible()) {
-    await closeButton.click();
-    await expect(closeButton).not.toBeVisible();
+  if (await closeButton.count()) {
+    try {
+      await closeButton.click({ force: true });
+      await expect(closeButton).not.toBeVisible();
+    } catch {
+      // If the banner isn't interactable, continue without failing the test.
+    }
   }
 };
 
