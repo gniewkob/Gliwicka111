@@ -19,8 +19,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Alert,
+  AlertDescription,
 } from "@/components/ui"
-import { toast } from "@/components/ui/sonner"
 import { coworkingFormSchema, type CoworkingFormData } from "@/lib/validation-schemas"
 import { submitCoworkingForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
@@ -34,6 +35,10 @@ interface CoworkingFormProps {
 
 export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{
+    success: boolean
+    message: string
+  } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "coworking",
@@ -164,6 +169,7 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
 
   const onSubmit = async (data: CoworkingFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -183,19 +189,18 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
-        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
-        toast.error(message)
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       analytics.trackSubmissionError(errorMessage)
-      toast.error(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
     } finally {
       setIsSubmitting(false)
     }
@@ -280,6 +285,16 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
           <CardDescription>Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin</CardDescription>
         </CardHeader>
         <CardContent>
+          {submitResult && (
+            <Alert
+              data-testid={
+                submitResult.success ? "form-success-alert" : "form-error-alert"
+              }
+              variant={submitResult.success ? "default" : "destructive"}
+            >
+              <AlertDescription>{submitResult.message}</AlertDescription>
+            </Alert>
+          )}
           <form
             noValidate
             data-testid="contact-form-coworking"
@@ -300,7 +315,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.firstName && (
                   <>
                     {handleFieldError("firstName", errors.firstName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                    <p
+                      data-testid="coworking-firstName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.firstName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -317,7 +337,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.lastName && (
                   <>
                     {handleFieldError("lastName", errors.lastName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                    <p
+                      data-testid="coworking-lastName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.lastName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -361,7 +386,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.phone && (
                   <>
                     {handleFieldError("phone", errors.phone.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    <p
+                      data-testid="coworking-phone-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.phone.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -379,7 +409,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
               {errors.companyName && (
                 <>
                   {handleFieldError("companyName", errors.companyName.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                  <p
+                    data-testid="coworking-companyName-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.companyName.message}
+                  </p>
                 </>
               )}
             </div>
@@ -405,7 +440,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.workspaceType && (
                   <>
                     {handleFieldError("workspaceType", errors.workspaceType.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.workspaceType.message}</p>
+                    <p
+                      data-testid="coworking-workspaceType-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.workspaceType.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -431,7 +471,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.duration && (
                   <>
                     {handleFieldError("duration", errors.duration.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
+                    <p
+                      data-testid="coworking-duration-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.duration.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -454,7 +499,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.startDate && (
                   <>
                     {handleFieldError("startDate", errors.startDate.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>
+                    <p
+                      data-testid="coworking-startDate-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.startDate.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -477,7 +527,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                 {errors.teamSize && (
                   <>
                     {handleFieldError("teamSize", errors.teamSize.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.teamSize.message}</p>
+                    <p
+                      data-testid="coworking-teamSize-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.teamSize.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -500,7 +555,10 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     "specialRequirements",
                     errors.specialRequirements.message,
                   )}
-                  <p className="text-red-500 text-sm mt-1">
+                  <p
+                    data-testid="coworking-specialRequirements-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
                     {errors.specialRequirements.message}
                   </p>
                 </>
@@ -521,7 +579,10 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
               {errors.message && (
                 <>
                   {handleFieldError("message", errors.message.message)}
-                  <p className="text-red-500 text-sm mt-1">
+                  <p
+                    data-testid="coworking-message-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
                     {errors.message.message}
                   </p>
                 </>
@@ -559,7 +620,12 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
               {errors.gdprConsent && (
                 <>
                   {handleFieldError("gdprConsent", errors.gdprConsent.message)}
-                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                  <p
+                    data-testid="coworking-gdprConsent-error"
+                    className="text-red-500 text-sm"
+                  >
+                    {errors.gdprConsent.message}
+                  </p>
                 </>
               )}
 
