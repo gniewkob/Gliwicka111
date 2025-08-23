@@ -19,6 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Alert,
+  AlertDescription,
 } from "@/components/ui"
 import { toast } from "@/components/ui/sonner"
 import { virtualOfficeFormSchema, type VirtualOfficeFormData } from "@/lib/validation-schemas"
@@ -34,6 +36,7 @@ interface VirtualOfficeFormProps {
 
 export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "virtual-office",
@@ -192,6 +195,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
 
   const onSubmit = async (data: VirtualOfficeFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -211,6 +215,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
         toast.success(message)
@@ -232,6 +237,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
         }
       }
       analytics.trackSubmissionError(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
       toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
@@ -301,6 +307,16 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
           <CardDescription>Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin</CardDescription>
         </CardHeader>
         <CardContent>
+          {submitResult && (
+            <Alert
+              data-testid={
+                submitResult.success ? "form-success-alert" : "form-error-alert"
+              }
+              variant={submitResult.success ? "default" : "destructive"}
+            >
+              <AlertDescription>{submitResult.message}</AlertDescription>
+            </Alert>
+          )}
           <form
             noValidate
             data-testid="contact-form-virtual-office"
@@ -321,7 +337,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.firstName && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="firstName-error"
+                    data-testid="virtual-office-firstName-error"
                     >
                       {errors.firstName.message}
                     </p>
@@ -340,7 +356,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.lastName && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="lastName-error"
+                    data-testid="virtual-office-lastName-error"
                     >
                       {errors.lastName.message}
                     </p>
@@ -397,7 +413,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.phone && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="phone-error"
+                    data-testid="virtual-office-phone-error"
                     >
                       {errors.phone.message}
                     </p>
@@ -419,7 +435,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.companyName && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="companyName-error"
+                    data-testid="virtual-office-companyName-error"
                     >
                       {errors.companyName.message}
                     </p>
@@ -439,7 +455,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.nip && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="nip-error"
+                    data-testid="virtual-office-nip-error"
                     >
                       {errors.nip.message}
                     </p>
@@ -469,7 +485,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.businessType && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="businessType-error"
+                    data-testid="virtual-office-businessType-error"
                     >
                       {errors.businessType.message}
                     </p>
@@ -495,7 +511,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   {errors.package && (
                     <p
                       className="text-red-500 text-sm mt-1"
-                      data-testid="package-error"
+                    data-testid="virtual-office-package-error"
                     >
                       {errors.package.message}
                     </p>
@@ -519,7 +535,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 {errors.startDate && (
                   <p
                     className="text-red-500 text-sm mt-1"
-                    data-testid="startDate-error"
+                    data-testid="virtual-office-startDate-error"
                   >
                     {errors.startDate.message}
                   </p>
@@ -568,7 +584,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 {errors.message && (
                   <p
                     className="text-red-500 text-sm mt-1"
-                    data-testid="message-error"
+                    data-testid="virtual-office-message-error"
                   >
                     {errors.message.message}
                   </p>
@@ -597,7 +613,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 {errors.gdprConsent && (
                   <p
                     className="text-red-500 text-sm"
-                    data-testid="gdprConsent-error"
+                    data-testid="virtual-office-gdprConsent-error"
                   >
                     {errors.gdprConsent.message}
                   </p>
