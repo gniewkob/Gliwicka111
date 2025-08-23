@@ -4,30 +4,31 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
+  Alert,
+  AlertDescription,
+  Badge,
   Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  Checkbox,
   Input,
   Label,
-  Textarea,
-  Checkbox,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Badge,
+  Textarea,
 } from "@/components/ui"
-import { toast } from "@/components/ui/sonner"
 import { specialDealsFormSchema, type SpecialDealsFormData } from "@/lib/validation-schemas"
 import { submitSpecialDealsForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { useFormAnalytics } from "@/hooks/use-form-analytics"
 import { messages } from "@/lib/i18n"
-import { Gift, Percent, Star, Shield, CheckCircle } from "lucide-react"
+import { Gift, Percent, Star, Shield } from "lucide-react"
 
 interface SpecialDealsFormProps {
   language?: "pl" | "en"
@@ -35,6 +36,10 @@ interface SpecialDealsFormProps {
 
 export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitResult, setSubmitResult] = useState<{
+    success: boolean
+    message: string
+  } | null>(null)
 
   const analytics = useFormAnalytics({
     formType: "special-deals",
@@ -214,6 +219,7 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
 
   const onSubmit = async (data: SpecialDealsFormData) => {
     setIsSubmitting(true)
+    setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
     try {
@@ -233,19 +239,18 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         (result.success
           ? messages.form.success[language]
           : messages.form.serverError[language])
+      setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
-        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
-        toast.error(message)
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       analytics.trackSubmissionError(errorMessage)
-      toast.error(errorMessage)
+      setSubmitResult({ success: false, message: errorMessage })
     } finally {
       setIsSubmitting(false)
     }
@@ -320,6 +325,16 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
           <CardDescription>Wypełnij formularz, a przygotujemy dla Ciebie spersonalizowaną ofertę</CardDescription>
         </CardHeader>
         <CardContent>
+          {submitResult && (
+            <Alert
+              data-testid={
+                submitResult.success ? "form-success-alert" : "form-error-alert"
+              }
+              variant={submitResult.success ? "default" : "destructive"}
+            >
+              <AlertDescription>{submitResult.message}</AlertDescription>
+            </Alert>
+          )}
           <form
             noValidate
             data-testid="contact-form-special-deals"
@@ -340,7 +355,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 {errors.firstName && (
                   <>
                     {handleFieldError("firstName", errors.firstName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                    <p
+                      data-testid="special-deals-firstName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.firstName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -357,7 +377,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 {errors.lastName && (
                   <>
                     {handleFieldError("lastName", errors.lastName.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                    <p
+                      data-testid="special-deals-lastName-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.lastName.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -401,7 +426,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 {errors.phone && (
                   <>
                     {handleFieldError("phone", errors.phone.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    <p
+                      data-testid="special-deals-phone-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.phone.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -419,7 +449,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {errors.companyName && (
                 <>
                   {handleFieldError("companyName", errors.companyName.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                  <p
+                    data-testid="special-deals-companyName-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.companyName.message}
+                  </p>
                 </>
               )}
             </div>
@@ -442,7 +477,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {errors.dealType && (
                 <>
                   {handleFieldError("dealType", errors.dealType.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.dealType.message}</p>
+                  <p
+                    data-testid="special-deals-dealType-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.dealType.message}
+                  </p>
                 </>
               )}
             </div>
@@ -479,7 +519,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                     "interestedServices",
                     errors.interestedServices.message,
                   )}
-                  <p className="text-red-500 text-sm mt-1">{errors.interestedServices.message}</p>
+                  <p
+                    data-testid="special-deals-interestedServices-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.interestedServices.message}
+                  </p>
                 </>
               )}
             </div>
@@ -502,7 +547,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 {errors.currentSituation && (
                   <>
                     {handleFieldError("currentSituation", errors.currentSituation.message)}
-                    <p className="text-red-500 text-sm mt-1">
+                    <p
+                      data-testid="special-deals-currentSituation-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
                       {errors.currentSituation.message}
                     </p>
                   </>
@@ -526,7 +574,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 {errors.timeline && (
                   <>
                     {handleFieldError("timeline", errors.timeline.message)}
-                    <p className="text-red-500 text-sm mt-1">{errors.timeline.message}</p>
+                    <p
+                      data-testid="special-deals-timeline-error"
+                      className="text-red-500 text-sm mt-1"
+                    >
+                      {errors.timeline.message}
+                    </p>
                   </>
                 )}
               </div>
@@ -545,7 +598,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {errors.referralSource && (
                 <>
                   {handleFieldError("referralSource", errors.referralSource.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.referralSource.message}</p>
+                  <p
+                    data-testid="special-deals-referralSource-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.referralSource.message}
+                  </p>
                 </>
               )}
             </div>
@@ -564,7 +622,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {errors.specificNeeds && (
                 <>
                   {handleFieldError("specificNeeds", errors.specificNeeds.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.specificNeeds.message}</p>
+                  <p
+                    data-testid="special-deals-specificNeeds-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.specificNeeds.message}
+                  </p>
                 </>
               )}
             </div>
@@ -583,7 +646,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {errors.message && (
                 <>
                   {handleFieldError("message", errors.message.message)}
-                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                  <p
+                    data-testid="special-deals-message-error"
+                    className="text-red-500 text-sm mt-1"
+                  >
+                    {errors.message.message}
+                  </p>
                 </>
               )}
             </div>
@@ -610,7 +678,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               {errors.gdprConsent && (
                 <>
                   {handleFieldError("gdprConsent", errors.gdprConsent.message)}
-                  <p className="text-red-500 text-sm">{errors.gdprConsent.message}</p>
+                  <p
+                    data-testid="special-deals-gdprConsent-error"
+                    className="text-red-500 text-sm"
+                  >
+                    {errors.gdprConsent.message}
+                  </p>
                 </>
               )}
 
