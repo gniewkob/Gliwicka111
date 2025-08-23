@@ -57,7 +57,7 @@ test.describe("Contact Forms", () => {
   test("should display all form types", async ({ page }) => {
     await expect(page.getByTestId("tab-virtual-office")).toBeVisible();
     await expect(page.getByTestId("tab-coworking")).toBeVisible();
-    await expect(page.getByTestId("tab-meeting-rooms")).toBeVisible();
+    await expect(page.getByTestId("tab-meeting-room")).toBeVisible();
     await expect(page.getByTestId("tab-advertising")).toBeVisible();
     await expect(page.getByTestId("tab-special-deals")).toBeVisible();
   });
@@ -267,7 +267,7 @@ test.describe("Contact Forms", () => {
     });
 
     // Navigate to meeting room form
-    await page.getByTestId("tab-meeting-rooms").click();
+    await page.getByTestId("tab-meeting-room").click();
 
     const form = page.getByTestId("contact-form-meeting-room");
     await expect(form).toBeVisible();
