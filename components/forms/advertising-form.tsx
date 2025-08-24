@@ -22,7 +22,6 @@ import {
   Alert,
   AlertDescription,
 } from "@/components/ui"
-import { toast } from "@/components/ui/sonner"
 import { advertisingFormSchema, type AdvertisingFormData } from "@/lib/validation-schemas"
 import { submitAdvertisingForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
@@ -223,18 +222,15 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
       setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
-        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
-        toast.error(message)
       }
     } catch (error) {
       const errorMessage =
         language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
       analytics.trackSubmissionError(errorMessage)
       setSubmitResult({ success: false, message: errorMessage })
-      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
