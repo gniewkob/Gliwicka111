@@ -121,10 +121,9 @@ test.describe("Contact Forms", () => {
       ),
       form.locator('button[type="submit"]').click(),
     ]);
-    const successToast = page
-      .locator("[data-sonner-toast]")
-      .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByTestId("form-success-alert"),
+    ).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
@@ -256,10 +255,9 @@ test.describe("Contact Forms", () => {
       ),
       form.locator('button[type="submit"]').click(),
     ]);
-    const successToast = page
-      .locator("[data-sonner-toast]")
-      .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByTestId("form-success-alert"),
+    ).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
@@ -313,10 +311,9 @@ test.describe("Contact Forms", () => {
       ),
       form.locator('button[type="submit"]').click(),
     ]);
-    const successToast = page
-      .locator("[data-sonner-toast]")
-      .filter({ hasText: messages.form.success.pl });
-    await expect(successToast).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByTestId("form-success-alert"),
+    ).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
