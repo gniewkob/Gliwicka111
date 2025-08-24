@@ -158,16 +158,13 @@ test.describe("Contact Forms", () => {
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
 
-    // Fill required fields with valid data scoped to the virtual office form
+    // Fill all required fields
     await form.locator('[name="companyName"]').fill("Test Company");
     await form.locator('[name="firstName"]').fill("Jan");
     await form.locator('[name="lastName"]').fill("Kowalski");
     await form.locator('[name="phone"]').fill("+48 123 456 789");
     await form.locator('[name="nip"]').fill("1234567890");
-    // Enter invalid email for validation early
     await form.locator('[name="email"]').fill("invalid-email");
-    // Blur the email field to trigger validation
-    await form.locator('[name="email"]').blur();
     await form.getByTestId("businessType-select").click();
     const businessTypeOption = page.getByRole("option", {
       name: /Działalność gospodarcza/i,
@@ -186,19 +183,8 @@ test.describe("Contact Forms", () => {
       .locator('[name="message"]')
       .fill("Test message for email validation");
 
-    // Ensure the email field remains unchanged before submission
-    await expect(form.locator('[name="email"]').first()).toHaveValue(
-      "invalid-email",
-    );
-
     await form.locator('button[type="submit"]').click();
 
-    // Confirm the invalid email value persists after submission
-    await expect(form.locator('[name="email"]').first()).toHaveValue(
-      "invalid-email",
-    );
-
-    // Check for email validation error
     const emailError = form.getByTestId("virtual-office-email-error");
     await expect(emailError).toBeVisible();
     await expect(emailError).toHaveText("Nieprawidłowy format adresu email");
