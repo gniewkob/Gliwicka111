@@ -365,10 +365,8 @@ test.describe("Contact Forms", () => {
       ),
       form.locator('button[type="submit"]').click(),
     ]);
-    const errorToast = page
-      .locator("[data-sonner-toast]")
-      .filter({ hasText: messages.form.serverError.pl });
-    await expect(errorToast).toBeVisible({ timeout: 15000 });
+    const errorAlert = page.getByTestId("form-error-alert");
+    await expect(errorAlert).toBeVisible({ timeout: 15000 });
 
     await unroute();
   });
