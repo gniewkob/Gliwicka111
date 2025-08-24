@@ -3,7 +3,6 @@ import { VirtualOfficeForm } from "@/components/forms"
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
 import { messages } from "@/lib/i18n"
-import { toast } from "@/components/ui/sonner"
 import { vi } from "vitest"
 
 const resetMock = vi.fn()
@@ -21,10 +20,6 @@ vi.mock("react-hook-form", async (importActual) => {
       reset: resetMock,
     }),
   }
-})
-vi.mock("@/components/ui/sonner", async (importActual) => {
-  const actual = (await importActual()) as any
-  return { ...actual, toast: { success: vi.fn(), error: vi.fn() } }
 })
 vi.mock("@/lib/analytics-client", () => ({
   analyticsClient: {
@@ -49,32 +44,46 @@ describe("VirtualOfficeForm", () => {
     vi.clearAllMocks()
   })
 
-  it("does not reuse toast between submissions", async () => {
+  it("clears previous alert between submissions", async () => {
     mockSubmit.mockResolvedValueOnce({ success: true, message: "OK" })
     render(<VirtualOfficeForm />)
     const form = screen.getByTestId("contact-form-virtual-office")
     await fireEvent.submit(form)
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("OK"))
+    await waitFor(() =>
+      expect(screen.getByTestId("form-success-alert")).toHaveTextContent("OK"),
+    )
 
     mockSubmit.mockImplementation(() => new Promise(() => {}))
     await fireEvent.submit(form)
-    await waitFor(() => expect(toast.success).toHaveBeenCalledTimes(1))
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("form-success-alert"),
+      ).not.toBeInTheDocument(),
+    )
   })
 
-  it("shows success toast and resets form", async () => {
+  it("shows success alert and resets form", async () => {
     mockSubmit.mockResolvedValue({ success: true, message: "Success" })
     render(<VirtualOfficeForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-virtual-office"))
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Success"))
+    await waitFor(() =>
+      expect(screen.getByTestId("form-success-alert")).toHaveTextContent(
+        "Success",
+      ),
+    )
     expect(resetMock).toHaveBeenCalled()
   })
 
-  it("uses fallback toast message and tracks errors", async () => {
+  it("uses fallback alert message and tracks errors", async () => {
     mockSubmit.mockResolvedValue({ success: false })
     render(<VirtualOfficeForm />)
     await fireEvent.submit(screen.getByTestId("contact-form-virtual-office"))
     const fallback = messages.form.serverError.pl
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(fallback))
+    await waitFor(() =>
+      expect(screen.getByTestId("form-error-alert")).toHaveTextContent(
+        fallback,
+      ),
+    )
     expect(analyticsClient.trackSubmissionError).toHaveBeenCalledWith(
       "virtual-office",
       fallback,

@@ -22,7 +22,6 @@ import {
   Alert,
   AlertDescription,
 } from "@/components/ui"
-import { toast } from "@/components/ui/sonner"
 import { virtualOfficeFormSchema, type VirtualOfficeFormData } from "@/lib/validation-schemas"
 import { submitVirtualOfficeForm } from "@/lib/server-actions"
 import { analyticsClient } from "@/lib/analytics-client"
@@ -218,11 +217,9 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       setSubmitResult({ success: result.success, message })
       if (result.success) {
         analytics.trackSubmissionSuccess()
-        toast.success(message)
         reset()
       } else {
         analytics.trackSubmissionError(message)
-        toast.error(message)
       }
     } catch (error) {
       let errorMessage = messages.form.serverError[language]
@@ -238,7 +235,6 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       }
       analytics.trackSubmissionError(errorMessage)
       setSubmitResult({ success: false, message: errorMessage })
-      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
