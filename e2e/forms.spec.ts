@@ -304,11 +304,9 @@ test.describe("Contact Forms", () => {
     await unroute();
   });
 
+  test.use({ env: { FORCED_FORM_ERROR: "true" } as any });
+
   test("should handle form submission errors gracefully", async ({ page }) => {
-    const unroute = await mockServerAction(page, {
-      success: false,
-      message: messages.form.serverError.pl,
-    });
 
     // Navigate to virtual office form
     await page.getByTestId("tab-virtual-office").click();
@@ -342,20 +340,12 @@ test.describe("Contact Forms", () => {
       .fill("Test message for error handling");
 
     // Submit the form and check for error message
-    await Promise.all([
-      page.waitForResponse(
-        (res) =>
-          res.request().method() === "POST" &&
-          isServerActionRequest(res.request()) &&
-          res.url().includes("/forms"),
-      ),
-      form.locator('button[type="submit"]').click(),
-    ]);
+    await form.locator('button[type="submit"]').click();
     const errorAlert = page.getByTestId("form-error-alert");
-    await expect(errorAlert).toBeVisible({ timeout: 15000 });
-
-    await unroute();
+    await expect(errorAlert).toContainText(messages.form.serverError.pl);
   });
+
+  test.use({ env: {} });
 
   test("should track analytics events", async ({ page }) => {
     // Listen for analytics requests
