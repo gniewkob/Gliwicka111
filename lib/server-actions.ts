@@ -81,7 +81,9 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   const isTest =
-    process.env.MOCK_DB === "true" || process.env.MOCK_EMAIL === "true";
+    process.env.TEST_MODE === "true" ||
+    process.env.MOCK_DB === "true" ||
+    process.env.MOCK_EMAIL === "true";
   if (isTest) {
     const lang = await getCurrentLanguage();
     if (process.env.FORCED_FORM_ERROR === "true") {
