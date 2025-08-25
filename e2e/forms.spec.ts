@@ -306,8 +306,48 @@ test.describe("Contact Forms", () => {
 
   test.use({ env: { FORCED_FORM_ERROR: "true" } });
 
-  test("should handle form submission errors gracefully", async () => {
-    expect(true).toBe(true);
+  test("should handle form submission errors gracefully", async ({ page }) => {
+    // Navigate to virtual office form
+    await page.getByTestId("tab-virtual-office").click();
+
+    const form = page.getByTestId("contact-form-virtual-office");
+    await expect(form).toBeVisible();
+
+    // Fill out the form
+    await form.locator('[name="companyName"]').fill("Error Company");
+    await form.locator('[name="firstName"]').fill("Jan");
+    await form.locator('[name="lastName"]').fill("Kowalski");
+    await form.locator('[name="email"]').fill("jan@example.com");
+    await form.locator('[name="phone"]').fill("+48 123 456 789");
+    await form.locator('[name="nip"]').fill("1234567890");
+    await form.getByTestId("businessType-select").click();
+    const businessTypeOption = page.getByRole("option", {
+      name: /Działalność gospodarcza/i,
+    });
+    await businessTypeOption.scrollIntoViewIfNeeded();
+    await businessTypeOption.click();
+    await form.getByTestId("package-select").click();
+    const packageOption = page.getByRole("option", { name: /Pakiet Podstawowy/i });
+    await packageOption.scrollIntoViewIfNeeded();
+    await packageOption.click();
+    await form.locator('[name="startDate"]').fill("2024-12-01");
+    await form.getByTestId("gdpr-checkbox").click();
+    await form.locator('[name="message"]').fill("Test error message");
+
+    // Submit the form and check for error message
+    await Promise.all([
+      page.waitForResponse(
+        (res) =>
+          res.request().method() === "POST" &&
+          isServerActionRequest(res.request()) &&
+          res.url().includes("/forms"),
+      ),
+      form.locator('button[type="submit"]').click(),
+    ]);
+
+    const errorAlert = page.getByTestId("form-error-alert");
+    await expect(errorAlert).toBeVisible({ timeout: 15000 });
+    await expect(errorAlert).toContainText(messages.form.serverError.pl);
   });
 
   test.use({ env: {} });
