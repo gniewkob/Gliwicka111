@@ -386,15 +386,37 @@ describe("Server Actions", () => {
     });
   });
 
-  describe("test environment shortcut", () => {
-    it("returns test submission without side effects", async () => {
-      process.env.NODE_ENV = "test";
+  describe("mock environment shortcut", () => {
+    it("returns success message without side effects", async () => {
+      process.env.MOCK_DB = "true";
+      (getCurrentLanguage as any).mockResolvedValue("pl");
       const formData = new FormData();
       const result = await submitVirtualOfficeForm(formData);
-      expect(result).toEqual({ success: true, message: "Test submission" });
+      expect(result).toEqual({
+        success: true,
+        message: messages.form.success.pl,
+      });
       expect(emailClient.sendEmail).not.toHaveBeenCalled();
       expect(db.query).not.toHaveBeenCalled();
       expect(saveFailedEmail).not.toHaveBeenCalled();
+      delete process.env.MOCK_DB;
+    });
+
+    it("returns server error when forced error flag is set", async () => {
+      process.env.MOCK_DB = "true";
+      process.env.FORCED_FORM_ERROR = "true";
+      (getCurrentLanguage as any).mockResolvedValue("en");
+      const formData = new FormData();
+      const result = await submitVirtualOfficeForm(formData);
+      expect(result).toEqual({
+        success: false,
+        message: messages.form.serverError.en,
+      });
+      expect(emailClient.sendEmail).not.toHaveBeenCalled();
+      expect(db.query).not.toHaveBeenCalled();
+      expect(saveFailedEmail).not.toHaveBeenCalled();
+      delete process.env.MOCK_DB;
+      delete process.env.FORCED_FORM_ERROR;
     });
   });
 });
