@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test"
+import { defineConfig, devices } from "@playwright/test";
 
 const projects = [
   {
@@ -21,7 +21,7 @@ const projects = [
     name: "Mobile Safari",
     use: { ...devices["iPhone 12"] },
   },
-]
+];
 
 export default defineConfig({
   testDir: "./e2e",
@@ -48,6 +48,7 @@ export default defineConfig({
     port: 3000,
     reuseExistingServer: !process.env.CI,
     env: {
+      ...process.env,
       DB_HOST: "localhost",
       DB_PORT: "5432",
       DB_NAME: "test_db",
@@ -63,4 +64,4 @@ export default defineConfig({
       NEXT_PUBLIC_ADMIN_PASS: "password",
     },
   },
-})
+});

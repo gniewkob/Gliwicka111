@@ -81,6 +81,7 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   const isTest =
+    process.env.NODE_ENV === "test" ||
     process.env.TEST_MODE === "true" ||
     process.env.MOCK_DB === "true" ||
     process.env.MOCK_EMAIL === "true";
@@ -97,8 +98,8 @@ async function handleFormSubmission<T>(
     const clientIP = getClientIP();
     const ipHash = await hashIP(clientIP);
 
-    const rateLimitCount = Number(process.env.RATE_LIMIT_COUNT ?? "100")
-    const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000")
+    const rateLimitCount = Number(process.env.RATE_LIMIT_COUNT ?? "100");
+    const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000");
     if (!(await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow))) {
       return {
         success: false,
@@ -110,7 +111,8 @@ async function handleFormSubmission<T>(
     const processingStart = Date.now();
     // Convert FormData to object
     const data = Object.fromEntries(formData.entries());
-    const sessionId = typeof data.sessionId === "string" ? data.sessionId : null;
+    const sessionId =
+      typeof data.sessionId === "string" ? data.sessionId : null;
     delete (data as any).sessionId;
 
     // Handle checkboxes and arrays
@@ -201,7 +203,13 @@ async function handleFormSubmission<T>(
       if (result.status === "rejected") {
         const type = index === 0 ? "confirmation" : "admin";
         console.error(`Failed to send ${type} email:`, result.reason);
-        void enqueueFailedEmail(type, sanitizedData, formType, language, result.reason);
+        void enqueueFailedEmail(
+          type,
+          sanitizedData,
+          formType,
+          language,
+          result.reason,
+        );
       }
     });
 
@@ -261,7 +269,11 @@ async function handleFormSubmission<T>(
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitVirtualOfficeForm(formData: FormData) {
-  return handleFormSubmission(formData, virtualOfficeFormSchema, "virtual-office");
+  return handleFormSubmission(
+    formData,
+    virtualOfficeFormSchema,
+    "virtual-office",
+  );
 }
 
 /**
@@ -297,7 +309,11 @@ export async function submitAdvertisingForm(formData: FormData) {
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitSpecialDealsForm(formData: FormData) {
-  return handleFormSubmission(formData, specialDealsFormSchema, "special-deals");
+  return handleFormSubmission(
+    formData,
+    specialDealsFormSchema,
+    "special-deals",
+  );
 }
 
 // Utility functions
@@ -387,7 +403,8 @@ export async function sendAdminNotification(
   language: "pl" | "en",
 ): Promise<void> {
   const serviceName =
-    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
+    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] ||
+    formType;
   const subject =
     language === "en"
       ? `New submission: ${serviceName}`
@@ -468,7 +485,8 @@ function getEmailBody(
   language: "pl" | "en",
 ): string {
   const serviceName =
-    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] || formType;
+    SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] ||
+    formType;
 
   const intro =
     language === "en"
