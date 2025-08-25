@@ -56,6 +56,8 @@ export default defineConfig({
       DB_PASSWORD: "test_password",
       MOCK_DB: "true",
       MOCK_EMAIL: "true",
+      TEST_MODE: "true",
+      FORCED_FORM_ERROR: "true",
       ADMIN_USER: "admin",
       ADMIN_PASS: "password",
       NEXT_PUBLIC_ADMIN_USER: "admin",
