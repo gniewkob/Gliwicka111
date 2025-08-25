@@ -304,7 +304,7 @@ test.describe("Contact Forms", () => {
     await unroute();
   });
 
-  test.use({ env: { FORCED_FORM_ERROR: "true" } as any });
+  test.use({ env: { FORCED_FORM_ERROR: "true" } });
 
   test("should handle form submission errors gracefully", async () => {
     expect(true).toBe(true);
