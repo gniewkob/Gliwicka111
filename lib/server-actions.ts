@@ -80,8 +80,14 @@ async function handleFormSubmission<T>(
   errors?: Record<string, string>;
   status?: number;
 }> {
-  if (process.env.NODE_ENV === "test") {
-    return { success: true, message: "Test submission" };
+  const isTest =
+    process.env.MOCK_DB === "true" || process.env.MOCK_EMAIL === "true";
+  if (isTest) {
+    const lang = await getCurrentLanguage();
+    if (process.env.FORCED_FORM_ERROR === "true") {
+      return { success: false, message: messages.form.serverError[lang] };
+    }
+    return { success: true, message: messages.form.success[lang] };
   }
 
   try {
