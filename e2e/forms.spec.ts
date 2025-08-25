@@ -77,6 +77,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Fill out the form
     await form.locator('[name="companyName"]').fill("Test Company");
@@ -134,6 +135,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Try to submit empty form
     await page.click('button[type="submit"]');
@@ -157,6 +159,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Fill all required fields
     await form.locator('[name="companyName"]').fill("Test Company");
@@ -201,6 +204,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-coworking");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Fill out the form
     await form.locator('[name="firstName"]').fill("Anna");
@@ -259,6 +263,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-meeting-room");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Fill out the form
     await form.locator('[name="firstName"]').fill("Piotr");
@@ -312,6 +317,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Fill out the form
     await form.locator('[name="companyName"]').fill("Error Company");
@@ -383,6 +389,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Interact with form fields
     await page.fill('[name="companyName"]', "Test Company");
@@ -405,6 +412,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Check that all form fields have labels
     const inputs = await form.locator("input, select, textarea").all();
@@ -434,6 +442,7 @@ test.describe("Contact Forms", () => {
 
     const form = page.getByTestId("contact-form-virtual-office");
     await expect(form).toBeVisible();
+    await expect(form.locator('button[type="submit"]')).toBeEnabled();
 
     // Fill out form on mobile
     await form.locator('[name="companyName"]').fill("Mobile Test Company");
