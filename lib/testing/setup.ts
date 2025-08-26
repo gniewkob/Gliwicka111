@@ -17,34 +17,65 @@ afterEach(() => {
 afterAll(() => server.close());
 
 // Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-};
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null;
+  readonly rootMargin = "";
+  readonly thresholds: ReadonlyArray<number> = [];
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _callback: IntersectionObserverCallback,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _options?: IntersectionObserverInit,
+  ) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  disconnect(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  observe(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  unobserve(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+global.IntersectionObserver = MockIntersectionObserver as any;
 
 // Mock ResizeObserver
-global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-};
+class MockResizeObserver implements ResizeObserver {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _callback: ResizeObserverCallback,
+  ) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  disconnect(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  observe(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  unobserve(): void {}
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+global.ResizeObserver = MockResizeObserver as any;
 
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: (query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: () => {},
-    removeListener: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => {},
-  }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: (query: string): MediaQueryList =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }) as any,
 });
 
 // Mock scrollTo
@@ -54,12 +85,17 @@ Object.defineProperty(window, "scrollTo", {
 });
 
 // Mock localStorage
-const localStorageMock = {
-  getItem: (key: string) => null,
-  setItem: (key: string, value: string) => {},
-  removeItem: (key: string) => {},
+const localStorageMock: Storage = {
+  getItem: () => null,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setItem: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  removeItem: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   clear: () => {},
-};
+  key: () => null,
+  length: 0,
+} as any;
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
 });
