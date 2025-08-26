@@ -3,6 +3,31 @@ import { requireAdminAuth } from "@/lib/admin-auth";
 
 const METRICS_WINDOW_HOURS = Number(process.env.METRICS_WINDOW_HOURS || "24");
 
+interface SubmissionRow {
+  hour: Date;
+  count: number;
+  avgProcessing: number;
+  maxProcessing: number;
+  avgEmailLatency: number;
+  maxEmailLatency: number;
+  errors: number;
+}
+
+interface FailureRow {
+  hour: Date;
+  count: number;
+  avgRetry: number;
+  maxRetry: number;
+  retries: number;
+}
+
+interface RateLimitRow {
+  hour: Date;
+  count: number;
+  avgCount: number;
+  maxCount: number;
+}
+
 export async function GET(request: NextRequest) {
   const unauthorized = requireAdminAuth(request);
   if (unauthorized) return unauthorized;
@@ -64,61 +89,97 @@ export async function GET(request: NextRequest) {
     db.query(rateLimitsQuery, params),
   ]);
 
-  const submissionsHourly = submissionsRes.rows.map((r) => ({
-    hour: r.hour,
-    count: Number(r.submissions || 0),
-    avgProcessing: Number(r.avg_processing_time_ms || 0),
-    maxProcessing: Number(r.max_processing_time_ms || 0),
-    avgEmailLatency: Number(r.avg_email_latency_ms || 0),
-    maxEmailLatency: Number(r.max_email_latency_ms || 0),
-    errors: Number(r.errors || 0),
-  }));
+  const submissionsHourly: SubmissionRow[] = submissionsRes.rows.map(
+    (r: any): SubmissionRow => ({
+      hour: r.hour,
+      count: Number(r.submissions || 0),
+      avgProcessing: Number(r.avg_processing_time_ms || 0),
+      maxProcessing: Number(r.max_processing_time_ms || 0),
+      avgEmailLatency: Number(r.avg_email_latency_ms || 0),
+      maxEmailLatency: Number(r.max_email_latency_ms || 0),
+      errors: Number(r.errors || 0),
+    }),
+  );
 
-  const totalSubmissions = submissionsHourly.reduce((sum, r) => sum + r.count, 0);
-  const totalErrors = submissionsHourly.reduce((sum, r) => sum + r.errors, 0);
+  const totalSubmissions = submissionsHourly.reduce(
+    (sum: number, r: SubmissionRow) => sum + r.count,
+    0,
+  );
+  const totalErrors = submissionsHourly.reduce(
+    (sum: number, r: SubmissionRow) => sum + r.errors,
+    0,
+  );
   const avgProcessingTime =
-    submissionsHourly.reduce((sum, r) => sum + r.avgProcessing, 0) /
+    submissionsHourly.reduce(
+      (sum: number, r: SubmissionRow) => sum + r.avgProcessing,
+      0,
+    ) /
     (submissionsHourly.length || 1);
   const peakProcessingTime = Math.max(
     0,
-    ...submissionsHourly.map((r) => r.maxProcessing),
+    ...submissionsHourly.map((r: SubmissionRow) => r.maxProcessing),
   );
   const avgEmailLatency =
-    submissionsHourly.reduce((sum, r) => sum + r.avgEmailLatency, 0) /
+    submissionsHourly.reduce(
+      (sum: number, r: SubmissionRow) => sum + r.avgEmailLatency,
+      0,
+    ) /
     (submissionsHourly.length || 1);
   const peakEmailLatency = Math.max(
     0,
-    ...submissionsHourly.map((r) => r.maxEmailLatency),
+    ...submissionsHourly.map((r: SubmissionRow) => r.maxEmailLatency),
   );
   const errorRate = totalSubmissions ? totalErrors / totalSubmissions : 0;
 
-  const failedHourly = failedRes.rows.map((r) => ({
-    hour: r.hour,
-    count: Number(r.failures || 0),
-    avgRetry: Number(r.avg_retry_count || 0),
-    maxRetry: Number(r.max_retry_count || 0),
-    retries: Number(r.total_retries || 0),
-  }));
+  const failedHourly: FailureRow[] = failedRes.rows.map(
+    (r: any): FailureRow => ({
+      hour: r.hour,
+      count: Number(r.failures || 0),
+      avgRetry: Number(r.avg_retry_count || 0),
+      maxRetry: Number(r.max_retry_count || 0),
+      retries: Number(r.total_retries || 0),
+    }),
+  );
 
-  const totalFailures = failedHourly.reduce((sum, r) => sum + r.count, 0);
-  const totalRetries = failedHourly.reduce((sum, r) => sum + r.retries, 0);
+  const totalFailures = failedHourly.reduce(
+    (sum: number, r: FailureRow) => sum + r.count,
+    0,
+  );
+  const totalRetries = failedHourly.reduce(
+    (sum: number, r: FailureRow) => sum + r.retries,
+    0,
+  );
   const avgRetryCount =
-    failedHourly.reduce((sum, r) => sum + r.avgRetry, 0) /
+    failedHourly.reduce(
+      (sum: number, r: FailureRow) => sum + r.avgRetry,
+      0,
+    ) /
     (failedHourly.length || 1);
-  const peakRetryCount = Math.max(0, ...failedHourly.map((r) => r.maxRetry));
+  const peakRetryCount = Math.max(
+    0,
+    ...failedHourly.map((r: FailureRow) => r.maxRetry),
+  );
   const retryRate = totalFailures ? totalRetries / totalFailures : 0;
 
-  const rateHourly = rateRes.rows.map((r) => ({
-    hour: r.hour,
-    count: Number(r.hits || 0),
-    avgCount: Number(r.avg_count || 0),
-    maxCount: Number(r.max_count || 0),
-  }));
+  const rateHourly: RateLimitRow[] = rateRes.rows.map(
+    (r: any): RateLimitRow => ({
+      hour: r.hour,
+      count: Number(r.hits || 0),
+      avgCount: Number(r.avg_count || 0),
+      maxCount: Number(r.max_count || 0),
+    }),
+  );
 
   const avgRateCount =
-    rateHourly.reduce((sum, r) => sum + r.avgCount, 0) /
+    rateHourly.reduce(
+      (sum: number, r: RateLimitRow) => sum + r.avgCount,
+      0,
+    ) /
     (rateHourly.length || 1);
-  const peakRateCount = Math.max(0, ...rateHourly.map((r) => r.maxCount));
+  const peakRateCount = Math.max(
+    0,
+    ...rateHourly.map((r: RateLimitRow) => r.maxCount),
+  );
 
   return NextResponse.json({
     windowHours: METRICS_WINDOW_HOURS,
@@ -127,7 +188,7 @@ export async function GET(request: NextRequest) {
       peakProcessingTime: peakProcessingTime,
       averageEmailLatency: avgEmailLatency,
       peakEmailLatency: peakEmailLatency,
-      hourlyVolume: submissionsHourly.map((r) => ({
+      hourlyVolume: submissionsHourly.map((r: SubmissionRow) => ({
         hour: r.hour,
         count: r.count,
       })),
@@ -136,13 +197,19 @@ export async function GET(request: NextRequest) {
     failedEmails: {
       averageRetryCount: avgRetryCount,
       peakRetryCount: peakRetryCount,
-      hourlyVolume: failedHourly.map((r) => ({ hour: r.hour, count: r.count })),
+      hourlyVolume: failedHourly.map((r: FailureRow) => ({
+        hour: r.hour,
+        count: r.count,
+      })),
       retryRate,
     },
     rateLimits: {
       averageCount: avgRateCount,
       peakCount: peakRateCount,
-      hourlyVolume: rateHourly.map((r) => ({ hour: r.hour, count: r.count })),
+      hourlyVolume: rateHourly.map((r: RateLimitRow) => ({
+        hour: r.hour,
+        count: r.count,
+      })),
     },
   });
 }
