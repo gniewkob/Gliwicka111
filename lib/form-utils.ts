@@ -4,6 +4,12 @@ import type React from "react"
 
 import type { FieldError } from "react-hook-form"
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void
+  }
+}
+
 // Form field validation utilities
 export const validateField = (value: string, rules: ValidationRule[]): string | null => {
   for (const rule of rules) {
@@ -106,8 +112,8 @@ export const trackFormInteraction = (
   fieldName?: string,
   metadata?: Record<string, any>,
 ) => {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", eventType, {
+  if (typeof window !== "undefined") {
+    window.gtag?.("event", eventType, {
       form_type: formType,
       field_name: fieldName,
       ...metadata,
