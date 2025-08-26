@@ -29,15 +29,10 @@ jobs:
         run: npm prune --production
 
       - name: Deploy
-        uses: burnett01/rsync-deployments@7.0.1
+        uses: burnett01/rsync-deployments@7.0.2
         with:
           switches: -avzr --delete
-          path: |
-            .next
-            public
-            package.json
-            package-lock.json
-            node_modules
+          path: ".next public package.json package-lock.json node_modules"
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
