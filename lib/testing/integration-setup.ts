@@ -22,12 +22,14 @@ process.env.ADMIN_EMAIL = "admin@example.com"
 process.env.IP_SALT = "test_salt"
 
 // Mock database connection
-vi.mock("@/lib/database/connection-pool", () => ({
-  db: {
+vi.mock("@/lib/database/connection-pool", () => {
+  const db = {
     query: vi.fn(),
     transaction: vi.fn(),
-  },
-}))
+  }
+  const getPool = vi.fn().mockResolvedValue(db)
+  return { getPool, default: getPool }
+})
 
 // Mock email service
 vi.mock("@/lib/email/smtp-client", () => ({

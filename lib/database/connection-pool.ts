@@ -55,10 +55,14 @@ async function createPool(): Promise<Pool | Queryable> {
 
 export async function getPool(): Promise<Pool | Queryable> {
   if (!pool) {
-    pool = await createPool();
+    try {
+      pool = await createPool();
+    } catch (error) {
+      console.error("Failed to initialize database pool", error);
+      throw new Error("Database connection failed");
+    }
   }
   return pool;
 }
 
-export const db = await getPool();
-export default db;
+export default getPool;

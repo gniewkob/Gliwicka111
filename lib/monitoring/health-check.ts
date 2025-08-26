@@ -77,8 +77,8 @@ export class HealthCheckService {
     const startTime = performance.now()
 
     try {
-      const { db } = await import("@/lib/database/connection-pool")
-
+      const { getPool } = await import("@/lib/database/connection-pool")
+      const db = await getPool()
       await db.query("SELECT 1")
 
       return {
