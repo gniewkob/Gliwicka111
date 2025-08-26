@@ -7,7 +7,13 @@ export async function GET(request: NextRequest) {
   const unauthorized = requireAdminAuth(request);
   if (unauthorized) return unauthorized;
 
-  const { db } = await import("@/lib/database/connection-pool");
+  let db;
+  try {
+    const { getPool } = await import("@/lib/database/connection-pool");
+    db = await getPool();
+  } catch {
+    return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+  }
 
   const params = [METRICS_WINDOW_HOURS];
 

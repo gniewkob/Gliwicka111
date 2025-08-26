@@ -8,7 +8,15 @@ import {
   advertisingFormSchema,
   specialDealsFormSchema,
 } from "./validation-schemas";
-import { db } from "./database/connection-pool";
+import { getPool } from "./database/connection-pool";
+async function getDb() {
+  try {
+    return await getPool();
+  } catch (error) {
+    console.error("Database connection error", error);
+    throw error;
+  }
+}
 import { emailClient } from "./email/smtp-client";
 import { saveFailedEmail } from "./email/failed-email-store";
 import { messages } from "./i18n";
@@ -98,6 +106,16 @@ async function handleFormSubmission<T>(
 
     const rateLimitCount = Number(process.env.RATE_LIMIT_COUNT ?? "100");
     const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000");
+    let db;
+    try {
+      db = await getDb();
+    } catch {
+      return {
+        success: false,
+        message: messages.form.serverError[language],
+        status: 500,
+      };
+    }
     if (!(await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow))) {
       return {
         success: false,
@@ -557,6 +575,7 @@ function getEmailSubject(formType: string, language: "pl" | "en"): string {
  */
 export async function getSubmissions(page = 1, limit = 10) {
   const offset = (page - 1) * limit;
+  const db = await getDb();
   const result = await db.query(
     `SELECT id, form_type as "formType", data, status, created_at as "submittedAt" FROM form_submissions ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
     [limit, offset],
@@ -587,6 +606,7 @@ export async function updateSubmissionStatus(
   id: string,
   status: "pending" | "contacted" | "completed" | "cancelled",
 ) {
+  const db = await getDb();
   const result = await db.query(
     `UPDATE form_submissions SET status=$1, updated_at=NOW() WHERE id=$2`,
     [status, id],
@@ -605,6 +625,7 @@ export async function updateSubmissionStatus(
  * @returns {Promise<{ success: boolean; message?: string }>} Operation result.
  */
 export async function deleteSubmission(id: string) {
+  const db = await getDb();
   const result = await db.query(`DELETE FROM form_submissions WHERE id=$1`, [
     id,
   ]);

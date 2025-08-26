@@ -65,8 +65,10 @@ export async function POST(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
   try {
-    const { db } = await import("@/lib/database/connection-pool")
+    const { getPool } = await import("@/lib/database/connection-pool")
+    let db
     try {
+      db = await getPool()
       await db.query("SELECT 1")
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
@@ -127,8 +129,10 @@ export async function GET(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
   try {
-    const { db } = await import("@/lib/database/connection-pool")
+    const { getPool } = await import("@/lib/database/connection-pool")
+    let db
     try {
+      db = await getPool()
       await db.query("SELECT 1")
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
