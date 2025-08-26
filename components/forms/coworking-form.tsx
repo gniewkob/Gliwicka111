@@ -217,7 +217,8 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
     analytics.trackFieldBlur(fieldName)
   }
 
-  const handleFieldError = (fieldName: string, error: string) => {
+  const handleFieldError = (fieldName: string, error?: string) => {
+    if (!error) return
     analytics.trackFieldError(fieldName, error)
   }
 
