@@ -2,34 +2,33 @@ import type React from "react"
 import type { ReactElement } from "react"
 import { render, type RenderOptions } from "@testing-library/react"
 import { ThemeProvider } from "@/components/theme-provider"
-import jest from "jest"
-import expect from "expect"
+import { vi, expect } from "vitest"
 
 // Mock Next.js router
 const mockRouter = {
-  push: jest.fn(),
-  replace: jest.fn(),
-  prefetch: jest.fn(),
-  back: jest.fn(),
-  forward: jest.fn(),
-  refresh: jest.fn(),
+  push: vi.fn(),
+  replace: vi.fn(),
+  prefetch: vi.fn(),
+  back: vi.fn(),
+  forward: vi.fn(),
+  refresh: vi.fn(),
   pathname: "/",
   route: "/",
   query: {},
   asPath: "/",
   events: {
-    on: jest.fn(),
-    off: jest.fn(),
-    emit: jest.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
+    emit: vi.fn(),
   },
 }
 
-jest.mock("next/router", () => ({
+vi.mock("next/router", () => ({
   useRouter: () => mockRouter,
 }))
 
 // Mock Next.js navigation
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => mockRouter,
   usePathname: () => "/",
   useSearchParams: () => new URLSearchParams(),
@@ -75,26 +74,30 @@ export const waitForFormSubmission = async (submitButton: HTMLElement) => {
 }
 
 export const mockAnalyticsClient = {
-  trackFormView: jest.fn(),
-  trackFormStart: jest.fn(),
-  trackFieldFocus: jest.fn(),
-  trackFieldBlur: jest.fn(),
-  trackFieldError: jest.fn(),
-  trackSubmissionAttempt: jest.fn(),
-  trackSubmissionSuccess: jest.fn(),
-  trackSubmissionError: jest.fn(),
-  trackAbandonment: jest.fn(),
-  hasConsent: jest.fn(() => true),
-  getSessionId: jest.fn(() => "test-session-id"),
+  trackFormView: vi.fn(),
+  trackFormStart: vi.fn(),
+  trackFieldFocus: vi.fn(),
+  trackFieldBlur: vi.fn(),
+  trackFieldError: vi.fn(),
+  trackSubmissionAttempt: vi.fn(),
+  trackSubmissionSuccess: vi.fn(),
+  trackSubmissionError: vi.fn(),
+  trackAbandonment: vi.fn(),
+  hasConsent: vi.fn(() => true),
+  getSessionId: vi.fn(() => "test-session-id"),
 }
 
 // Mock analytics client
-jest.mock("@/lib/analytics-client", () => ({
+vi.mock("@/lib/analytics-client", () => ({
   analyticsClient: mockAnalyticsClient,
 }))
 
 // Form test helpers
-export const fillFormField = async (getByLabelText: (text: string) => HTMLElement, label: string, value: string) => {
+export const fillFormField = async (
+  getByLabelText: (text: string | RegExp) => HTMLElement,
+  label: string,
+  value: string,
+) => {
   const { fireEvent } = await import("@testing-library/react")
   const field = getByLabelText(new RegExp(label, "i"))
   fireEvent.change(field, { target: { value } })
@@ -116,7 +119,10 @@ export const selectFormOption = async (
   return select
 }
 
-export const checkFormCheckbox = async (getByLabelText: (text: string) => HTMLElement, label: string) => {
+export const checkFormCheckbox = async (
+  getByLabelText: (text: string | RegExp) => HTMLElement,
+  label: string,
+) => {
   const { fireEvent } = await import("@testing-library/react")
   const checkbox = getByLabelText(new RegExp(label, "i"))
   fireEvent.click(checkbox)
@@ -125,7 +131,7 @@ export const checkFormCheckbox = async (getByLabelText: (text: string) => HTMLEl
 
 // API mocking utilities
 export const mockSuccessfulSubmission = () => {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       ok: true,
       json: () =>
@@ -134,11 +140,11 @@ export const mockSuccessfulSubmission = () => {
           message: "Form submitted successfully",
         }),
     }),
-  ) as jest.Mock
+  ) as vi.Mock
 }
 
 export const mockFailedSubmission = (errorMessage = "Submission failed") => {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       ok: false,
       json: () =>
@@ -147,11 +153,11 @@ export const mockFailedSubmission = (errorMessage = "Submission failed") => {
           message: errorMessage,
         }),
     }),
-  ) as jest.Mock
+  ) as vi.Mock
 }
 
 export const mockNetworkError = () => {
-  global.fetch = jest.fn(() => Promise.reject(new Error("Network error"))) as jest.Mock
+  global.fetch = vi.fn(() => Promise.reject(new Error("Network error"))) as vi.Mock
 }
 
 // Performance testing utilities
