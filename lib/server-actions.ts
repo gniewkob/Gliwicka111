@@ -143,7 +143,13 @@ async function handleFormSubmission<T>(
       interestedServices: formData.getAll("interestedServices"),
     };
 
-    ["teamSize", "attendees", "budget"].forEach((field) => {
+    const numericFields: Array<keyof typeof processedData> = [
+      "teamSize",
+      "attendees",
+      "budget",
+    ];
+
+    numericFields.forEach((field) => {
       if (
         processedData[field] !== undefined &&
         !Number.isNaN(Number(processedData[field]))
@@ -586,10 +592,18 @@ export async function getSubmissions(page = 1, limit = 10) {
   );
   const total = Number.parseInt(countResult.rows[0]?.count || "0");
   return {
-    submissions: result.rows.map((row) => ({
-      ...row,
-      data: typeof row.data === "string" ? JSON.parse(row.data) : row.data,
-    })),
+    submissions: result.rows.map(
+      (row: {
+        id: string;
+        formType: string;
+        data: any;
+        status: string;
+        submittedAt: string;
+      }) => ({
+        ...row,
+        data: typeof row.data === "string" ? JSON.parse(row.data) : row.data,
+      }),
+    ),
     total,
     page,
     totalPages: Math.ceil(total / limit),
