@@ -38,7 +38,13 @@ jobs:
           remote_user: ${{ secrets.DEPLOY_USER }}
           remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
 
+      - name: Verify deploy URL secret
+        if: ${{ !secrets.DEPLOY_URL }}
+        run: |
+          echo "Missing DEPLOY_URL secret"
+          exit 1
       - name: Smoke test
+        if: ${{ secrets.DEPLOY_URL }}
         run: |
           set -e
           curl -fsSL "${{ secrets.DEPLOY_URL }}" | grep -qi "<html"
