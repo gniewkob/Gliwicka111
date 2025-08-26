@@ -18,6 +18,7 @@ export default defineConfig({
     url: process.env.BASE_URL || 'http://localhost:3000',
     timeout: 60000,
     reuseExistingServer: !process.env.CI,
+    env: { MOCK_DB: 'true' },
   },
   projects: [
     { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'] } },

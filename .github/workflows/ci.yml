@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   e2e:
     runs-on: ubuntu-latest
+    env:
+      MOCK_DB: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
