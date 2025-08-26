@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { requireAuth } from "@/lib/analytics-auth"
+import { type AnalyticsEventRow } from "@/lib/analytics-types"
 
 export async function GET(request: NextRequest) {
   const unauthorized = requireAuth(request)
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     const { rows } = await db.query(query, params)
 
-    const sanitizedEvents = rows.map((event) => ({
+    const sanitizedEvents = rows.map((event: AnalyticsEventRow) => ({
       formType: event.formType,
       eventType: event.eventType,
       fieldName: event.fieldName,
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     if (format === "csv") {
       const csvHeaders = ["formType", "eventType", "fieldName", "timestamp", "date", "language"]
-      const csvRows = sanitizedEvents.map((event) =>
+      const csvRows = sanitizedEvents.map((event: any) =>
         csvHeaders.map((header) => event[header as keyof typeof event] || "").join(","),
       )
       const csvContent = [csvHeaders.join(","), ...csvRows].join("\n")
