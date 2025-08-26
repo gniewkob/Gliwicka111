@@ -247,7 +247,8 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
     analytics.trackFieldBlur(fieldName)
   }
 
-  const handleFieldError = (fieldName: string, error: string) => {
+  const handleFieldError = (fieldName: string, error?: string) => {
+    if (!error) return
     analytics.trackFieldError(fieldName, error)
   }
 
