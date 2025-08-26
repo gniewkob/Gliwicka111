@@ -3,7 +3,7 @@ import { requireAdminAuth } from '@/lib/admin-auth'
 
 const securityHeaders: Record<string, string> = {
   'Content-Security-Policy':
-    "default-src 'self'; img-src 'self' data: https://stats0.mydevil.net; script-src 'self' 'unsafe-inline' https://stats0.mydevil.net; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://stats0.mydevil.net;",
+    "default-src 'self'; img-src 'self' data: https://stats0.mydevil.net; script-src 'self' https://stats0.mydevil.net; style-src 'self'; font-src 'self'; connect-src 'self' https://stats0.mydevil.net;",
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
