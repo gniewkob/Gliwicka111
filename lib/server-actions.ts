@@ -1,6 +1,7 @@
 "use server";
 
 import type { z } from "zod";
+import type { Pool } from "pg";
 import {
   virtualOfficeFormSchema,
   coworkingFormSchema,
@@ -9,9 +10,9 @@ import {
   specialDealsFormSchema,
 } from "./validation-schemas";
 import { getPool } from "./database/connection-pool";
-async function getDb() {
+async function getDb(): Promise<Pool> {
   try {
-    return await getPool();
+    return (await getPool()) as Pool;
   } catch (error) {
     console.error("Database connection error", error);
     throw error;
@@ -106,9 +107,9 @@ async function handleFormSubmission<T>(
 
     const rateLimitCount = Number(process.env.RATE_LIMIT_COUNT ?? "100");
     const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000");
-    let db;
+    let db: Pool;
     try {
-      db = await getDb();
+      db = (await getDb()) as Pool;
     } catch {
       return {
         success: false,
@@ -575,7 +576,7 @@ function getEmailSubject(formType: string, language: "pl" | "en"): string {
  */
 export async function getSubmissions(page = 1, limit = 10) {
   const offset = (page - 1) * limit;
-  const db = await getDb();
+  const db = (await getDb()) as Pool;
   const result = await db.query(
     `SELECT id, form_type as "formType", data, status, created_at as "submittedAt" FROM form_submissions ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
     [limit, offset],
@@ -606,7 +607,7 @@ export async function updateSubmissionStatus(
   id: string,
   status: "pending" | "contacted" | "completed" | "cancelled",
 ) {
-  const db = await getDb();
+  const db = (await getDb()) as Pool;
   const result = await db.query(
     `UPDATE form_submissions SET status=$1, updated_at=NOW() WHERE id=$2`,
     [status, id],
@@ -625,7 +626,7 @@ export async function updateSubmissionStatus(
  * @returns {Promise<{ success: boolean; message?: string }>} Operation result.
  */
 export async function deleteSubmission(id: string) {
-  const db = await getDb();
+  const db = (await getDb()) as Pool;
   const result = await db.query(`DELETE FROM form_submissions WHERE id=$1`, [
     id,
   ]);

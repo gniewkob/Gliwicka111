@@ -3,6 +3,7 @@ import { z } from "zod"
 import { requireAuth } from "@/lib/analytics-auth"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { type AnalyticsEventRow } from "@/lib/analytics-types"
+import type { Pool } from "pg"
 
 // Analytics event schema
 const analyticsEventSchema = z.object({
@@ -67,9 +68,9 @@ export async function POST(request: NextRequest) {
   if (unauthorized) return unauthorized
   try {
     const { getPool } = await import("@/lib/database/connection-pool")
-    let db
+    let db: Pool
     try {
-      db = await getPool()
+      db = (await getPool()) as Pool
       await db.query("SELECT 1")
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
@@ -131,9 +132,9 @@ export async function GET(request: NextRequest) {
   if (unauthorized) return unauthorized
   try {
     const { getPool } = await import("@/lib/database/connection-pool")
-    let db
+    let db: Pool
     try {
-      db = await getPool()
+      db = (await getPool()) as Pool
       await db.query("SELECT 1")
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
@@ -165,9 +166,9 @@ export async function GET(request: NextRequest) {
     query += ` ORDER BY timestamp DESC LIMIT $${params.length + 1}`
     params.push(limit)
 
-    const { rows } = await db.query(query, params)
+    const { rows } = await db.query<AnalyticsEventRow>(query, params)
 
-    const sanitizedEvents = rows.map((event: AnalyticsEventRow) => ({
+    const sanitizedEvents = rows.map((event) => ({
       formType: event.formType,
       eventType: event.eventType,
       fieldName: event.fieldName,

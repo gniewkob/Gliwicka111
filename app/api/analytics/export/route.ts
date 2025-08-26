@@ -1,15 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { requireAuth } from "@/lib/analytics-auth"
 import { type AnalyticsEventRow } from "@/lib/analytics-types"
+import type { Pool } from "pg"
 
 export async function GET(request: NextRequest) {
   const unauthorized = requireAuth(request)
   if (unauthorized) return unauthorized
   try {
     const { getPool } = await import("@/lib/database/connection-pool")
-    let db
+    let db: Pool
     try {
-      db = await getPool()
+      db = (await getPool()) as Pool
       await db.query("SELECT 1")
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
@@ -36,9 +37,9 @@ export async function GET(request: NextRequest) {
       params.push(formType)
     }
 
-    const { rows } = await db.query(query, params)
+    const { rows } = await db.query<AnalyticsEventRow>(query, params)
 
-    const sanitizedEvents = rows.map((event: AnalyticsEventRow) => ({
+    const sanitizedEvents = rows.map((event) => ({
       formType: event.formType,
       eventType: event.eventType,
       fieldName: event.fieldName,

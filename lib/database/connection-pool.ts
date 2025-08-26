@@ -1,12 +1,8 @@
 import { Pool } from "pg";
 
-type Queryable = {
-  query: (...args: any[]) => Promise<any>;
-};
+let pool: Pool | null = null;
 
-let pool: (Pool | Queryable) | null = null;
-
-async function createPool(): Promise<Pool | Queryable> {
+async function createPool(): Promise<Pool> {
   const {
     DB_HOST,
     DB_PORT,
@@ -20,7 +16,7 @@ async function createPool(): Promise<Pool | Queryable> {
   if (MOCK_DB === "true" || (!DB_HOST && !DATABASE_URL)) {
     return {
       query: async () => ({ rows: [], rowCount: 0 }),
-    };
+    } as unknown as Pool;
   }
 
   const instance = DATABASE_URL
@@ -53,7 +49,7 @@ async function createPool(): Promise<Pool | Queryable> {
   return instance;
 }
 
-export async function getPool(): Promise<Pool | Queryable> {
+export async function getPool(): Promise<Pool> {
   if (!pool) {
     try {
       pool = await createPool();

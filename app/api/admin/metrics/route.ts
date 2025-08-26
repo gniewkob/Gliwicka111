@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireAdminAuth } from "@/lib/admin-auth";
+import type { Pool } from "pg";
 
 const METRICS_WINDOW_HOURS = Number(process.env.METRICS_WINDOW_HOURS || "24");
 
@@ -32,10 +33,10 @@ export async function GET(request: NextRequest) {
   const unauthorized = requireAdminAuth(request);
   if (unauthorized) return unauthorized;
 
-  let db;
+  let db: Pool;
   try {
     const { getPool } = await import("@/lib/database/connection-pool");
-    db = await getPool();
+    db = (await getPool()) as Pool;
   } catch {
     return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
   }
