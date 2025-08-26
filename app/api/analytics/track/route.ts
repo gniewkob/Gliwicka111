@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { requireAuth } from "@/lib/analytics-auth"
 import { checkRateLimit } from "@/lib/rate-limit"
+import { type AnalyticsEventRow } from "@/lib/analytics-types"
 
 // Analytics event schema
 const analyticsEventSchema = z.object({
@@ -166,7 +167,7 @@ export async function GET(request: NextRequest) {
 
     const { rows } = await db.query(query, params)
 
-    const sanitizedEvents = rows.map((event) => ({
+    const sanitizedEvents = rows.map((event: AnalyticsEventRow) => ({
       formType: event.formType,
       eventType: event.eventType,
       fieldName: event.fieldName,
