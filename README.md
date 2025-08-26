@@ -45,6 +45,8 @@ Migrations are orchestrated by `scripts/migrate.ts` which executes all SQL files
 ### Admin Dashboard
 `ADMIN_USER`, `ADMIN_PASS`, `NEXT_PUBLIC_ADMIN_USER`, `NEXT_PUBLIC_ADMIN_PASS`, `METRICS_WINDOW_HOURS`
 
+At least one of `ADMIN_AUTH_TOKEN` or the `ADMIN_USER`/`ADMIN_PASS` pair must be set.
+
 ### Misc
 `CI`, `NODE_ENV`
 
@@ -55,8 +57,8 @@ Migrations are orchestrated by `scripts/migrate.ts` which executes all SQL files
 
 ## Admin Dashboard & Metrics
 
-- Navigate to `/admin/dashboard` to view submission and rate-limit metrics.  
-- Supply credentials via `ADMIN_USER` and `ADMIN_PASS` (or `NEXT_PUBLIC_ADMIN_USER`/`NEXT_PUBLIC_ADMIN_PASS` for prefilled prompts) to satisfy the HTTP Basic Auth check.
+- Navigate to `/admin/dashboard` to view submission and rate-limit metrics.
+- Access requires either a bearer token (`ADMIN_AUTH_TOKEN`) or HTTP Basic credentials (`ADMIN_USER`/`ADMIN_PASS`; `NEXT_PUBLIC_ADMIN_USER`/`NEXT_PUBLIC_ADMIN_PASS` prefill the prompt).
 - Metrics are served from `/api/admin/metrics` and include submission processing times, email retry stats, and rate‑limit counts.
 - Health checks are available at `/api/health` for infrastructure monitoring.
 
