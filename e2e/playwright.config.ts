@@ -13,6 +13,12 @@ export default defineConfig({
     video: 'off',
     screenshot: 'only-on-failure',
   },
+  webServer: {
+    command: 'npm run start',
+    url: process.env.BASE_URL || 'http://localhost:3000',
+    timeout: 60000,
+    reuseExistingServer: !process.env.CI,
+  },
   projects: [
     { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile-chromium',  use: { ...devices['iPhone 12'] } },
