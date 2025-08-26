@@ -24,7 +24,10 @@ import { ConsentBanner } from "@/components/analytics"
 import { Globe, MapPin, Users, Calendar, Megaphone, Gift, BarChart3, Shield } from "lucide-react"
 
 const AnalyticsDashboard = dynamic(
-  () => import("@/components/analytics/analytics-dashboard"),
+  () =>
+    import("@/components/analytics/analytics-dashboard").then(
+      (m) => m.default
+    ),
   { ssr: false }
 )
 
