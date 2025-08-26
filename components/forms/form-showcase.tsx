@@ -26,7 +26,7 @@ import { Globe, MapPin, Users, Calendar, Megaphone, Gift, BarChart3, Shield } fr
 const AnalyticsDashboard = dynamic(
   () =>
     import("@/components/analytics/analytics-dashboard").then(
-      (m) => m.default
+      (m) => m.AnalyticsDashboard
     ),
   { ssr: false }
 )

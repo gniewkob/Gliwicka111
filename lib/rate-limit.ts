@@ -5,7 +5,7 @@ export async function checkRateLimit(
   windowMs = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000"),
 ): Promise<boolean> {
   const now = Date.now()
-  const { rows } = await db.query<{ count: number; reset_time: number }>(
+  const { rows } = await db.query(
     "SELECT count, reset_time FROM rate_limits WHERE identifier = $1",
     [identifier],
   )

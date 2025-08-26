@@ -8,18 +8,20 @@ import path from "node:path"
 let client: Client
 
 // Mock environment variables for integration tests
-process.env["NODE_ENV"] = "test"
-process.env.DB_HOST = "localhost"
-process.env.DB_PORT = "5432"
-process.env.DB_NAME = "test_db"
-process.env.DB_USER = "test_user"
-process.env.DB_PASSWORD = "test_password"
-process.env.SMTP_HOST = "smtp.example.com"
-process.env.SMTP_PORT = "587"
-process.env.SMTP_USER = "test@example.com"
-process.env.SMTP_PASS = "test_password"
-process.env.ADMIN_EMAIL = "admin@example.com"
-process.env.IP_SALT = "test_salt"
+Object.assign(process.env, {
+  NODE_ENV: "test",
+  DB_HOST: "localhost",
+  DB_PORT: "5432",
+  DB_NAME: "test_db",
+  DB_USER: "test_user",
+  DB_PASSWORD: "test_password",
+  SMTP_HOST: "smtp.example.com",
+  SMTP_PORT: "587",
+  SMTP_USER: "test@example.com",
+  SMTP_PASS: "test_password",
+  ADMIN_EMAIL: "admin@example.com",
+  IP_SALT: "test_salt",
+})
 
 // Mock database connection
 vi.mock("@/lib/database/connection-pool", () => {
