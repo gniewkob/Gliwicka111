@@ -1,8 +1,9 @@
 import { getPool } from "@/lib/database/connection-pool";
+import type { Pool } from "pg";
 
-async function getDb() {
+async function getDb(): Promise<Pool> {
   try {
-    return await getPool();
+    return (await getPool()) as Pool;
   } catch (error) {
     console.error("Database connection error", error);
     throw error;
@@ -10,7 +11,7 @@ async function getDb() {
 }
 
 export async function getSubmissionMetrics() {
-  const db = await getDb();
+  const db = (await getDb()) as Pool;
   const result = await db.query<{
     avg_processing_time_ms: number | null;
     avg_email_latency_ms: number | null;
@@ -26,7 +27,7 @@ export async function getSubmissionMetrics() {
 }
 
 export async function getDuplicateAttemptCount() {
-  const db = await getDb();
+  const db = (await getDb()) as Pool;
   const result = await db.query<{ count: string }>(
     `SELECT COUNT(*)::text AS count FROM duplicate_attempts`,
   );

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { requireAuth } from "@/lib/analytics-auth"
+import type { Pool } from "pg"
 
 interface MetricsSummary {
   totalViews: number
@@ -40,9 +41,9 @@ export async function GET(request: NextRequest) {
   if (unauthorized) return unauthorized
   try {
     const { getPool } = await import("@/lib/database/connection-pool")
-    let db
+    let db: Pool
     try {
-      db = await getPool()
+      db = (await getPool()) as Pool
       await db.query("SELECT 1")
     } catch {
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
@@ -72,7 +73,11 @@ export async function GET(request: NextRequest) {
       FROM analytics_events
       WHERE timestamp >= $1 ${filter}
     `
-    const overallRes = await db.query(overallQuery, params)
+    const overallRes = await db.query<{
+      views: string
+      starts: string
+      completions: string
+    }>(overallQuery, params)
     const totalViews = Number(overallRes.rows[0]?.views ?? 0)
     const totalStarts = Number(overallRes.rows[0]?.starts ?? 0)
     const totalCompletions = Number(overallRes.rows[0]?.completions ?? 0)
@@ -84,7 +89,9 @@ export async function GET(request: NextRequest) {
       WHERE s.event_type = 'start' AND c.event_type = 'submission_success'
         AND s.timestamp >= $1 AND c.timestamp >= $1 ${filter}
     `
-    const avgTimeRes = await db.query(avgTimeQuery, params)
+    const avgTimeRes = await db.query<{
+      avg_completion_time: string | null
+    }>(avgTimeQuery, params)
     const avgCompletionTime = Number(avgTimeRes.rows[0]?.avg_completion_time ?? 0)
 
     const formStatsQuery = `
@@ -97,7 +104,12 @@ export async function GET(request: NextRequest) {
       WHERE timestamp >= $1 ${filter}
       GROUP BY form_type
     `
-    const formStatsRes = await db.query(formStatsQuery, params)
+    const formStatsRes = await db.query<{
+      form_type: string
+      views: string
+      starts: string
+      completions: string
+    }>(formStatsQuery, params)
 
     const formTimeQuery = `
       SELECT
@@ -109,13 +121,16 @@ export async function GET(request: NextRequest) {
         AND s.timestamp >= $1 AND c.timestamp >= $1 ${filter}
       GROUP BY s.form_type
     `
-    const formTimeRes = await db.query(formTimeQuery, params)
+    const formTimeRes = await db.query<{
+      form_type: string
+      avg_completion_time: string | null
+    }>(formTimeQuery, params)
     const formTimeMap = Object.fromEntries(
-      formTimeRes.rows.map((r: any) => [r.form_type, Number(r.avg_completion_time ?? 0)]),
+      formTimeRes.rows.map((r) => [r.form_type, Number(r.avg_completion_time ?? 0)]),
     )
 
     const formBreakdown: Record<string, any> = {}
-    formStatsRes.rows.forEach((r: any) => {
+    formStatsRes.rows.forEach((r) => {
       const starts = Number(r.starts ?? 0)
       const completions = Number(r.completions ?? 0)
       const conversionRate = starts > 0 ? (completions / starts) * 100 : 0
@@ -136,9 +151,13 @@ export async function GET(request: NextRequest) {
       WHERE timestamp >= $1 AND field_name IS NOT NULL AND event_type IN ('field_focus', 'field_error') ${filter}
       GROUP BY field_name
     `
-    const fieldRes = await db.query(fieldQuery, params)
+    const fieldRes = await db.query<{
+      field_name: string
+      focus_count: string
+      error_count: string
+    }>(fieldQuery, params)
     const fieldAnalytics: Record<string, any> = {}
-    fieldRes.rows.forEach((r: any) => {
+    fieldRes.rows.forEach((r) => {
       const focusCount = Number(r.focus_count ?? 0)
       const errorCount = Number(r.error_count ?? 0)
       fieldAnalytics[r.field_name] = {
@@ -160,8 +179,13 @@ export async function GET(request: NextRequest) {
       GROUP BY date
       ORDER BY date
     `
-    const timeRes = await db.query(timeSeriesQuery, params)
-    const timeSeriesData = timeRes.rows.map((r: any) => ({
+    const timeRes = await db.query<{
+      date: string
+      views: string
+      starts: string
+      completions: string
+    }>(timeSeriesQuery, params)
+    const timeSeriesData = timeRes.rows.map((r) => ({
       date: r.date,
       views: Number(r.views ?? 0),
       starts: Number(r.starts ?? 0),

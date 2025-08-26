@@ -1,7 +1,7 @@
 import { vi, beforeAll, afterAll, beforeEach, afterEach } from "vitest"
 import "@testing-library/jest-dom"
 import { cleanup } from "@testing-library/react"
-import { Client } from "pg"
+import { Client, type Pool } from "pg"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 
@@ -27,7 +27,7 @@ vi.mock("@/lib/database/connection-pool", () => {
     query: vi.fn(),
     transaction: vi.fn(),
   }
-  const getPool = vi.fn().mockResolvedValue(db)
+  const getPool = vi.fn().mockResolvedValue(db as unknown as Pool)
   return { getPool, default: getPool }
 })
 

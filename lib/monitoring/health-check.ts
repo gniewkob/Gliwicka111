@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import type { Pool } from "pg"
 
 interface HealthCheckResult {
   service: string
@@ -78,7 +79,7 @@ export class HealthCheckService {
 
     try {
       const { getPool } = await import("@/lib/database/connection-pool")
-      const db = await getPool()
+      const db = (await getPool()) as Pool
       await db.query("SELECT 1")
 
       return {
