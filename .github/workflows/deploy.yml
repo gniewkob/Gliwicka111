@@ -39,7 +39,7 @@ jobs:
           remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
 
       - name: Verify deploy URL secret
-        if: ${{ !secrets.DEPLOY_URL }}
+        if: ${{ secrets.DEPLOY_URL }}
         run: |
           echo "Missing DEPLOY_URL secret"
           exit 1
