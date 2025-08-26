@@ -133,30 +133,24 @@ async function handleFormSubmission<T>(
     delete (data as any).sessionId;
 
     // Handle checkboxes and arrays
-    const processedData = {
-      ...data,
-      gdprConsent: formData.get("gdprConsent") === "on",
-      marketingConsent: formData.get("marketingConsent") === "on",
-      additionalServices: formData.getAll("additionalServices"),
-      equipment: formData.getAll("equipment"),
-      campaignGoals: formData.getAll("campaignGoals"),
-      interestedServices: formData.getAll("interestedServices"),
-    };
+      const processedData: Record<string, any> = {
+        ...data,
+        gdprConsent: formData.get("gdprConsent") === "on",
+        marketingConsent: formData.get("marketingConsent") === "on",
+        additionalServices: formData.getAll("additionalServices"),
+        equipment: formData.getAll("equipment"),
+        campaignGoals: formData.getAll("campaignGoals"),
+        interestedServices: formData.getAll("interestedServices"),
+      };
 
-    const numericFields: Array<keyof typeof processedData> = [
-      "teamSize",
-      "attendees",
-      "budget",
-    ];
+      const numericFields = ["teamSize", "attendees", "budget"];
 
-    numericFields.forEach((field) => {
-      if (
-        processedData[field] !== undefined &&
-        !Number.isNaN(Number(processedData[field]))
-      ) {
-        processedData[field] = Number(processedData[field]);
-      }
-    });
+      numericFields.forEach((field) => {
+        const value = processedData[field];
+        if (value !== undefined && !Number.isNaN(Number(value))) {
+          processedData[field] = Number(value);
+        }
+      });
 
     // Validate data
     const validationResult = schema.safeParse(processedData);
@@ -626,7 +620,7 @@ export async function updateSubmissionStatus(
     `UPDATE form_submissions SET status=$1, updated_at=NOW() WHERE id=$2`,
     [status, id],
   );
-  if (result.rowCount > 0) {
+    if ((result.rowCount ?? 0) > 0) {
     return { success: true };
   }
   const language = await getCurrentLanguage();
@@ -644,7 +638,7 @@ export async function deleteSubmission(id: string) {
   const result = await db.query(`DELETE FROM form_submissions WHERE id=$1`, [
     id,
   ]);
-  if (result.rowCount > 0) {
+    if ((result.rowCount ?? 0) > 0) {
     return { success: true };
   }
   const language = await getCurrentLanguage();

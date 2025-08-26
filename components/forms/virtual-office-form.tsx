@@ -371,7 +371,6 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                     return (
                       <Input
                         id="email"
-                        name="email"
                         type="email"
                         {...emailRegister}
                         onBlur={(e) => {

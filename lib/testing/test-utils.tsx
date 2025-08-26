@@ -2,7 +2,7 @@ import type React from "react"
 import type { ReactElement } from "react"
 import { render, type RenderOptions } from "@testing-library/react"
 import { ThemeProvider } from "@/components/theme-provider"
-import { vi, expect } from "vitest"
+import { vi, expect, type Mock } from "vitest"
 
 // Mock Next.js router
 const mockRouter = {
@@ -88,9 +88,9 @@ export const mockAnalyticsClient = {
 }
 
 // Mock analytics client
-vi.mock("@/lib/analytics-client", () => ({
-  analyticsClient: mockAnalyticsClient,
-}))
+  vi.mock("@/lib/analytics-client", () => ({
+    analyticsClient: mockAnalyticsClient,
+  }))
 
 // Form test helpers
 export const fillFormField = async (
@@ -131,34 +131,34 @@ export const checkFormCheckbox = async (
 
 // API mocking utilities
 export const mockSuccessfulSubmission = () => {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          success: true,
-          message: "Form submitted successfully",
-        }),
-    }),
-  ) as vi.Mock
-}
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            success: true,
+            message: "Form submitted successfully",
+          }),
+      }),
+    ) as Mock
+  }
 
 export const mockFailedSubmission = (errorMessage = "Submission failed") => {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      ok: false,
-      json: () =>
-        Promise.resolve({
-          success: false,
-          message: errorMessage,
-        }),
-    }),
-  ) as vi.Mock
-}
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: false,
+        json: () =>
+          Promise.resolve({
+            success: false,
+            message: errorMessage,
+          }),
+      }),
+    ) as Mock
+  }
 
 export const mockNetworkError = () => {
-  global.fetch = vi.fn(() => Promise.reject(new Error("Network error"))) as vi.Mock
-}
+    global.fetch = vi.fn(() => Promise.reject(new Error("Network error"))) as Mock
+  }
 
 // Performance testing utilities
 export const measureRenderTime = async (renderFn: () => void) => {
