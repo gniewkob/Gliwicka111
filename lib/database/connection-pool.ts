@@ -34,7 +34,7 @@ async function createPool(): Promise<Pool> {
         max: 20,
       });
 
-  instance.on("error", (err) => {
+  instance.on("error", (err: Error) => {
     console.error("Database connection error", err);
     throw err;
   });
