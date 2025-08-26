@@ -8,7 +8,7 @@ import path from "node:path"
 let client: Client
 
 // Mock environment variables for integration tests
-process.env.NODE_ENV = "test"
+process.env["NODE_ENV"] = "test"
 process.env.DB_HOST = "localhost"
 process.env.DB_PORT = "5432"
 process.env.DB_NAME = "test_db"
