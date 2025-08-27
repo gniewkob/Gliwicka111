@@ -295,7 +295,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       </div>
 
       {/* Form */}
-      <Card>
+      <Card data-testid="contact-form-virtual-office">
         <CardHeader>
           <CardTitle className="flex items-center">
             <FileText className="w-5 h-5 mr-2" />

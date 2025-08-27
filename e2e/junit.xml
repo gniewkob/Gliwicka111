@@ -1,0 +1,314 @@
+<testsuites id="" name="" tests="16" failures="8" skipped="0" errors="0" time="36.997226000000005">
+<testsuite name="forms.spec.ts" timestamp="2025-08-27T00:42:16.478Z" hostname="desktop-chromium" tests="2" failures="2" skipped="0" time="60.217" errors="0">
+<testcase name="Virtual office form submits (UI)" classname="forms.spec.ts" time="30.111">
+<failure message="forms.spec.ts:4:5 Virtual office form submits (UI)" type="FAILURE">
+<![CDATA[  [desktop-chromium] › forms.spec.ts:4:5 › Virtual office form submits (UI) ────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByText('Działalność gospodarcza')
+
+
+      16 |   // Select business type using the data-testid
+      17 |   await page.getByTestId('businessType-select').click();
+    > 18 |   await page.getByText('Działalność gospodarcza').click();
+         |                                                   ^
+      19 |   // Select package using the data-testid
+      20 |   await page.getByTestId('package-select').click();
+      21 |   await page.getByText('Pakiet Podstawowy (99 zł/miesiąc)').click();
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:18:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/forms-Virtual-office-form-submits-UI--desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/forms-Virtual-office-form-submits-UI--desktop-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--desktop-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--desktop-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Virtual office email validation" classname="forms.spec.ts" time="30.106">
+<failure message="forms.spec.ts:32:5 Virtual office email validation" type="FAILURE">
+<![CDATA[  [desktop-chromium] › forms.spec.ts:32:5 › Virtual office email validation ────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByText('Działalność gospodarcza')
+
+
+      44 |   // Select required fields
+      45 |   await page.getByTestId('businessType-select').click();
+    > 46 |   await page.getByText('Działalność gospodarcza').click();
+         |                                                   ^
+      47 |   await page.getByTestId('package-select').click();
+      48 |   await page.getByText('Pakiet Podstawowy (99 zł/miesiąc)').click();
+      49 |   await page.fill('#startDate', '2024-12-01');
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:46:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/forms-Virtual-office-email-validation-desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/forms-Virtual-office-email-validation-desktop-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-desktop-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-desktop-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="simple.spec.ts" timestamp="2025-08-27T00:42:16.478Z" hostname="desktop-chromium" tests="4" failures="1" skipped="0" time="12.044" errors="0">
+<testcase name="Homepage loads correctly" classname="simple.spec.ts" time="1.638">
+</testcase>
+<testcase name="Forms page loads and shows tabs" classname="simple.spec.ts" time="1.91">
+</testcase>
+<testcase name="Admin page requires authentication" classname="simple.spec.ts" time="0.615">
+</testcase>
+<testcase name="Form validation works" classname="simple.spec.ts" time="7.881">
+<failure message="simple.spec.ts:41:5 Form validation works" type="FAILURE">
+<![CDATA[  [desktop-chromium] › simple.spec.ts:41:5 › Form validation works ─────────────────────────────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByTestId('virtual-office-email-error')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('virtual-office-email-error')
+
+
+      54 |   
+      55 |   // Should see validation error for email
+    > 56 |   await expect(page.getByTestId('virtual-office-email-error')).toBeVisible({ timeout: 5000 });
+         |                                                                ^
+      57 | });
+      58 |
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/simple.spec.ts:56:64
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/simple-Form-validation-works-desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/simple-Form-validation-works-desktop-chromium/test-failed-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="smoke.spec.ts" timestamp="2025-08-27T00:42:16.478Z" hostname="desktop-chromium" tests="2" failures="1" skipped="0" time="8.793" errors="0">
+<testcase name="Home renders" classname="smoke.spec.ts" time="1.516">
+</testcase>
+<testcase name="Admin shell behind auth" classname="smoke.spec.ts" time="7.277">
+<failure message="smoke.spec.ts:11:5 Admin shell behind auth" type="FAILURE">
+<![CDATA[  [desktop-chromium] › smoke.spec.ts:11:5 › Admin shell behind auth ────────────────────────────────
+
+    Error: Timed out 7000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByRole('heading', { name: 'Admin Metrics' })
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 7000ms
+      - waiting for getByRole('heading', { name: 'Admin Metrics' })
+
+
+      15 |   // The page should load directly if auth is configured in env
+      16 |   // Look for admin metrics heading or table
+    > 17 |   await expect(page.getByRole('heading', { name: 'Admin Metrics' })).toBeVisible();
+         |                                                                      ^
+      18 | });
+      19 |
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/smoke.spec.ts:17:70
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/smoke-Admin-shell-behind-auth-desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/smoke-Admin-shell-behind-auth-desktop-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/smoke-Admin-shell-behind-auth-desktop-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/smoke-Admin-shell-behind-auth-desktop-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="forms.spec.ts" timestamp="2025-08-27T00:42:16.478Z" hostname="mobile-chromium" tests="2" failures="2" skipped="0" time="60.302" errors="0">
+<testcase name="Virtual office form submits (UI)" classname="forms.spec.ts" time="30.165">
+<failure message="forms.spec.ts:4:5 Virtual office form submits (UI)" type="FAILURE">
+<![CDATA[  [mobile-chromium] › forms.spec.ts:4:5 › Virtual office form submits (UI) ─────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByText('Działalność gospodarcza')
+
+
+      16 |   // Select business type using the data-testid
+      17 |   await page.getByTestId('businessType-select').click();
+    > 18 |   await page.getByText('Działalność gospodarcza').click();
+         |                                                   ^
+      19 |   // Select package using the data-testid
+      20 |   await page.getByTestId('package-select').click();
+      21 |   await page.getByText('Pakiet Podstawowy (99 zł/miesiąc)').click();
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:18:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Virtual office email validation" classname="forms.spec.ts" time="30.137">
+<failure message="forms.spec.ts:32:5 Virtual office email validation" type="FAILURE">
+<![CDATA[  [mobile-chromium] › forms.spec.ts:32:5 › Virtual office email validation ─────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByText('Działalność gospodarcza')
+
+
+      44 |   // Select required fields
+      45 |   await page.getByTestId('businessType-select').click();
+    > 46 |   await page.getByText('Działalność gospodarcza').click();
+         |                                                   ^
+      47 |   await page.getByTestId('package-select').click();
+      48 |   await page.getByText('Pakiet Podstawowy (99 zł/miesiąc)').click();
+      49 |   await page.fill('#startDate', '2024-12-01');
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:46:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/forms-Virtual-office-email-validation-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/forms-Virtual-office-email-validation-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="simple.spec.ts" timestamp="2025-08-27T00:42:16.478Z" hostname="mobile-chromium" tests="4" failures="1" skipped="0" time="9.823" errors="0">
+<testcase name="Homepage loads correctly" classname="simple.spec.ts" time="1.488">
+</testcase>
+<testcase name="Forms page loads and shows tabs" classname="simple.spec.ts" time="1.346">
+</testcase>
+<testcase name="Admin page requires authentication" classname="simple.spec.ts" time="0.531">
+</testcase>
+<testcase name="Form validation works" classname="simple.spec.ts" time="6.458">
+<failure message="simple.spec.ts:41:5 Form validation works" type="FAILURE">
+<![CDATA[  [mobile-chromium] › simple.spec.ts:41:5 › Form validation works ──────────────────────────────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByTestId('virtual-office-email-error')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('virtual-office-email-error')
+
+
+      54 |   
+      55 |   // Should see validation error for email
+    > 56 |   await expect(page.getByTestId('virtual-office-email-error')).toBeVisible({ timeout: 5000 });
+         |                                                                ^
+      57 | });
+      58 |
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/simple.spec.ts:56:64
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/simple-Form-validation-works-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/simple-Form-validation-works-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/simple-Form-validation-works-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/simple-Form-validation-works-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="smoke.spec.ts" timestamp="2025-08-27T00:42:16.478Z" hostname="mobile-chromium" tests="2" failures="1" skipped="0" time="8.322" errors="0">
+<testcase name="Home renders" classname="smoke.spec.ts" time="0.973">
+</testcase>
+<testcase name="Admin shell behind auth" classname="smoke.spec.ts" time="7.349">
+<failure message="smoke.spec.ts:11:5 Admin shell behind auth" type="FAILURE">
+<![CDATA[  [mobile-chromium] › smoke.spec.ts:11:5 › Admin shell behind auth ─────────────────────────────────
+
+    Error: Timed out 7000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByRole('heading', { name: 'Admin Metrics' })
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 7000ms
+      - waiting for getByRole('heading', { name: 'Admin Metrics' })
+
+
+      15 |   // The page should load directly if auth is configured in env
+      16 |   // Look for admin metrics heading or table
+    > 17 |   await expect(page.getByRole('heading', { name: 'Admin Metrics' })).toBeVisible();
+         |                                                                      ^
+      18 | });
+      19 |
+        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/smoke.spec.ts:17:70
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/smoke-Admin-shell-behind-auth-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/smoke-Admin-shell-behind-auth-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/smoke-Admin-shell-behind-auth-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/smoke-Admin-shell-behind-auth-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

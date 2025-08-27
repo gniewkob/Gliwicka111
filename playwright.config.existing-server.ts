@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
+
 export default defineConfig({
-  testDir: './tests',
+  testDir: './e2e/tests',
   fullyParallel: true,
   retries: 0,
   workers: process.env.CI ? 2 : '50%',
@@ -8,24 +9,12 @@ export default defineConfig({
   expect: { timeout: 7_000 },
   reporter: [['list'], ['junit', { outputFile: 'junit.xml' }], ['html', { open: 'never' }]],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.BASE_URL || 'http://localhost:3001',
     trace: process.env.CI ? 'retain-on-failure' : 'off',
     video: 'off',
     screenshot: 'only-on-failure',
   },
-  webServer: {
-    command: 'npm run start',
-    url: process.env.BASE_URL || 'http://localhost:3000',
-    timeout: 60000,
-    reuseExistingServer: !process.env.CI,
-    env: {
-      MOCK_DB: 'true',
-      // Provide admin auth config so middleware doesn't crash during tests
-      ADMIN_AUTH_TOKEN: process.env.ADMIN_AUTH_TOKEN || 'test-admin-token',
-      // Provide a test salt for any hashing that may run during requests
-      IP_SALT: process.env.IP_SALT || 'test-ip-salt',
-    },
-  },
+  // No webServer config - we'll use an already running server
   projects: [
     { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile-chromium',  use: { ...devices['iPhone 12'] } },

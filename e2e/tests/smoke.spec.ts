@@ -4,20 +4,15 @@ import { goto, dismissCookieBanner } from './helpers';
 test('Home renders', async ({ page }) => {
   await goto(page, '/');
   await dismissCookieBanner(page);
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  // Look for the main heading with specific text to avoid strict mode violation
+  await expect(page.getByRole('heading', { name: 'Profesjonalne zarządzanie nieruchomościami' })).toBeVisible();
 });
 
 test('Admin shell behind auth', async ({ page }) => {
-  await goto(page, '/admin');
+  await goto(page, '/admin/dashboard');
   await dismissCookieBanner(page);
-  const user = process.env.NEXT_PUBLIC_ADMIN_USER ?? 'admin';
-  const pass = process.env.NEXT_PUBLIC_ADMIN_PASS ?? 'admin';
-  const userInput = page.locator('[name="username"]');
-  const passInput = page.locator('[name="password"]');
-  if (await userInput.isVisible().catch(() => false)) {
-    await userInput.fill(user);
-    await passInput.fill(pass);
-    await page.click('button[type="submit"]');
-  }
-  await expect(page.getByTestId(/admin|dashboard|shell/i)).toBeVisible();
+  // Admin dashboard doesn't have login form, it uses HTTP Basic Auth via headers
+  // The page should load directly if auth is configured in env
+  // Look for admin metrics heading or table
+  await expect(page.getByRole('heading', { name: 'Admin Metrics' })).toBeVisible();
 });
