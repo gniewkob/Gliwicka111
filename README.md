@@ -68,8 +68,9 @@ At least one of `ADMIN_AUTH_TOKEN` or the `ADMIN_USER`/`ADMIN_PASS` pair must be
 - **Unit & Integration Tests**: `npm test`, `npm run test:integration` (Vitest).
 - **End-to-End Tests**: `npm run test:e2e` (Playwright).
 - **Linting**: `npm run lint` (Next.js ESLint).
-- **Continuous Integration**: GitHub Actions workflow `ci.yml` runs lint, tests, and build on every push/PR.  
+- **Continuous Integration**: GitHub Actions workflow `ci.yml` runs lint, tests, and build on every push/PR.
 - **End-to-End & Deployment Pipelines**: `e2e.yml` executes Playwright tests, while `deploy.yml` ships builds to MyDevil (FreeBSD) after successful E2E runs.
+- For detailed linting, testing, and security audit steps, see [Quality checks](./docs/quality.md).
 
 ## Deployment
 
