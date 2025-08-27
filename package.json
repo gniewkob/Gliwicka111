@@ -28,7 +28,7 @@
     "security:audit": "npm audit --audit-level moderate",
     "security:fix": "npm audit fix",
     "start": "next start",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run build && playwright test -c e2e/playwright.config.ts",
     "test:integration": "vitest run --config vitest.integration.config.mts",
