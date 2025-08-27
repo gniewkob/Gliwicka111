@@ -1,5 +1,7 @@
 # Page snapshot
 
 ```yaml
-- text: "{\"error\":\"Unauthorized\"}"
+- heading "404" [level=1]
+- heading "This page could not be found." [level=2]
+- alert
 ```
