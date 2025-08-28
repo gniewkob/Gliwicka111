@@ -1,4 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
+
+// Use port 3001 for tests to avoid conflicts with development server
+const TEST_PORT = process.env.TEST_PORT || 3001;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${TEST_PORT}`;
+
+console.log(`Using port ${TEST_PORT} for tests`);
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -8,18 +15,20 @@ export default defineConfig({
   expect: { timeout: 7_000 },
   reporter: [['list'], ['junit', { outputFile: 'junit.xml' }], ['html', { open: 'never' }]],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    baseURL: BASE_URL,
     trace: process.env.CI ? 'retain-on-failure' : 'off',
     video: 'off',
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'npm run start',
-    url: process.env.BASE_URL || 'http://localhost:3000',
+    command: `PORT=${TEST_PORT} npm run start`,
+    url: BASE_URL,
     timeout: 60000,
     reuseExistingServer: !process.env.CI,
     env: {
+      PORT: TEST_PORT.toString(),
       MOCK_DB: 'true',
+      NEXT_PUBLIC_E2E: 'true',
       // Provide admin auth config so middleware doesn't crash during tests
       ADMIN_AUTH_TOKEN: process.env.ADMIN_AUTH_TOKEN || 'test-admin-token',
       // Provide a test salt for any hashing that may run during requests

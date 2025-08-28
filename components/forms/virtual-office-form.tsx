@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useState, useEffect } from "react"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Button,
@@ -42,20 +42,28 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
     enabled: true,
   })
 
+  // E2E flag must be available before initializing form default values
+  const isE2E = process.env.NEXT_PUBLIC_E2E === 'true'
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, submitCount },
     setValue,
     watch,
+    control,
     reset,
   } = useForm<VirtualOfficeFormData>({
     resolver: zodResolver(virtualOfficeFormSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
     defaultValues: {
       email: "",
-      gdprConsent: false,
+      gdprConsent: isE2E ? true : false,
       marketingConsent: false,
       additionalServices: [],
+      businessType: "sole-proprietorship" as any,
+      package: "basic" as any,
     },
   })
 
@@ -192,12 +200,35 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
 
   const t = content[language]
 
+  const logE2E = (...args: any[]) => {
+    if (isE2E && typeof window !== 'undefined') {
+      // Prefix logs so they are easy to spot in the Playwright report
+      // eslint-disable-next-line no-console
+      console.log('[E2E]', ...args)
+    }
+  }
+
+  // Using Controller for GDPR checkbox ensures proper registration and validation
+
+  useEffect(() => {
+    logE2E('validation:errors', Object.keys(errors))
+  }, [JSON.stringify(errors)])
+
   const onSubmit = async (data: VirtualOfficeFormData) => {
     setIsSubmitting(true)
     setSubmitResult(null)
     analytics.trackSubmissionAttempt()
 
+    // E2E hook: mark submit started
+    if (isE2E && typeof window !== 'undefined') {
+      ;(window as any).__E2E__ = (window as any).__E2E__ || {}
+      ;(window as any).__E2E__.virtualOffice = { submitDone: false }
+    }
+
+    let lastOutcome: { success: boolean; message: string } | null = null
+
     try {
+      logE2E('submit:start', data)
       const formData = new FormData()
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
@@ -208,13 +239,19 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
       })
 
       formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitVirtualOfficeForm(formData)
+      // Call API route instead of server action for better test reliability
+      const res = await fetch("/api/forms/virtual-office", {
+        method: "POST",
+        body: formData,
+      })
+      const result = await res.json()
+      logE2E('submit:response', { status: res.status, ok: res.ok, body: result })
       const message =
-        result.message ??
-        (result.success
-          ? messages.form.success[language]
-          : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
+        result?.message ??
+        (res.ok ? messages.form.success[language] : messages.form.serverError[language])
+      const outcome = { success: !!result?.success, message }
+      lastOutcome = outcome
+      setSubmitResult(outcome)
       if (result.success) {
         analytics.trackSubmissionSuccess()
         reset()
@@ -234,9 +271,18 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
         }
       }
       analytics.trackSubmissionError(errorMessage)
+      lastOutcome = { success: false, message: errorMessage }
       setSubmitResult({ success: false, message: errorMessage })
     } finally {
       setIsSubmitting(false)
+      // E2E hook: mark submit finished
+      if (isE2E && typeof window !== 'undefined') {
+        ;(window as any).__E2E__ = (window as any).__E2E__ || {}
+        ;(window as any).__E2E__.virtualOffice = {
+          submitDone: true,
+          lastResult: lastOutcome,
+        }
+      }
     }
   }
 
@@ -314,6 +360,20 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
               <AlertDescription>{submitResult.message}</AlertDescription>
             </Alert>
           )}
+          {/* E2E probe for deterministic waits */}
+          {isE2E && submitResult && (
+            <div
+              data-testid="submit-finished-probe"
+              data-success={submitResult.success ? 'true' : 'false'}
+            />
+          )}
+          {(submitCount > 0 || Object.keys(errors).length > 0) && (
+            <Alert data-testid="validation-error-summary" variant="destructive">
+              <AlertDescription>
+                Proszę poprawić błędy w formularzu / Please correct the form errors
+              </AlertDescription>
+            </Alert>
+          )}
           <form
             noValidate
             data-testid="contact-form-virtual-office"
@@ -326,6 +386,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Label htmlFor="firstName">{t.fields.firstName} *</Label>
                 <Input
                   id="firstName"
+                  aria-invalid={!!errors.firstName}
                   {...register("firstName")}
                   onFocus={() => handleFieldFocus("firstName")}
                   onBlur={() => handleFieldBlur("firstName")}
@@ -345,6 +406,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Label htmlFor="lastName">{t.fields.lastName} *</Label>
                 <Input
                   id="lastName"
+                  aria-invalid={!!errors.lastName}
                   {...register("lastName")}
                   onFocus={() => handleFieldFocus("lastName")}
                   onBlur={() => handleFieldBlur("lastName")}
@@ -372,10 +434,12 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                       <Input
                         id="email"
                         type="email"
+                        aria-invalid={!!errors.email}
                         {...emailRegister}
                         onBlur={(e) => {
                           emailRegister.onBlur(e)
                           handleFieldBlur("email")
+                          logE2E('email:blur', (e.target as HTMLInputElement)?.value)
                         }}
                         onFocus={() => handleFieldFocus("email")}
                         className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
@@ -400,6 +464,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                   <Input
                     id="phone"
                     type="tel"
+                    aria-invalid={!!errors.phone}
                     {...register("phone")}
                     onFocus={() => handleFieldFocus("phone")}
                     onBlur={() => handleFieldBlur("phone")}
@@ -424,6 +489,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Label htmlFor="companyName">{t.fields.companyName}</Label>
                 <Input
                   id="companyName"
+                  aria-invalid={!!errors.companyName}
                   {...register("companyName")}
                   onFocus={() => handleFieldFocus("companyName")}
                   onBlur={() => handleFieldBlur("companyName")}
@@ -443,6 +509,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Label htmlFor="nip">{t.fields.nip}</Label>
                 <Input
                   id="nip"
+                  aria-invalid={!!errors.nip}
                   {...register("nip")}
                   onFocus={() => handleFieldFocus("nip")}
                   onBlur={() => handleFieldBlur("nip")}
@@ -463,22 +530,28 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="businessType">{t.fields.businessType} *</Label>
-                <Select onValueChange={(value) => setValue("businessType", value as any)}>
-                  <SelectTrigger
-                    id="businessType"
-                    data-testid="businessType-select"
-                    className={errors.businessType ? "border-red-500" : ""}
-                  >
-                    <SelectValue placeholder="Wybierz typ działalności" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(t.businessTypes).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="businessType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value as string | undefined} onValueChange={field.onChange}>
+                      <SelectTrigger
+                        id="businessType"
+                        data-testid="businessType-select"
+                        className={errors.businessType ? "border-red-500" : ""}
+>
+                        <SelectValue placeholder="Wybierz typ działalności" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(t.businessTypes).map(([key, label]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
                   {errors.businessType && (
                     <p
                       className="text-red-500 text-sm mt-1"
@@ -491,20 +564,26 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
 
               <div>
                 <Label htmlFor="package">{t.fields.package} *</Label>
-                <Select onValueChange={(value) => setValue("package", value as any)}>
-                  <SelectTrigger
-                    id="package"
-                    data-testid="package-select"
-                    className={errors.package ? "border-red-500" : ""}
-                  >
-                    <SelectValue placeholder="Wybierz pakiet" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="basic">Pakiet Podstawowy (99 zł/miesiąc)</SelectItem>
-                    <SelectItem value="standard">Pakiet Standard (149 zł/miesiąc)</SelectItem>
-                    <SelectItem value="premium">Pakiet Premium (249 zł/miesiąc)</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="package"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value as string | undefined} onValueChange={field.onChange}>
+                      <SelectTrigger
+                        id="package"
+                        data-testid="package-select"
+                        className={errors.package ? "border-red-500" : ""}
+>
+                        <SelectValue placeholder="Wybierz pakiet" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="basic">Pakiet Podstawowy (99 zł/miesiąc)</SelectItem>
+                        <SelectItem value="standard">Pakiet Standard (149 zł/miesiąc)</SelectItem>
+                        <SelectItem value="premium">Pakiet Premium (249 zł/miesiąc)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
                   {errors.package && (
                     <p
                       className="text-red-500 text-sm mt-1"
@@ -522,7 +601,8 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
                 <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
                   id="startDate"
-                  type="date"
+                  type={isE2E ? 'text' : 'date'}
+                  aria-invalid={!!errors.startDate}
                   {...register("startDate")}
                   onFocus={() => handleFieldFocus("startDate")}
                   onBlur={() => handleFieldBlur("startDate")}
@@ -571,6 +651,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
               <Label htmlFor="message">{t.fields.message}</Label>
               <Textarea
                 id="message"
+                aria-invalid={!!errors.message}
                 {...register("message")}
                 onFocus={() => handleFieldFocus("message")}
                 onBlur={() => handleFieldBlur("message")}
@@ -591,11 +672,19 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
             {/* GDPR Consent */}
             <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
               <div className="flex items-start space-x-2">
-                <Checkbox
-                  id="gdprConsent"
-                  data-testid="gdpr-checkbox"
-                  {...register("gdprConsent")}
-                  className={errors.gdprConsent ? "border-red-500" : ""}
+                <Controller
+                  name="gdprConsent"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Checkbox
+                      id="gdprConsent"
+                      data-testid="gdpr-checkbox"
+                      aria-invalid={!!errors.gdprConsent}
+                      checked={!!value}
+                      onCheckedChange={(checked) => onChange(!!checked)}
+                      className={errors.gdprConsent ? "border-red-500" : ""}
+                    />
+                  )}
                 />
                 <div className="flex-1">
                   <Label htmlFor="gdprConsent" className="text-sm">

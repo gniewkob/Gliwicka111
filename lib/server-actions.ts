@@ -135,8 +135,8 @@ async function handleFormSubmission<T>(
     // Handle checkboxes and arrays
       const processedData: Record<string, any> = {
         ...data,
-        gdprConsent: formData.get("gdprConsent") === "on",
-        marketingConsent: formData.get("marketingConsent") === "on",
+        gdprConsent: ["on", "true", "1"].includes(String(formData.get("gdprConsent"))),
+        marketingConsent: ["on", "true", "1"].includes(String(formData.get("marketingConsent"))),
         additionalServices: formData.getAll("additionalServices"),
         equipment: formData.getAll("equipment"),
         campaignGoals: formData.getAll("campaignGoals"),
