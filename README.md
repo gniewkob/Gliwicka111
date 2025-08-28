@@ -67,6 +67,9 @@ At least one of `ADMIN_AUTH_TOKEN` or the `ADMIN_USER`/`ADMIN_PASS` pair must be
 - **Playwright setup**: run `npx playwright install --with-deps` before executing Playwright tests.
 - **Unit & Integration Tests**: `npm test`, `npm run test:integration` (Vitest).
 - **End-to-End Tests**: `npm run test:e2e` (Playwright).
+  - E2E mode: build/run with `NEXT_PUBLIC_E2E=true` or append `?e2e=1` in dev.
+    - Auto-accepts consent banner, relaxes error boundaries on forms pages, and enables deterministic form UI hooks.
+    - Scripts: `npm run test:e2e`, `npm run dev:e2e`, `npm run test:e2e:existing`.
 - **Linting**: `npm run lint` (Next.js ESLint).
 - **Continuous Integration**: GitHub Actions workflow `ci.yml` runs lint, tests, and build on every push/PR.
 - **End-to-End & Deployment Pipelines**: `e2e.yml` executes Playwright tests, while `deploy.yml` ships builds to MyDevil (FreeBSD) after successful E2E runs.

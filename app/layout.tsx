@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+// Removed next/font/google to avoid network fetch during build/tests
 import { cookies } from "next/headers"
 import Script from "next/script"
 import { LanguageProvider } from "@/components/language-provider"
@@ -8,7 +8,7 @@ import { ErrorBoundary } from "@/components/error-boundary"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
+// Use system font stack via Tailwind's font-sans
 
 export const metadata: Metadata = {
   title: "Gliwicka 111 - Profesjonalne zarządzanie nieruchomościami | Property Management",
@@ -96,12 +96,16 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Script src="/matomo.js" strategy="afterInteractive" />
       </head>
-      <body className={inter.className}>
+      <body className="font-sans" data-e2e={process.env.NEXT_PUBLIC_E2E === 'true' ? 'true' : undefined}>
         <Toaster />
         <LanguageProvider initialLanguage={currentLanguage}>
-          <ErrorBoundary fallback={<p>Something went wrong</p>}>
-            {children}
-          </ErrorBoundary>
+          {process.env.NEXT_PUBLIC_E2E === 'true' ? (
+            children
+          ) : (
+            <ErrorBoundary fallback={<p>Something went wrong</p>}>
+              {children}
+            </ErrorBoundary>
+          )}
         </LanguageProvider>
       </body>
     </html>

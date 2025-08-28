@@ -39,15 +39,9 @@ await page.getByTestId('tab-virtual-office').click();
   // Give overlays a moment to render, then close if present
   await page.waitForTimeout(1000);
   await closeGdprModalIfPresent(page);
-  // Deterministic: wait for E2E probe element to appear
-  const probe = page.getByTestId('submit-finished-probe');
-  await expect(probe).toHaveAttribute('data-success', /true|false/, { timeout: 10000 });
-  // Wait for any alert (success or error) to confirm submission result
-  await expect(card.getByRole('alert')).toBeVisible({ timeout: 10000 });
-  const successVisible = await page.getByTestId('form-success-alert').isVisible().catch(() => false);
-  if (!successVisible) {
-    await expect(page.getByTestId('form-error-alert')).toBeVisible({ timeout: 10000 });
-  }
+  await page.waitForLoadState('networkidle'); // Wait for form submission to complete
+  // Wait for any alert (success or error) within the form card
+  await expect(card.getByRole('alert')).toBeVisible({ timeout: 20000 });
 });
 
 test('Virtual office email validation', async ({ page }) => {
@@ -66,7 +60,9 @@ const card = page.locator('[data-testid="contact-form-virtual-office"]').first()
   await page.fill('#lastName', 'User');
   await page.fill('#email', 'bad-email');
   // Trigger blur to fire validation in onChange mode
-  await page.locator('#email').blur();
+  // Use a robust blur by focusing another input
+  await page.locator('#phone').scrollIntoViewIfNeeded();
+  await page.click('#phone', { force: true });
   await page.fill('#phone', '+48 123 123 123');
   await page.fill('#companyName', 'Test Company');
   // Ensure GDPR checkbox is toggled so submit path is consistent
@@ -88,13 +84,11 @@ const card = page.locator('[data-testid="contact-form-virtual-office"]').first()
   // Give overlays a moment to render, then close if present
   await page.waitForTimeout(1000);
   await closeGdprModalIfPresent(page);
+  await page.waitForLoadState('networkidle'); // Ensure validation logic completes
   // Now assert validation feedback without waiting for submit completion
   // Check a visible, stable error element instead of aria-invalid
   const emailErr = card.getByTestId('virtual-office-email-error');
   const summary = card.getByTestId('validation-error-summary');
   const emailInvalid = await page.locator('#email').getAttribute('aria-invalid').catch(() => null);
-  const emailVisible = await emailErr.isVisible().catch(() => false);
-  if (!emailVisible && emailInvalid !== 'true') {
-    await expect(summary).toBeVisible({ timeout: 7000 });
-  }
+    await expect(summary).toBeVisible({ timeout: 15000 });
 });

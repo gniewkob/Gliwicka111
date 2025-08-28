@@ -35,12 +35,17 @@ class AnalyticsClient {
   private eventQueue: AnalyticsEvent[] = []
   private isInitialized = false
   private formStartTimes: Map<string, number> = new Map()
+  private flushTimer: any = null
+  private readonly FLUSH_INTERVAL_MS = 250
+  private readonly MAX_SENDS_PER_SECOND = 10
+  private lastSendAt = 0
 
   constructor() {
     this.sessionId = this.generateSessionId()
     this.loadConsentSettings()
     this.initializeAnalytics()
     this.setupConsentListener()
+    this.startScheduler()
   }
 
   private generateSessionId(): string {
@@ -139,25 +144,29 @@ class AnalyticsClient {
   }
 
   private processEventQueue(): void {
-    if (!this.isInitialized || !this.hasAnalyticsConsent()) {
-      return
-    }
-
-    while (this.eventQueue.length > 0) {
-      const event = this.eventQueue.shift()
-      if (event) {
-        this.sendEvent(event)
-      }
-    }
+    // No-op; sending is handled by the scheduler to avoid bursty traffic.
   }
 
   private queueOrSendEvent(event: AnalyticsEvent): void {
-    if (!this.isInitialized || !this.hasAnalyticsConsent()) {
-      this.eventQueue.push(event)
-      return
-    }
+    this.eventQueue.push(event)
+  }
 
-    this.sendEvent(event)
+  private startScheduler() {
+    if (this.flushTimer) return
+    this.flushTimer = setInterval(async () => {
+      if (!this.isInitialized || !this.hasAnalyticsConsent()) return
+      if (this.eventQueue.length === 0) return
+      const now = Date.now()
+      const minGap = 1000 / this.MAX_SENDS_PER_SECOND
+      if (now - this.lastSendAt < minGap) return
+      const next = this.eventQueue.shift()
+      if (!next) return
+      try {
+        await this.sendEvent(next)
+      } finally {
+        this.lastSendAt = Date.now()
+      }
+    }, this.FLUSH_INTERVAL_MS)
   }
 
   // Public API methods

@@ -27,3 +27,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+
+# playwright artifacts
+/playwright-report/
+/test-results/
+/junit.xml
+/e2e/junit.xml
+
+# temp files
+/tmp/

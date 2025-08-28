@@ -1,7 +1,33 @@
 import { defineConfig, devices } from '@playwright/test';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Use port 3001 for tests to avoid conflicts with development server
-const TEST_PORT = process.env.TEST_PORT || 3001;
+const portFile = path.resolve(process.cwd(), 'tmp', 'e2e-port');
+const pickPort = () => {
+  if (process.env.TEST_PORT) return Number(process.env.TEST_PORT);
+  try {
+    if (fs.existsSync(portFile)) {
+      const v = Number(fs.readFileSync(portFile, 'utf8').trim());
+      if (!Number.isNaN(v) && v > 0) {
+        process.env.TEST_PORT = String(v);
+        return v;
+      }
+    }
+    const out = execSync('node scripts/free-port.js', { stdio: ['ignore', 'pipe', 'ignore'] });
+    const p = Number(String(out).trim());
+    if (!Number.isNaN(p) && p > 0) {
+      fs.mkdirSync(path.dirname(portFile), { recursive: true });
+      fs.writeFileSync(portFile, String(p), 'utf8');
+      process.env.TEST_PORT = String(p);
+      return p;
+    }
+  } catch {}
+  process.env.TEST_PORT = '3001';
+  return 3001;
+}
+const TEST_PORT = pickPort();
 const BASE_URL = process.env.BASE_URL || `http://localhost:${TEST_PORT}`;
 
 console.log(`Using port ${TEST_PORT} for tests`);

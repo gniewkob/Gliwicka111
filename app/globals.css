@@ -5,6 +5,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Local Inter variable font (optional). If the file is missing, browsers will fallback gracefully. */
+@font-face {
+  font-family: 'InterVar';
+  src: url('/fonts/Inter-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -121,6 +130,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'InterVar', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
   }
 }
 

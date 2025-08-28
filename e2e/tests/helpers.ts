@@ -12,8 +12,13 @@ export async function primeConsent(page: Page) {
 }
 
 export async function goto(page: Page, path = '/') {
-  // Use Playwright's configured baseURL by navigating with a relative URL
-  await page.goto(path, { waitUntil: 'domcontentloaded' });
+  // Ensure an `e2e=1` param to enable client-side E2E toggles even without build-time env
+  let url = path;
+  if (!/\be2e=1\b/.test(path)) {
+    if (path.includes('?')) url = path + '&e2e=1';
+    else url = path + '?e2e=1';
+  }
+  await page.goto(url, { waitUntil: 'domcontentloaded' });
 }
 
 export async function dismissCookieBanner(page: Page) {
@@ -55,4 +60,3 @@ export async function ensureSubmitVisible(form: Locator) {
   await expect(btn).toBeVisible();
   await expect(btn).toBeEnabled();
 }
-

@@ -1,238 +1,46 @@
-<testsuites id="" name="" tests="16" failures="6" skipped="0" errors="0" time="33.903558">
-<testsuite name="forms.spec.ts" timestamp="2025-08-28T14:45:55.661Z" hostname="desktop-chromium" tests="2" failures="2" skipped="0" time="44.593" errors="0">
-<testcase name="Virtual office form submits (UI)" classname="forms.spec.ts" time="14.529">
-<failure message="forms.spec.ts:4:5 Virtual office form submits (UI)" type="FAILURE">
-<![CDATA[  [desktop-chromium] › forms.spec.ts:4:5 › Virtual office form submits (UI) ────────────────────────
-
-    Error: Timed out 10000ms waiting for expect(locator).toHaveAttribute(expected)
-
-    Locator: getByTestId('submit-finished-probe')
-    Expected pattern: /true|false/
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toHaveAttribute" with timeout 10000ms
-      - waiting for getByTestId('submit-finished-probe')
-
-
-      42 |   // Deterministic: wait for E2E probe element to appear
-      43 |   const probe = page.getByTestId('submit-finished-probe');
-    > 44 |   await expect(probe).toHaveAttribute('data-success', /true|false/, { timeout: 10000 });
-         |                       ^
-      45 |   // Wait for any alert (success or error) to confirm submission result
-      46 |   await expect(card.getByRole('alert')).toBeVisible({ timeout: 10000 });
-      47 |   const successVisible = await page.getByTestId('form-success-alert').isVisible().catch(() => false);
-        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:44:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/forms-Virtual-office-form-submits-UI--desktop-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--desktop-chromium/test-failed-1.png]]
-]]>
-</system-out>
+<testsuites id="" name="" tests="16" failures="0" skipped="0" errors="0" time="18.795543000000002">
+<testsuite name="forms.spec.ts" timestamp="2025-08-28T22:10:55.003Z" hostname="desktop-chromium" tests="2" failures="0" skipped="0" time="10.822" errors="0">
+<testcase name="Virtual office form submits (UI)" classname="forms.spec.ts" time="5.14">
 </testcase>
-<testcase name="Virtual office email validation" classname="forms.spec.ts" time="30.064">
-<failure message="forms.spec.ts:53:5 Virtual office email validation" type="FAILURE">
-<![CDATA[  [desktop-chromium] › forms.spec.ts:53:5 › Virtual office email validation ────────────────────────
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator._expect: Target page, context or browser has been closed
-
-       96 |   const emailVisible = await emailErr.isVisible().catch(() => false);
-       97 |   if (!emailVisible && emailInvalid !== 'true') {
-    >  98 |     await expect(summary).toBeVisible({ timeout: 7000 });
-          |                           ^
-       99 |   }
-      100 | });
-      101 |
-        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:98:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/forms-Virtual-office-email-validation-desktop-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-desktop-chromium/test-failed-1.png]]
-]]>
-</system-out>
+<testcase name="Virtual office email validation" classname="forms.spec.ts" time="5.682">
 </testcase>
 </testsuite>
-<testsuite name="simple.spec.ts" timestamp="2025-08-28T14:45:55.661Z" hostname="desktop-chromium" tests="4" failures="1" skipped="0" time="37.521" errors="0">
-<testcase name="Homepage loads correctly" classname="simple.spec.ts" time="2.867">
+<testsuite name="simple.spec.ts" timestamp="2025-08-28T22:10:55.003Z" hostname="desktop-chromium" tests="4" failures="0" skipped="0" time="11.284" errors="0">
+<testcase name="Homepage loads correctly" classname="simple.spec.ts" time="2.081">
 </testcase>
-<testcase name="Forms page loads and shows tabs" classname="simple.spec.ts" time="3.199">
+<testcase name="Forms page loads and shows tabs" classname="simple.spec.ts" time="2.794">
 </testcase>
-<testcase name="Admin page requires authentication" classname="simple.spec.ts" time="1.389">
+<testcase name="Admin page requires authentication" classname="simple.spec.ts" time="0.915">
 </testcase>
-<testcase name="Form validation works" classname="simple.spec.ts" time="30.066">
-<failure message="simple.spec.ts:42:5 Form validation works" type="FAILURE">
-<![CDATA[  [desktop-chromium] › simple.spec.ts:42:5 › Form validation works ─────────────────────────────────
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator._expect: Target page, context or browser has been closed
-
-      87 |   const startVisible = await startErr.isVisible().catch(() => false);
-      88 |   if (!startVisible && startInvalid !== 'true') {
-    > 89 |     await expect(summary).toBeVisible({ timeout: 7000 });
-         |                           ^
-      90 |   }
-      91 | });
-      92 |
-        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/simple.spec.ts:89:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/simple-Form-validation-works-desktop-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../test-results/simple-Form-validation-works-desktop-chromium/test-failed-1.png]]
-]]>
-</system-out>
+<testcase name="Form validation works" classname="simple.spec.ts" time="5.494">
 </testcase>
 </testsuite>
-<testsuite name="smoke.spec.ts" timestamp="2025-08-28T14:45:55.661Z" hostname="desktop-chromium" tests="2" failures="0" skipped="0" time="4.134" errors="0">
-<testcase name="Home renders" classname="smoke.spec.ts" time="2.6">
+<testsuite name="smoke.spec.ts" timestamp="2025-08-28T22:10:55.003Z" hostname="desktop-chromium" tests="2" failures="0" skipped="0" time="4.316" errors="0">
+<testcase name="Home renders" classname="smoke.spec.ts" time="2.808">
 </testcase>
-<testcase name="Admin shell behind auth" classname="smoke.spec.ts" time="1.534">
-</testcase>
-</testsuite>
-<testsuite name="forms.spec.ts" timestamp="2025-08-28T14:45:55.661Z" hostname="mobile-chromium" tests="2" failures="2" skipped="0" time="24.951" errors="0">
-<testcase name="Virtual office form submits (UI)" classname="forms.spec.ts" time="13.995">
-<failure message="forms.spec.ts:4:5 Virtual office form submits (UI)" type="FAILURE">
-<![CDATA[  [mobile-chromium] › forms.spec.ts:4:5 › Virtual office form submits (UI) ─────────────────────────
-
-    Error: Timed out 10000ms waiting for expect(locator).toHaveAttribute(expected)
-
-    Locator: getByTestId('submit-finished-probe')
-    Expected pattern: /true|false/
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toHaveAttribute" with timeout 10000ms
-      - waiting for getByTestId('submit-finished-probe')
-
-
-      42 |   // Deterministic: wait for E2E probe element to appear
-      43 |   const probe = page.getByTestId('submit-finished-probe');
-    > 44 |   await expect(probe).toHaveAttribute('data-success', /true|false/, { timeout: 10000 });
-         |                       ^
-      45 |   // Wait for any alert (success or error) to confirm submission result
-      46 |   await expect(card.getByRole('alert')).toBeVisible({ timeout: 10000 });
-      47 |   const successVisible = await page.getByTestId('form-success-alert').isVisible().catch(() => false);
-        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:44:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|../test-results/forms-Virtual-office-form-submits-UI--mobile-chromium/error-context.md]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Virtual office email validation" classname="forms.spec.ts" time="10.956">
-<failure message="forms.spec.ts:53:5 Virtual office email validation" type="FAILURE">
-<![CDATA[  [mobile-chromium] › forms.spec.ts:53:5 › Virtual office email validation ─────────────────────────
-
-    Error: Timed out 7000ms waiting for expect(locator).toBeVisible()
-
-    Locator: locator('[data-testid="contact-form-virtual-office"]').first().getByTestId('validation-error-summary')
-    Expected: visible
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toBeVisible" with timeout 7000ms
-      - waiting for locator('[data-testid="contact-form-virtual-office"]').first().getByTestId('validation-error-summary')
-
-
-       96 |   const emailVisible = await emailErr.isVisible().catch(() => false);
-       97 |   if (!emailVisible && emailInvalid !== 'true') {
-    >  98 |     await expect(summary).toBeVisible({ timeout: 7000 });
-          |                           ^
-       99 |   }
-      100 | });
-      101 |
-        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/forms.spec.ts:98:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/forms-Virtual-office-email-validation-mobile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/forms-Virtual-office-email-validation-mobile-chromium/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-mobile-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|../test-results/forms-Virtual-office-email-validation-mobile-chromium/error-context.md]]
-]]>
-</system-out>
+<testcase name="Admin shell behind auth" classname="smoke.spec.ts" time="1.508">
 </testcase>
 </testsuite>
-<testsuite name="simple.spec.ts" timestamp="2025-08-28T14:45:55.661Z" hostname="mobile-chromium" tests="4" failures="1" skipped="0" time="12.667" errors="0">
-<testcase name="Homepage loads correctly" classname="simple.spec.ts" time="2.477">
+<testsuite name="forms.spec.ts" timestamp="2025-08-28T22:10:55.003Z" hostname="mobile-chromium" tests="2" failures="0" skipped="0" time="14.245" errors="0">
+<testcase name="Virtual office form submits (UI)" classname="forms.spec.ts" time="7.089">
 </testcase>
-<testcase name="Forms page loads and shows tabs" classname="simple.spec.ts" time="0.838">
-</testcase>
-<testcase name="Admin page requires authentication" classname="simple.spec.ts" time="0.319">
-</testcase>
-<testcase name="Form validation works" classname="simple.spec.ts" time="9.033">
-<failure message="simple.spec.ts:42:5 Form validation works" type="FAILURE">
-<![CDATA[  [mobile-chromium] › simple.spec.ts:42:5 › Form validation works ──────────────────────────────────
-
-    Error: Timed out 7000ms waiting for expect(locator).toBeVisible()
-
-    Locator: locator('[data-testid="contact-form-virtual-office"]').first().getByTestId('validation-error-summary')
-    Expected: visible
-    Received: <element(s) not found>
-    Call log:
-      - Expect "toBeVisible" with timeout 7000ms
-      - waiting for locator('[data-testid="contact-form-virtual-office"]').first().getByTestId('validation-error-summary')
-
-
-      87 |   const startVisible = await startErr.isVisible().catch(() => false);
-      88 |   if (!startVisible && startInvalid !== 'true') {
-    > 89 |     await expect(summary).toBeVisible({ timeout: 7000 });
-         |                           ^
-      90 |   }
-      91 | });
-      92 |
-        at /Users/gniewko/Repos/Gliwicka111/e2e/tests/simple.spec.ts:89:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/simple-Form-validation-works-mobile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/simple-Form-validation-works-mobile-chromium/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|../test-results/simple-Form-validation-works-mobile-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|../test-results/simple-Form-validation-works-mobile-chromium/error-context.md]]
-]]>
-</system-out>
+<testcase name="Virtual office email validation" classname="forms.spec.ts" time="7.156">
 </testcase>
 </testsuite>
-<testsuite name="smoke.spec.ts" timestamp="2025-08-28T14:45:55.661Z" hostname="mobile-chromium" tests="2" failures="0" skipped="0" time="3.674" errors="0">
-<testcase name="Home renders" classname="smoke.spec.ts" time="1.668">
+<testsuite name="simple.spec.ts" timestamp="2025-08-28T22:10:55.003Z" hostname="mobile-chromium" tests="4" failures="0" skipped="0" time="19.059" errors="0">
+<testcase name="Homepage loads correctly" classname="simple.spec.ts" time="5.703">
 </testcase>
-<testcase name="Admin shell behind auth" classname="smoke.spec.ts" time="2.006">
+<testcase name="Forms page loads and shows tabs" classname="simple.spec.ts" time="4.846">
+</testcase>
+<testcase name="Admin page requires authentication" classname="simple.spec.ts" time="2.644">
+</testcase>
+<testcase name="Form validation works" classname="simple.spec.ts" time="5.866">
+</testcase>
+</testsuite>
+<testsuite name="smoke.spec.ts" timestamp="2025-08-28T22:10:55.003Z" hostname="mobile-chromium" tests="2" failures="0" skipped="0" time="4.862" errors="0">
+<testcase name="Home renders" classname="smoke.spec.ts" time="3.043">
+</testcase>
+<testcase name="Admin shell behind auth" classname="smoke.spec.ts" time="1.819">
 </testcase>
 </testsuite>
 </testsuites>

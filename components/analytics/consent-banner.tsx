@@ -10,6 +10,7 @@ import {
   Label,
 } from "@/components/ui"
 import { Shield, Cookie, BarChart3, X, Settings, CheckCircle } from "lucide-react"
+import { isE2E } from "@/lib/is-e2e"
 
 /**
  * Renders a GDPR-compliant consent banner allowing users to control analytics
@@ -30,6 +31,23 @@ export function ConsentBanner() {
 
   useEffect(() => {
     const storedConsent = localStorage.getItem("analytics-consent")
+
+    // Auto-accept in E2E/dev scenarios so banners don't block UI
+    const shouldAutoAccept = isE2E()
+
+    if (shouldAutoAccept) {
+      const fullConsent = {
+        necessary: true,
+        analytics: true,
+        marketing: false,
+      }
+      const consentWithTimestamp = { ...fullConsent, timestamp: Date.now() }
+      localStorage.setItem("analytics-consent", JSON.stringify(consentWithTimestamp))
+      setIsVisible(false)
+      window.dispatchEvent(new CustomEvent("consentUpdated", { detail: fullConsent }))
+      return
+    }
+
     if (!storedConsent) {
       setIsVisible(true)
     } else {

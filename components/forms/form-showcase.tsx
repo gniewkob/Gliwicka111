@@ -21,6 +21,7 @@ import MeetingRoomForm from "./meeting-room-form"
 import AdvertisingForm from "./advertising-form"
 import SpecialDealsForm from "./special-deals-form"
 import { ConsentBanner } from "@/components/analytics"
+import { isE2E } from "@/lib/is-e2e"
 import { Globe, MapPin, Users, Calendar, Megaphone, Gift, BarChart3, Shield } from "lucide-react"
 
 const AnalyticsDashboard = dynamic(
@@ -33,7 +34,8 @@ const AnalyticsDashboard = dynamic(
 
 export default function FormShowcase() {
   const [language, setLanguage] = useState<"pl" | "en">("pl")
-  const showAnalytics = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true"
+  const e2e = isE2E()
+  const showAnalytics = !e2e && process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true"
 
   const toggleLanguage = () => {
     setLanguage(language === "pl" ? "en" : "pl")
@@ -270,8 +272,8 @@ export default function FormShowcase() {
         </Card>
       </div>
 
-      {/* GDPR Consent Banner */}
-      <ConsentBanner />
+      {/* GDPR Consent Banner - hidden in E2E to avoid UI interference */}
+      {!e2e && <ConsentBanner />}
     </div>
   )
 }

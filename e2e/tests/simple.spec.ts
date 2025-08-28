@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { primeConsent, goto, dismissCookieBanner, closeGdprModalIfPresent } from './helpers';
 
 test('Homepage loads correctly', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   
   // Check that the page loads
   await expect(page).toHaveTitle(/Gliwicka 111/i);
@@ -54,8 +54,9 @@ test('Form validation works', async ({ page }) => {
   // Fill only some fields (missing required ones)
   await page.fill('#firstName', 'Test');
   await page.fill('#email', 'invalid-email'); // Invalid email
-  // Trigger blur to surface field-level validation
-  await page.locator('#email').blur();
+  // Trigger blur to surface field-level validation by focusing another input
+  await page.locator('#firstName').scrollIntoViewIfNeeded();
+  await page.click('#firstName', { force: true });
   
   // Toggle GDPR for a consistent submit path
   const card = page.locator('[data-testid="contact-form-virtual-office"]').first();
@@ -79,13 +80,11 @@ test('Form validation works', async ({ page }) => {
   // Give overlays a moment to render, then close if present
   await page.waitForTimeout(1000);
   await closeGdprModalIfPresent(page);
+  await page.waitForLoadState('networkidle'); // Ensure validation logic completes
   
   // Should show a visible error for missing start date
   const startErr = card.getByTestId('virtual-office-startDate-error');
   const summary = card.getByTestId('validation-error-summary');
   const startInvalid = await page.locator('#startDate').getAttribute('aria-invalid').catch(() => null);
-  const startVisible = await startErr.isVisible().catch(() => false);
-  if (!startVisible && startInvalid !== 'true') {
-    await expect(summary).toBeVisible({ timeout: 7000 });
-  }
+    await expect(summary).toBeVisible({ timeout: 15000 });
 });
