@@ -229,7 +229,7 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {pkg.features.map((feature, index) => (
+                {pkg.features.map((feature: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-sm">{feature}</span>
