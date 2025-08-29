@@ -220,7 +220,8 @@ export default function VirtualOfficeForm({ language = "pl" }: VirtualOfficeForm
 
       {/* Package Selection */}
       <div className="grid md:grid-cols-3 gap-6 mb-8">
-        {Object.entries(t.packages).map(([key, pkg]) => (
+        {Object.entries(t.packages).map(
+          ([key, pkg]: [string, { name: string; price: string; features: readonly string[] }]) => (
           <Card key={key} className="relative hover:shadow-lg transition-shadow">
             <CardHeader className="text-center">
               <CardTitle className="text-lg">{pkg.name}</CardTitle>
