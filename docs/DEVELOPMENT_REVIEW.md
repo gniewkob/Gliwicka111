@@ -784,8 +784,7 @@ this.recordMetric('FCP', entry.startTime)
 }
 
 private observeTTFB(): void {
-const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
-if (navigationEntry) {
+const navigationEntry = performance.getEntriesByType['navigation'](0) as PerformanceNavigationTimingif (navigationEntry) {
 this.recordMetric('TTFB', navigationEntry.responseStart - navigationEntry.requestStart)
 }
 }

@@ -20,7 +20,7 @@ export default function FormsError({
       }, 0);
       return () => clearTimeout(id);
     }
-  }, [error]);
+  }, [error, reset]);
 
   if (process.env.NEXT_PUBLIC_E2E === "true") return null;
 

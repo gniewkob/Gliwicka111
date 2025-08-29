@@ -101,7 +101,7 @@ export default function VirtualOfficeForm({
 
   useEffect(() => {
     logE2E("validation:errors", Object.keys(errors));
-  }, [JSON.stringify(errors)]);
+  }, [errors, logE2E]);
 
   const onSubmit = async (data: VirtualOfficeFormData) => {
     setIsSubmitting(true);
