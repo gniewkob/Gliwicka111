@@ -1,26 +1,28 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
 export default function FormsError({
   error,
   reset,
 }: {
-  error: Error
-  reset: () => void
+  error: Error;
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Error in forms route', error)
+    console.error("Error in forms route", error);
     // In E2E, auto-retry once to bypass transient client hydration issues
-    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+    if (process.env.NEXT_PUBLIC_E2E === "true") {
       const id = setTimeout(() => {
-        try { reset() } catch {}
-      }, 0)
-      return () => clearTimeout(id)
+        try {
+          reset();
+        } catch {}
+      }, 0);
+      return () => clearTimeout(id);
     }
-  }, [error])
+  }, [error]);
 
-  if (process.env.NEXT_PUBLIC_E2E === 'true') return null
+  if (process.env.NEXT_PUBLIC_E2E === "true") return null;
 
   return (
     <div className="p-4 text-center">
@@ -29,5 +31,5 @@ export default function FormsError({
         Try again
       </button>
     </div>
-  )
+  );
 }

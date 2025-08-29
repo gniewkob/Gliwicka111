@@ -31,23 +31,29 @@ Migrations are orchestrated by `scripts/migrate.ts` which executes all SQL files
 ## Environment Variables
 
 ### Database
+
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL`, `MOCK_DB`
 
 ### Email
+
 `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_EMAIL`, `EMAIL_MAX_RETRIES`, `MOCK_EMAIL`
 
 ### Security & Rate Limiting
+
 `IP_SALT`, `ADMIN_AUTH_TOKEN`, `RATE_LIMIT_COUNT`, `RATE_LIMIT_WINDOW_MS`
 
 ### Analytics
+
 `NEXT_PUBLIC_ANALYTICS_TOKEN`, `ANALYTICS_AUTH_TOKEN`, `ANALYTICS_BASIC_USER`, `ANALYTICS_BASIC_PASS`
 
 ### Admin Dashboard
+
 `ADMIN_USER`, `ADMIN_PASS`, `NEXT_PUBLIC_ADMIN_USER`, `NEXT_PUBLIC_ADMIN_PASS`, `METRICS_WINDOW_HOURS`
 
 At least one of `ADMIN_AUTH_TOKEN` or the `ADMIN_USER`/`ADMIN_PASS` pair must be set.
 
 ### Misc
+
 `CI`, `NODE_ENV`
 
 ## Database Setup & Migration
@@ -78,11 +84,13 @@ At least one of `ADMIN_AUTH_TOKEN` or the `ADMIN_USER`/`ADMIN_PASS` pair must be
 ## Deployment
 
 ### Vercel
+
 1. Create a new Vercel project and link this repository.
 2. Add the environment variables from `.env.local`.
 3. Vercel automatically builds and deploys `main` using `next build`.
 
 ### Traditional Node.js Hosting (e.g., MyDevil.net/FreeBSD)
+
 1. Install Node.js 18+ and PostgreSQL.
 2. Copy the project to the server (see `deploy.yml` for an SCP-based example).
 3. Provide `.env` values on the server, run `npm install`, `npm run build`, and `npm start` (behind a process manager or Phusion Passenger).

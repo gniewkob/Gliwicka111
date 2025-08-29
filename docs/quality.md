@@ -67,4 +67,3 @@ Attempt automatic fixes:
 ```bash
 npm run security:fix
 ```
-

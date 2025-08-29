@@ -11,12 +11,12 @@ export const navTranslations = {
     about: "About",
     contact: "Contact",
   },
-} as const
+} as const;
 
 export const backTranslations = {
   pl: "Powrót do strony głównej",
   en: "Back to homepage",
-} as const
+} as const;
 
 export const messages = {
   form: {
@@ -43,6 +43,6 @@ export const messages = {
       en: "Submission not found",
     },
   },
-} as const
+} as const;
 
-export type Language = keyof typeof navTranslations
+export type Language = keyof typeof navTranslations;

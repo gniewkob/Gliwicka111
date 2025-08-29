@@ -2,11 +2,39 @@ export const virtualOfficeCopy = {
   pl: {
     title: "Biuro Wirtualne",
     subtitle: "Prestiżowy adres biznesowy od 99 zł/miesiąc",
-    description: "Uzyskaj profesjonalny adres dla swojej firmy z pełnym wsparciem administracyjnym",
+    description:
+      "Uzyskaj profesjonalny adres dla swojej firmy z pełnym wsparciem administracyjnym",
     packages: {
-      basic: { name: "Pakiet Podstawowy", price: "99 zł/miesiąc", features: ["Adres do rejestracji firmy", "Odbiór korespondencji", "Powiadomienia SMS/email"] },
-      standard: { name: "Pakiet Standard", price: "149 zł/miesiąc", features: ["Wszystko z pakietu podstawowego", "Przekazywanie połączeń", "2h sali konferencyjnej/miesiąc", "Skanowanie dokumentów"] },
-      premium: { name: "Pakiet Premium", price: "249 zł/miesiąc", features: ["Wszystko z pakietu standard", "Dedykowany numer telefonu", "5h sali konferencyjnej/miesiąc", "Obsługa sekretarska", "Magazynowanie dokumentów"] },
+      basic: {
+        name: "Pakiet Podstawowy",
+        price: "99 zł/miesiąc",
+        features: [
+          "Adres do rejestracji firmy",
+          "Odbiór korespondencji",
+          "Powiadomienia SMS/email",
+        ],
+      },
+      standard: {
+        name: "Pakiet Standard",
+        price: "149 zł/miesiąc",
+        features: [
+          "Wszystko z pakietu podstawowego",
+          "Przekazywanie połączeń",
+          "2h sali konferencyjnej/miesiąc",
+          "Skanowanie dokumentów",
+        ],
+      },
+      premium: {
+        name: "Pakiet Premium",
+        price: "249 zł/miesiąc",
+        features: [
+          "Wszystko z pakietu standard",
+          "Dedykowany numer telefonu",
+          "5h sali konferencyjnej/miesiąc",
+          "Obsługa sekretarska",
+          "Magazynowanie dokumentów",
+        ],
+      },
     },
     fields: {
       firstName: "Imię",
@@ -21,7 +49,8 @@ export const virtualOfficeCopy = {
       additionalServices: "Usługi dodatkowe",
       message: "Dodatkowe informacje",
       gdprConsent: "Wyrażam zgodę na przetwarzanie moich danych osobowych",
-      marketingConsent: "Wyrażam zgodę na otrzymywanie informacji marketingowych",
+      marketingConsent:
+        "Wyrażam zgodę na otrzymywanie informacji marketingowych",
     },
     businessTypes: {
       "sole-proprietorship": "Działalność gospodarcza",
@@ -43,11 +72,39 @@ export const virtualOfficeCopy = {
   en: {
     title: "Virtual Office",
     subtitle: "Prestigious business address from 99 PLN/month",
-    description: "Get a professional address for your company with full administrative support",
+    description:
+      "Get a professional address for your company with full administrative support",
     packages: {
-      basic: { name: "Basic Package", price: "99 PLN/month", features: ["Company registration address", "Mail collection", "SMS/email notifications"] },
-      standard: { name: "Standard Package", price: "149 PLN/month", features: ["Everything from basic package", "Call forwarding", "2h conference room/month", "Document scanning"] },
-      premium: { name: "Premium Package", price: "249 PLN/month", features: ["Everything from standard package", "Dedicated phone number", "5h conference room/month", "Secretary service", "Document storage"] },
+      basic: {
+        name: "Basic Package",
+        price: "99 PLN/month",
+        features: [
+          "Company registration address",
+          "Mail collection",
+          "SMS/email notifications",
+        ],
+      },
+      standard: {
+        name: "Standard Package",
+        price: "149 PLN/month",
+        features: [
+          "Everything from basic package",
+          "Call forwarding",
+          "2h conference room/month",
+          "Document scanning",
+        ],
+      },
+      premium: {
+        name: "Premium Package",
+        price: "249 PLN/month",
+        features: [
+          "Everything from standard package",
+          "Dedicated phone number",
+          "5h conference room/month",
+          "Secretary service",
+          "Document storage",
+        ],
+      },
     },
     fields: {
       firstName: "First Name",
@@ -81,5 +138,4 @@ export const virtualOfficeCopy = {
     submit: "Send Inquiry",
     submitting: "Sending...",
   },
-} as const
-
+} as const;

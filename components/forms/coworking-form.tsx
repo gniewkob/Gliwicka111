@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
   Card,
@@ -21,29 +21,39 @@ import {
   SelectValue,
   Alert,
   AlertDescription,
-} from "@/components/ui"
-import { coworkingFormSchema, type CoworkingFormData } from "@/lib/validation-schemas"
-import { submitCoworkingForm } from "@/lib/server-actions"
-import { analyticsClient } from "@/lib/analytics-client"
-import { useFormAnalytics } from "@/hooks/use-form-analytics"
-import { messages } from "@/lib/i18n"
-import { Users, Coffee, Calendar, Shield, CheckCircle, MapPin } from "lucide-react"
+} from "@/components/ui";
+import {
+  coworkingFormSchema,
+  type CoworkingFormData,
+} from "@/lib/validation-schemas";
+import { submitCoworkingForm } from "@/lib/server-actions";
+import { analyticsClient } from "@/lib/analytics-client";
+import { useFormAnalytics } from "@/hooks/use-form-analytics";
+import { messages } from "@/lib/i18n";
+import {
+  Users,
+  Coffee,
+  Calendar,
+  Shield,
+  CheckCircle,
+  MapPin,
+} from "lucide-react";
 
 interface CoworkingFormProps {
-  language?: "pl" | "en"
+  language?: "pl" | "en";
 }
 
 export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
-    success: boolean
-    message: string
-  } | null>(null)
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   const analytics = useFormAnalytics({
     formType: "coworking",
     enabled: true,
-  })
+  });
 
   const {
     register,
@@ -60,31 +70,47 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
       trialDay: false,
       teamSize: 1,
     },
-  })
+  });
 
   const content = {
     pl: {
       title: "Coworking & Biura",
       subtitle: "Elastyczne przestrzenie pracy od 25 zł/dzień",
-      description: "Znajdź idealne miejsce do pracy - od hot desk po prywatne biuro",
+      description:
+        "Znajdź idealne miejsce do pracy - od hot desk po prywatne biuro",
       workspaceTypes: {
         "hot-desk": {
           name: "Hot Desk",
           price: "25 zł/dzień",
           description: "Elastyczne stanowisko pracy w otwartej przestrzeni",
-          features: ["Dostęp do internetu", "Kawa/herbata", "Sala konferencyjna", "Parking"],
+          features: [
+            "Dostęp do internetu",
+            "Kawa/herbata",
+            "Sala konferencyjna",
+            "Parking",
+          ],
         },
         "dedicated-desk": {
           name: "Dedicated Desk",
           price: "350 zł/miesiąc",
           description: "Twoje stałe miejsce w przestrzeni coworkingowej",
-          features: ["Własne biurko", "Szafka na dokumenty", "Wszystko z Hot Desk", "Możliwość personalizacji"],
+          features: [
+            "Własne biurko",
+            "Szafka na dokumenty",
+            "Wszystko z Hot Desk",
+            "Możliwość personalizacji",
+          ],
         },
         "private-office": {
           name: "Prywatne Biuro",
           price: "800 zł/miesiąc",
           description: "Zamknięta przestrzeń dla Twojego zespołu",
-          features: ["Prywatność", "Własne wyposażenie", "Sala konferencyjna", "Recepcja"],
+          features: [
+            "Prywatność",
+            "Własne wyposażenie",
+            "Sala konferencyjna",
+            "Recepcja",
+          ],
         },
       },
       fields: {
@@ -101,7 +127,8 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
         trialDay: "Bezpłatny dzień próbny",
         message: "Dodatkowe informacje",
         gdprConsent: "Wyrażam zgodę na przetwarzanie moich danych osobowych",
-        marketingConsent: "Wyrażam zgodę na otrzymywanie informacji marketingowych",
+        marketingConsent:
+          "Wyrażam zgodę na otrzymywanie informacji marketingowych",
       },
       durations: {
         daily: "Dziennie",
@@ -111,30 +138,47 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
       },
       submit: "Wyślij zapytanie",
       submitting: "Wysyłanie...",
-      trialDayInfo: "Skorzystaj z bezpłatnego dnia próbnego, aby przetestować nasze przestrzenie",
+      trialDayInfo:
+        "Skorzystaj z bezpłatnego dnia próbnego, aby przetestować nasze przestrzenie",
     },
     en: {
       title: "Coworking & Offices",
       subtitle: "Flexible workspaces from 25 PLN/day",
-      description: "Find the perfect place to work - from hot desk to private office",
+      description:
+        "Find the perfect place to work - from hot desk to private office",
       workspaceTypes: {
         "hot-desk": {
           name: "Hot Desk",
           price: "25 PLN/day",
           description: "Flexible workspace in open area",
-          features: ["Internet access", "Coffee/tea", "Conference room", "Parking"],
+          features: [
+            "Internet access",
+            "Coffee/tea",
+            "Conference room",
+            "Parking",
+          ],
         },
         "dedicated-desk": {
           name: "Dedicated Desk",
           price: "350 PLN/month",
           description: "Your permanent place in coworking space",
-          features: ["Own desk", "Document locker", "Everything from Hot Desk", "Personalization options"],
+          features: [
+            "Own desk",
+            "Document locker",
+            "Everything from Hot Desk",
+            "Personalization options",
+          ],
         },
         "private-office": {
           name: "Private Office",
           price: "800 PLN/month",
           description: "Closed space for your team",
-          features: ["Privacy", "Own equipment", "Conference room", "Reception"],
+          features: [
+            "Privacy",
+            "Own equipment",
+            "Conference room",
+            "Reception",
+          ],
         },
       },
       fields: {
@@ -163,64 +207,66 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
       submitting: "Sending...",
       trialDayInfo: "Take advantage of a free trial day to test our spaces",
     },
-  }
+  };
 
-  const t = content[language]
+  const t = content[language];
 
   const onSubmit = async (data: CoworkingFormData) => {
-    setIsSubmitting(true)
-    setSubmitResult(null)
-    analytics.trackSubmissionAttempt()
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    analytics.trackSubmissionAttempt();
 
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item))
+          value.forEach((item) => formData.append(key, item));
         } else {
-          formData.append(key, String(value))
+          formData.append(key, String(value));
         }
-      })
+      });
 
-      formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitCoworkingForm(formData)
+      formData.append("sessionId", analyticsClient.getSessionId());
+      const result = await submitCoworkingForm(formData);
       const message =
         result.message ??
         (result.success
           ? messages.form.success[language]
-          : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
+          : messages.form.serverError[language]);
+      setSubmitResult({ success: result.success, message });
       if (result.success) {
-        analytics.trackSubmissionSuccess()
-        reset()
+        analytics.trackSubmissionSuccess();
+        reset();
       } else {
-        analytics.trackSubmissionError(message)
+        analytics.trackSubmissionError(message);
       }
     } catch (error) {
       const errorMessage =
-        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
-      analytics.trackSubmissionError(errorMessage)
-      setSubmitResult({ success: false, message: errorMessage })
+        language === "en"
+          ? "An unexpected error occurred"
+          : "Wystąpił nieoczekiwany błąd";
+      analytics.trackSubmissionError(errorMessage);
+      setSubmitResult({ success: false, message: errorMessage });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFieldFocus = (fieldName: string) => {
-    analytics.trackFieldFocus(fieldName)
+    analytics.trackFieldFocus(fieldName);
     if (!watch("firstName") && fieldName === "firstName") {
-      analytics.trackFormStart()
+      analytics.trackFormStart();
     }
-  }
+  };
 
   const handleFieldBlur = (fieldName: string) => {
-    analytics.trackFieldBlur(fieldName)
-  }
+    analytics.trackFieldBlur(fieldName);
+  };
 
   const handleFieldError = (fieldName: string, error?: string) => {
-    if (!error) return
-    analytics.trackFieldError(fieldName, error)
-  }
+    if (!error) return;
+    analytics.trackFieldError(fieldName, error);
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -241,11 +287,18 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
       {/* Workspace Types */}
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         {Object.entries(t.workspaceTypes).map(([key, workspace]) => (
-          <Card key={key} className="relative hover:shadow-lg transition-shadow">
+          <Card
+            key={key}
+            className="relative hover:shadow-lg transition-shadow"
+          >
             <CardHeader className="text-center">
               <CardTitle className="text-lg">{workspace.name}</CardTitle>
-              <div className="text-2xl font-bold text-green-600">{workspace.price}</div>
-              <CardDescription className="text-sm">{workspace.description}</CardDescription>
+              <div className="text-2xl font-bold text-green-600">
+                {workspace.price}
+              </div>
+              <CardDescription className="text-sm">
+                {workspace.description}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
@@ -269,7 +322,9 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
               <Coffee className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-green-800">Bezpłatny dzień próbny</h3>
+              <h3 className="font-semibold text-green-800">
+                Bezpłatny dzień próbny
+              </h3>
               <p className="text-green-700 text-sm">{t.trialDayInfo}</p>
             </div>
           </div>
@@ -283,7 +338,9 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
             <MapPin className="w-5 h-5 mr-2" />
             Formularz rezerwacji
           </CardTitle>
-          <CardDescription>Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin</CardDescription>
+          <CardDescription>
+            Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {submitResult && (
@@ -423,8 +480,14 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
             {/* Workspace Configuration */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="workspaceType">{t.fields.workspaceType} *</Label>
-                <Select onValueChange={(value) => setValue("workspaceType", value as any)}>
+                <Label htmlFor="workspaceType">
+                  {t.fields.workspaceType} *
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setValue("workspaceType", value as any)
+                  }
+                >
                   <SelectTrigger
                     id="workspaceType"
                     className={errors.workspaceType ? "border-red-500" : ""}
@@ -433,14 +496,23 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     <SelectValue placeholder="Wybierz typ przestrzeni" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="hot-desk">Hot Desk (25 zł/dzień)</SelectItem>
-                    <SelectItem value="dedicated-desk">Dedicated Desk (350 zł/miesiąc)</SelectItem>
-                    <SelectItem value="private-office">Prywatne Biuro (800 zł/miesiąc)</SelectItem>
+                    <SelectItem value="hot-desk">
+                      Hot Desk (25 zł/dzień)
+                    </SelectItem>
+                    <SelectItem value="dedicated-desk">
+                      Dedicated Desk (350 zł/miesiąc)
+                    </SelectItem>
+                    <SelectItem value="private-office">
+                      Prywatne Biuro (800 zł/miesiąc)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.workspaceType && (
                   <>
-                    {handleFieldError("workspaceType", errors.workspaceType.message)}
+                    {handleFieldError(
+                      "workspaceType",
+                      errors.workspaceType.message,
+                    )}
                     <p
                       data-testid="coworking-workspaceType-error"
                       className="text-red-500 text-sm mt-1"
@@ -453,7 +525,9 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
 
               <div>
                 <Label htmlFor="duration">{t.fields.duration} *</Label>
-                <Select onValueChange={(value) => setValue("duration", value as any)}>
+                <Select
+                  onValueChange={(value) => setValue("duration", value as any)}
+                >
                   <SelectTrigger
                     id="duration"
                     className={errors.duration ? "border-red-500" : ""}
@@ -540,7 +614,9 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="specialRequirements">{t.fields.specialRequirements}</Label>
+              <Label htmlFor="specialRequirements">
+                {t.fields.specialRequirements}
+              </Label>
               <Textarea
                 id="specialRequirements"
                 {...register("specialRequirements")}
@@ -614,7 +690,8 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
                     {t.fields.gdprConsent} *
                   </Label>
                   <p className="text-xs text-gray-600 mt-1">
-                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu realizacji zapytania i kontaktu z Tobą.
+                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu
+                    realizacji zapytania i kontaktu z Tobą.
                   </p>
                 </div>
               </div>
@@ -631,7 +708,10 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
               )}
 
               <div className="flex items-start space-x-2">
-                <Checkbox id="marketingConsent" {...register("marketingConsent")} />
+                <Checkbox
+                  id="marketingConsent"
+                  {...register("marketingConsent")}
+                />
                 <Label htmlFor="marketingConsent" className="text-sm">
                   {t.fields.marketingConsent}
                 </Label>
@@ -639,12 +719,16 @@ export default function CoworkingForm({ language = "pl" }: CoworkingFormProps) {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" disabled={isSubmitting} className="w-full bg-green-600 hover:bg-green-700">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-green-600 hover:bg-green-700"
+            >
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

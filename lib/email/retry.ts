@@ -1,5 +1,12 @@
-import { getPendingFailedEmails, markEmailFailed, markEmailSent } from "./failed-email-store";
-import { sendConfirmationEmail, sendAdminNotification } from "@/lib/server-actions";
+import {
+  getPendingFailedEmails,
+  markEmailFailed,
+  markEmailSent,
+} from "./failed-email-store";
+import {
+  sendConfirmationEmail,
+  sendAdminNotification,
+} from "@/lib/server-actions";
 import { emailClient } from "./smtp-client";
 
 export async function processFailedEmails() {
@@ -18,7 +25,10 @@ export async function processFailedEmails() {
     } catch (error) {
       const result = await markEmailFailed(failure.id, error, MAX_RETRIES);
       if (result.retry_count >= MAX_RETRIES && result.status === "failed") {
-        console.error(`Email ${failure.id} failed after ${result.retry_count} attempts`, error);
+        console.error(
+          `Email ${failure.id} failed after ${result.retry_count} attempts`,
+          error,
+        );
         try {
           await emailClient.sendEmail({
             to: ADMIN_EMAIL,

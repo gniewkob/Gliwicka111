@@ -5,6 +5,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 ## Development Commands
 
 ### Essential Build Commands
+
 ```bash
 # Install dependencies
 npm install
@@ -23,6 +24,7 @@ npm run clean
 ```
 
 ### Testing Commands
+
 ```bash
 # Run all tests
 npm test
@@ -43,6 +45,7 @@ npm run test:ui
 ```
 
 ### Quality & Maintenance
+
 ```bash
 # Type checking
 npm run type-check
@@ -64,6 +67,7 @@ npm run generate:docs
 ```
 
 ### Database Operations
+
 ```bash
 # Run database migrations
 npm run migrate

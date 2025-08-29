@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React from 'react'
+import React from "react";
 
 /**
  * Reusable React error boundary component.
@@ -14,20 +14,20 @@ export class ErrorBoundary extends React.Component<
   React.PropsWithChildren<{ fallback?: React.ReactNode }>,
   { hasError: boolean }
 > {
-  state = { hasError: false }
+  state = { hasError: false };
 
   static getDerivedStateFromError() {
-    return { hasError: true }
+    return { hasError: true };
   }
 
   componentDidCatch(error: unknown, info: React.ErrorInfo) {
     // Replace console.error with integration to a logging service like Sentry.
-    console.error('ErrorBoundary caught an error', error, info)
+    console.error("ErrorBoundary caught an error", error, info);
   }
 
   private handleReset = () => {
-    this.setState({ hasError: false })
-  }
+    this.setState({ hasError: false });
+  };
 
   render() {
     if (this.state.hasError) {
@@ -46,9 +46,9 @@ export class ErrorBoundary extends React.Component<
             </div>
           )}
         </div>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }

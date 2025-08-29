@@ -90,8 +90,7 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   const isTest =
-    process.env.MOCK_DB === "true" ||
-    process.env.MOCK_EMAIL === "true";
+    process.env.MOCK_DB === "true" || process.env.MOCK_EMAIL === "true";
   if (isTest) {
     const lang = await getCurrentLanguage();
     if (process.env.FORCED_FORM_ERROR === "true") {
@@ -133,24 +132,28 @@ async function handleFormSubmission<T>(
     delete (data as any).sessionId;
 
     // Handle checkboxes and arrays
-      const processedData: Record<string, any> = {
-        ...data,
-        gdprConsent: ["on", "true", "1"].includes(String(formData.get("gdprConsent"))),
-        marketingConsent: ["on", "true", "1"].includes(String(formData.get("marketingConsent"))),
-        additionalServices: formData.getAll("additionalServices"),
-        equipment: formData.getAll("equipment"),
-        campaignGoals: formData.getAll("campaignGoals"),
-        interestedServices: formData.getAll("interestedServices"),
-      };
+    const processedData: Record<string, any> = {
+      ...data,
+      gdprConsent: ["on", "true", "1"].includes(
+        String(formData.get("gdprConsent")),
+      ),
+      marketingConsent: ["on", "true", "1"].includes(
+        String(formData.get("marketingConsent")),
+      ),
+      additionalServices: formData.getAll("additionalServices"),
+      equipment: formData.getAll("equipment"),
+      campaignGoals: formData.getAll("campaignGoals"),
+      interestedServices: formData.getAll("interestedServices"),
+    };
 
-      const numericFields = ["teamSize", "attendees", "budget"];
+    const numericFields = ["teamSize", "attendees", "budget"];
 
-      numericFields.forEach((field) => {
-        const value = processedData[field];
-        if (value !== undefined && !Number.isNaN(Number(value))) {
-          processedData[field] = Number(value);
-        }
-      });
+    numericFields.forEach((field) => {
+      const value = processedData[field];
+      if (value !== undefined && !Number.isNaN(Number(value))) {
+        processedData[field] = Number(value);
+      }
+    });
 
     // Validate data
     const validationResult = schema.safeParse(processedData);
@@ -620,7 +623,7 @@ export async function updateSubmissionStatus(
     `UPDATE form_submissions SET status=$1, updated_at=NOW() WHERE id=$2`,
     [status, id],
   );
-    if ((result.rowCount ?? 0) > 0) {
+  if ((result.rowCount ?? 0) > 0) {
     return { success: true };
   }
   const language = await getCurrentLanguage();
@@ -638,7 +641,7 @@ export async function deleteSubmission(id: string) {
   const result = await db.query(`DELETE FROM form_submissions WHERE id=$1`, [
     id,
   ]);
-    if ((result.rowCount ?? 0) > 0) {
+  if ((result.rowCount ?? 0) > 0) {
     return { success: true };
   }
   const language = await getCurrentLanguage();

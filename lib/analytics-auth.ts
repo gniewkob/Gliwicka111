@@ -11,7 +11,9 @@ function isTokenValid(header: string | null): boolean {
 
 function isBasicValid(header: string | null): boolean {
   if (!header || !BASIC_USER || !BASIC_PASS) return false;
-  const expected = Buffer.from(`${BASIC_USER}:${BASIC_PASS}`).toString("base64");
+  const expected = Buffer.from(`${BASIC_USER}:${BASIC_PASS}`).toString(
+    "base64",
+  );
   return header === `Basic ${expected}`;
 }
 

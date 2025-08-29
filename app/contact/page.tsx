@@ -1,10 +1,21 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useLanguage } from "@/components/language-provider"
-import { Building2, MapPin, Phone, Mail, Menu, X, Globe, ArrowLeft, Clock, CheckCircle } from "lucide-react"
+import { useState } from "react";
+import { useLanguage } from "@/components/language-provider";
+import {
+  Building2,
+  MapPin,
+  Phone,
+  Mail,
+  Menu,
+  X,
+  Globe,
+  ArrowLeft,
+  Clock,
+  CheckCircle,
+} from "lucide-react";
 import {
   Button,
   Card,
@@ -15,9 +26,9 @@ import {
   Textarea,
   Checkbox,
   Label,
-} from "@/components/ui"
-import Link from "next/link"
-import { navTranslations, backTranslations } from "@/lib/i18n"
+} from "@/components/ui";
+import Link from "next/link";
+import { navTranslations, backTranslations } from "@/lib/i18n";
 
 const translations = {
   pl: {
@@ -41,7 +52,8 @@ const translations = {
       message: "Wiadomość",
       messagePlaceholder: "Opisz swoje zapytanie...",
       rodo: "Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z RODO w celu odpowiedzi na zapytanie.",
-      marketing: "Wyrażam zgodę na otrzymywanie informacji marketingowych (opcjonalnie).",
+      marketing:
+        "Wyrażam zgodę na otrzymywanie informacji marketingowych (opcjonalnie).",
       send: "Wyślij wiadomość",
       sending: "Wysyłanie...",
       success: "Wiadomość została wysłana!",
@@ -122,11 +134,11 @@ const translations = {
     },
     back: backTranslations.en,
   },
-}
+};
 
 export default function ContactPage() {
-  const { language, toggleLanguage } = useLanguage()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { language, toggleLanguage } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -135,38 +147,44 @@ export default function ContactPage() {
     message: "",
     rodo: false,
     marketing: false,
-  })
-  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
+  });
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
 
-  const t = translations[language]
+  const t = translations[language];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleCheckboxChange = (name: string, checked: boolean) => {
-    setFormData((prev) => ({ ...prev, [name]: checked }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: checked }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.rodo) {
       alert(
         language === "pl"
           ? "Musisz wyrazić zgodę na przetwarzanie danych osobowych."
           : "You must consent to personal data processing.",
-      )
-      return
+      );
+      return;
     }
 
-    setFormStatus("sending")
+    setFormStatus("sending");
 
     // Simulate form submission
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      setFormStatus("success")
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setFormStatus("success");
       setFormData({
         name: "",
         email: "",
@@ -175,13 +193,13 @@ export default function ContactPage() {
         message: "",
         rodo: false,
         marketing: false,
-      })
-      setTimeout(() => setFormStatus("idle"), 3000)
+      });
+      setTimeout(() => setFormStatus("idle"), 3000);
     } catch (error) {
-      setFormStatus("error")
-      setTimeout(() => setFormStatus("idle"), 3000)
+      setFormStatus("error");
+      setTimeout(() => setFormStatus("idle"), 3000);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -195,20 +213,31 @@ export default function ContactPage() {
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Gliwicka 111</h1>
+                <h1 className="text-xl font-bold text-slate-900">
+                  Gliwicka 111
+                </h1>
                 <p className="text-xs text-slate-600">Property Management</p>
               </div>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.home}
               </Link>
-              <Link href="/properties" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/properties"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.properties}
               </Link>
-              <Link href="/about" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/about"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.about}
               </Link>
               <Link href="/contact" className="text-teal-600 font-medium">
@@ -238,8 +267,16 @@ export default function ContactPage() {
                 <Globe className="w-4 h-4" />
                 <span>{language.toUpperCase()}</span>
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </Button>
             </div>
           </div>
@@ -248,13 +285,22 @@ export default function ContactPage() {
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-gray-100 py-4">
               <nav className="flex flex-col space-y-4">
-                <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="/properties" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/properties"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.properties}
                 </Link>
-                <Link href="/about" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/about"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.about}
                 </Link>
                 <Link href="/contact" className="text-teal-600 font-medium">
@@ -271,14 +317,21 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Button asChild variant="ghost" className="mb-6">
-              <Link href="/" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900">
+              <Link
+                href="/"
+                className="flex items-center space-x-2 text-slate-600 hover:text-slate-900"
+              >
                 <ArrowLeft className="w-4 h-4" />
                 <span>{t.back}</span>
               </Link>
             </Button>
-            <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">{t.header.title}</h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+              {t.header.title}
+            </h1>
             <p className="text-xl text-teal-600 mb-6">{t.header.subtitle}</p>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">{t.header.description}</p>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              {t.header.description}
+            </p>
           </div>
         </div>
       </section>
@@ -290,7 +343,9 @@ export default function ContactPage() {
             {/* Contact Form */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl text-slate-900">{t.form.title}</CardTitle>
+                <CardTitle className="text-2xl text-slate-900">
+                  {t.form.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -375,10 +430,15 @@ export default function ContactPage() {
                       <Checkbox
                         id="rodo"
                         checked={formData.rodo}
-                        onCheckedChange={(checked) => handleCheckboxChange("rodo", checked as boolean)}
+                        onCheckedChange={(checked) =>
+                          handleCheckboxChange("rodo", checked as boolean)
+                        }
                         className="mt-1"
                       />
-                      <Label htmlFor="rodo" className="text-sm text-slate-600 leading-relaxed">
+                      <Label
+                        htmlFor="rodo"
+                        className="text-sm text-slate-600 leading-relaxed"
+                      >
                         {t.form.rodo} *
                       </Label>
                     </div>
@@ -386,10 +446,15 @@ export default function ContactPage() {
                       <Checkbox
                         id="marketing"
                         checked={formData.marketing}
-                        onCheckedChange={(checked) => handleCheckboxChange("marketing", checked as boolean)}
+                        onCheckedChange={(checked) =>
+                          handleCheckboxChange("marketing", checked as boolean)
+                        }
                         className="mt-1"
                       />
-                      <Label htmlFor="marketing" className="text-sm text-slate-600 leading-relaxed">
+                      <Label
+                        htmlFor="marketing"
+                        className="text-sm text-slate-600 leading-relaxed"
+                      >
                         {t.form.marketing}
                       </Label>
                     </div>
@@ -403,7 +468,9 @@ export default function ContactPage() {
                     {formStatus === "sending" && (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                     )}
-                    {formStatus === "success" && <CheckCircle className="w-4 h-4 mr-2" />}
+                    {formStatus === "success" && (
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                    )}
                     {formStatus === "sending"
                       ? t.form.sending
                       : formStatus === "success"
@@ -420,13 +487,17 @@ export default function ContactPage() {
             <div className="space-y-8">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl text-slate-900">{t.contact.title}</CardTitle>
+                  <CardTitle className="text-2xl text-slate-900">
+                    {t.contact.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex items-start space-x-3">
                     <MapPin className="w-5 h-5 text-teal-600 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-slate-900">{t.contact.address}</h4>
+                      <h4 className="font-semibold text-slate-900">
+                        {t.contact.address}
+                      </h4>
                       <p className="text-slate-600">Gliwicka 111</p>
                       <p className="text-slate-600">42-600 Tarnowskie Góry</p>
                       <p className="text-slate-600">Polska</p>
@@ -436,8 +507,13 @@ export default function ContactPage() {
                   <div className="flex items-start space-x-3">
                     <Phone className="w-5 h-5 text-teal-600 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-slate-900">{t.contact.phone}</h4>
-                      <a href="tel:+48791554674" className="text-teal-600 hover:text-teal-700">
+                      <h4 className="font-semibold text-slate-900">
+                        {t.contact.phone}
+                      </h4>
+                      <a
+                        href="tel:+48791554674"
+                        className="text-teal-600 hover:text-teal-700"
+                      >
                         +48 791 554 674
                       </a>
                     </div>
@@ -446,8 +522,13 @@ export default function ContactPage() {
                   <div className="flex items-start space-x-3">
                     <Mail className="w-5 h-5 text-teal-600 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-slate-900">{t.contact.email}</h4>
-                      <a href="mailto:kontakt@gliwicka111.pl" className="text-teal-600 hover:text-teal-700">
+                      <h4 className="font-semibold text-slate-900">
+                        {t.contact.email}
+                      </h4>
+                      <a
+                        href="mailto:kontakt@gliwicka111.pl"
+                        className="text-teal-600 hover:text-teal-700"
+                      >
                         kontakt@gliwicka111.pl
                       </a>
                     </div>
@@ -456,7 +537,9 @@ export default function ContactPage() {
                   <div className="flex items-start space-x-3">
                     <Clock className="w-5 h-5 text-teal-600 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-slate-900">{t.contact.hours}</h4>
+                      <h4 className="font-semibold text-slate-900">
+                        {t.contact.hours}
+                      </h4>
                       <p className="text-slate-600">{t.contact.hoursValue}</p>
                     </div>
                   </div>
@@ -465,16 +548,34 @@ export default function ContactPage() {
 
               {/* Quick Actions */}
               <div className="grid grid-cols-2 gap-4">
-                <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
-                  <a href="tel:+48791554674" className="flex flex-col items-center space-y-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto p-4 bg-transparent"
+                >
+                  <a
+                    href="tel:+48791554674"
+                    className="flex flex-col items-center space-y-2"
+                  >
                     <Phone className="w-6 h-6 text-teal-600" />
-                    <span className="text-sm font-medium">{language === "pl" ? "Zadzwoń" : "Call"}</span>
+                    <span className="text-sm font-medium">
+                      {language === "pl" ? "Zadzwoń" : "Call"}
+                    </span>
                   </a>
                 </Button>
-                <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
-                  <a href="mailto:kontakt@gliwicka111.pl" className="flex flex-col items-center space-y-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto p-4 bg-transparent"
+                >
+                  <a
+                    href="mailto:kontakt@gliwicka111.pl"
+                    className="flex flex-col items-center space-y-2"
+                  >
                     <Mail className="w-6 h-6 text-teal-600" />
-                    <span className="text-sm font-medium">{language === "pl" ? "E-mail" : "Email"}</span>
+                    <span className="text-sm font-medium">
+                      {language === "pl" ? "E-mail" : "Email"}
+                    </span>
                   </a>
                 </Button>
               </div>
@@ -487,8 +588,12 @@ export default function ContactPage() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t.map.title}</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">{t.map.description}</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              {t.map.title}
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              {t.map.description}
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -496,9 +601,13 @@ export default function ContactPage() {
               <div className="text-center">
                 <MapPin className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                 <p className="text-slate-600">
-                  {language === "pl" ? "Mapa Google zostanie załadowana tutaj" : "Google Map will be loaded here"}
+                  {language === "pl"
+                    ? "Mapa Google zostanie załadowana tutaj"
+                    : "Google Map will be loaded here"}
                 </p>
-                <p className="text-sm text-slate-500 mt-2">Gliwicka 111, 42-600 Tarnowskie Góry</p>
+                <p className="text-sm text-slate-500 mt-2">
+                  Gliwicka 111, 42-600 Tarnowskie Góry
+                </p>
               </div>
             </div>
           </div>
@@ -543,18 +652,32 @@ export default function ContactPage() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">{language === "pl" ? "Szybkie linki" : "Quick Links"}</h4>
+              <h4 className="text-lg font-semibold mb-4">
+                {language === "pl" ? "Szybkie linki" : "Quick Links"}
+              </h4>
               <nav className="space-y-2">
-                <Link href="/" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="/properties" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/properties"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.properties}
                 </Link>
-                <Link href="/about" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/about"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.about}
                 </Link>
-                <Link href="/contact" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/contact"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.contact}
                 </Link>
               </nav>
@@ -566,10 +689,18 @@ export default function ContactPage() {
                 {language === "pl" ? "Informacje prawne" : "Legal Information"}
               </h4>
               <nav className="space-y-2">
-                <Link href="/privacy" className="block text-slate-400 hover:text-white transition-colors">
-                  {language === "pl" ? "Polityka prywatności" : "Privacy Policy"}
+                <Link
+                  href="/privacy"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
+                  {language === "pl"
+                    ? "Polityka prywatności"
+                    : "Privacy Policy"}
                 </Link>
-                <Link href="/terms" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/terms"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {language === "pl" ? "Regulamin" : "Terms of Service"}
                 </Link>
               </nav>
@@ -578,11 +709,14 @@ export default function ContactPage() {
 
           <div className="border-t border-slate-800 mt-12 pt-8 text-center text-slate-400">
             <p>
-              &copy; 2024 Gliwicka 111. {language === "pl" ? "Wszystkie prawa zastrzeżone." : "All rights reserved."}
+              &copy; 2024 Gliwicka 111.{" "}
+              {language === "pl"
+                ? "Wszystkie prawa zastrzeżone."
+                : "All rights reserved."}
             </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

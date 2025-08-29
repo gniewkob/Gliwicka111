@@ -1,11 +1,11 @@
-import { vi, beforeAll, afterAll, beforeEach, afterEach } from "vitest"
-import "@testing-library/jest-dom"
-import { cleanup } from "@testing-library/react"
-import { Client, type Pool } from "pg"
-import { readFile } from "node:fs/promises"
-import path from "node:path"
+import { vi, beforeAll, afterAll, beforeEach, afterEach } from "vitest";
+import "@testing-library/jest-dom";
+import { cleanup } from "@testing-library/react";
+import { Client, type Pool } from "pg";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
-let client: Client
+let client: Client;
 
 // Mock environment variables for integration tests
 Object.assign(process.env, {
@@ -21,17 +21,17 @@ Object.assign(process.env, {
   SMTP_PASS: "test_password",
   ADMIN_EMAIL: "admin@example.com",
   IP_SALT: "test_salt",
-})
+});
 
 // Mock database connection
 vi.mock("@/lib/database/connection-pool", () => {
   const db = {
     query: vi.fn(),
     transaction: vi.fn(),
-  }
-  const getPool = vi.fn().mockResolvedValue(db as unknown as Pool)
-  return { getPool, default: getPool }
-})
+  };
+  const getPool = vi.fn().mockResolvedValue(db as unknown as Pool);
+  return { getPool, default: getPool };
+});
 
 // Mock email service
 vi.mock("@/lib/email/smtp-client", () => ({
@@ -39,7 +39,7 @@ vi.mock("@/lib/email/smtp-client", () => ({
     sendEmail: vi.fn(),
     verifyConnection: vi.fn(),
   },
-}))
+}));
 
 // Database setup for integration tests
 beforeAll(async () => {
@@ -50,50 +50,50 @@ beforeAll(async () => {
     user: process.env.DB_USER || "test_user",
     password: process.env.DB_PASSWORD || "test_password",
     database: process.env.DB_NAME || "test_db",
-  })
+  });
 
-  await client.connect()
+  await client.connect();
 
   // Run database migrations
-  await runMigrations(client)
-})
+  await runMigrations(client);
+});
 
 beforeEach(async () => {
   // Clean database before each test
-  await cleanDatabase(client)
+  await cleanDatabase(client);
 
   // Seed test data
-  await seedTestData(client)
+  await seedTestData(client);
 
-  vi.clearAllMocks()
-})
+  vi.clearAllMocks();
+});
 
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});
 
 afterAll(async () => {
   if (client) {
-    await client.end()
+    await client.end();
   }
-})
+});
 
 async function runMigrations(conn: Client) {
   const migrations = [
     "migrations/001_create_form_submissions.sql",
     "migrations/002_create_analytics_tables.sql",
-  ]
+  ];
 
   for (const migration of migrations) {
-    const sql = await readFile(path.join(process.cwd(), migration), "utf8")
-    await conn.query(sql)
+    const sql = await readFile(path.join(process.cwd(), migration), "utf8");
+    await conn.query(sql);
   }
 }
 
 async function cleanDatabase(conn: Client) {
-  await conn.query("TRUNCATE TABLE form_submissions RESTART IDENTITY CASCADE")
-  await conn.query("TRUNCATE TABLE analytics_events RESTART IDENTITY CASCADE")
-  await conn.query("TRUNCATE TABLE rate_limits RESTART IDENTITY CASCADE")
+  await conn.query("TRUNCATE TABLE form_submissions RESTART IDENTITY CASCADE");
+  await conn.query("TRUNCATE TABLE analytics_events RESTART IDENTITY CASCADE");
+  await conn.query("TRUNCATE TABLE rate_limits RESTART IDENTITY CASCADE");
 }
 
 async function seedTestData(conn: Client) {
@@ -115,5 +115,5 @@ async function seedTestData(conn: Client) {
       "completed",
       "test_ip_hash",
     ],
-  )
+  );
 }

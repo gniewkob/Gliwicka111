@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useLanguage } from "@/components/language-provider"
+import { useState, useEffect } from "react";
+import { useLanguage } from "@/components/language-provider";
 import {
   Building2,
   MapPin,
@@ -25,7 +25,7 @@ import {
   Target,
   TrendingUp,
   ChevronDown,
-} from "lucide-react"
+} from "lucide-react";
 import {
   Button,
   Card,
@@ -38,11 +38,11 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui"
-import { ConsentBanner } from "@/components/analytics"
-import Link from "next/link"
-import Image from "next/image"
-import { navTranslations } from "@/lib/i18n"
+} from "@/components/ui";
+import { ConsentBanner } from "@/components/analytics";
+import Link from "next/link";
+import Image from "next/image";
+import { navTranslations } from "@/lib/i18n";
 
 const translations = {
   pl: {
@@ -72,13 +72,15 @@ const translations = {
     offer: {
       title: "Nasza oferta",
       subtitle: "Kompleksowe rozwiązania dla Twojego biznesu",
-      description: "Wybierz usługę dopasowaną do Twoich potrzeb i rozwijaj biznes w profesjonalnym środowisku",
+      description:
+        "Wybierz usługę dopasowaną do Twoich potrzeb i rozwijaj biznes w profesjonalnym środowisku",
     },
     services: {
       virtualOffice: {
         title: "Biuro wirtualne",
         subtitle: "Prestiżowy adres od 99 zł/miesiąc",
-        description: "Profesjonalny adres biznesowy z pełną obsługą korespondencji",
+        description:
+          "Profesjonalny adres biznesowy z pełną obsługą korespondencji",
         benefits: [
           "Adres do rejestracji firmy",
           "Odbiór i przekazywanie korespondencji",
@@ -88,13 +90,19 @@ const translations = {
           "Profesjonalna obsługa telefoniczna",
         ],
         targetCustomer: "Idealne dla freelancerów, firm online i startupów",
-        useCase: "Firma IT z Katowic używa naszego adresu do rejestracji i odbioru dokumentów urzędowych",
+        useCase:
+          "Firma IT z Katowic używa naszego adresu do rejestracji i odbioru dokumentów urzędowych",
         pricing: {
           basic: {
             name: "Podstawowy",
             price: "99 zł/miesiąc",
             originalPrice: "129 zł",
-            features: ["Adres biznesowy", "Odbiór poczty", "Powiadomienia SMS/email", "Recepcja 8-18"],
+            features: [
+              "Adres biznesowy",
+              "Odbiór poczty",
+              "Powiadomienia SMS/email",
+              "Recepcja 8-18",
+            ],
             popular: false,
           },
           standard: {
@@ -137,13 +145,20 @@ const translations = {
           "Dostęp 24/7 z kartą",
         ],
         targetCustomer: "Dla freelancerów, małych zespołów i firm w rozwoju",
-        useCase: "Zespół marketingowy wynajmuje dedicated desk na 6 miesięcy podczas realizacji dużego projektu",
+        useCase:
+          "Zespół marketingowy wynajmuje dedicated desk na 6 miesięcy podczas realizacji dużego projektu",
         pricing: {
           hotDesk: {
             name: "Hot Desk",
             price: "25 zł/dzień",
             monthlyPrice: "450 zł/miesiąc",
-            features: ["Elastyczne miejsce", "Wi-Fi 1Gb/s", "Kawa/herbata", "Sala konferencyjna", "Drukarki"],
+            features: [
+              "Elastyczne miejsce",
+              "Wi-Fi 1Gb/s",
+              "Kawa/herbata",
+              "Sala konferencyjna",
+              "Drukarki",
+            ],
             popular: false,
           },
           dedicatedDesk: {
@@ -177,7 +192,8 @@ const translations = {
       meetingRooms: {
         title: "Sale spotkań / Wydarzenia",
         subtitle: "Profesjonalne sale od 30 zł/godzinę",
-        description: "W pełni wyposażone sale konferencyjne z obsługą techniczną",
+        description:
+          "W pełni wyposażone sale konferencyjne z obsługą techniczną",
         benefits: [
           "Profesjonalny sprzęt AV 4K",
           "Szybki internet i Wi-Fi",
@@ -186,21 +202,35 @@ const translations = {
           "Obsługa techniczna",
           "Klimatyzacja i oświetlenie LED",
         ],
-        targetCustomer: "Dla firm organizujących spotkania, szkolenia i prezentacje",
-        useCase: "Kancelaria prawna organizuje comiesięczne spotkania partnerów w naszej sali średniej",
+        targetCustomer:
+          "Dla firm organizujących spotkania, szkolenia i prezentacje",
+        useCase:
+          "Kancelaria prawna organizuje comiesięczne spotkania partnerów w naszej sali średniej",
         pricing: {
           small: {
             name: "Sala mała (2-6 osób)",
             price: "30 zł/h",
             dayPrice: "200 zł/dzień",
-            features: ["Projektor 4K", "Flipchart", "Wi-Fi", "Klimatyzacja", "Kawa/herbata"],
+            features: [
+              "Projektor 4K",
+              "Flipchart",
+              "Wi-Fi",
+              "Klimatyzacja",
+              "Kawa/herbata",
+            ],
             popular: false,
           },
           medium: {
             name: "Sala średnia (6-12 osób)",
             price: "50 zł/h",
             dayPrice: "350 zł/dzień",
-            features: ['Duży ekran 65"', "System audio", "Telekonferencje", "Catering", "Tablica interaktywna"],
+            features: [
+              'Duży ekran 65"',
+              "System audio",
+              "Telekonferencje",
+              "Catering",
+              "Tablica interaktywna",
+            ],
             popular: true,
           },
           large: {
@@ -220,7 +250,13 @@ const translations = {
             name: "Sala konferencyjna (20-50 osób)",
             price: "150 zł/h",
             dayPrice: "1000 zł/dzień",
-            features: ["Pełne wyposażenie AV", "Obsługa eventów", "Premium catering", "Parking VIP", "Hostessa"],
+            features: [
+              "Pełne wyposażenie AV",
+              "Obsługa eventów",
+              "Premium catering",
+              "Parking VIP",
+              "Hostessa",
+            ],
             popular: false,
           },
         },
@@ -228,7 +264,8 @@ const translations = {
       advertising: {
         title: "Reklama zewnętrzna",
         subtitle: "Billboard mobilny od 350 zł/tydzień",
-        description: "Skuteczna reklama mobilna docierająca do tysięcy potencjalnych klientów",
+        description:
+          "Skuteczna reklama mobilna docierająca do tysięcy potencjalnych klientów",
         benefits: [
           "Duża powierzchnia reklamowa 5m x 3m",
           "Mobilność - dotarcie do różnych lokalizacji",
@@ -237,8 +274,10 @@ const translations = {
           "Profesjonalny montaż reklam",
           "Raportowanie tras GPS",
         ],
-        targetCustomer: "Dla firm chcących zwiększyć rozpoznawalność marki lokalnie",
-        useCase: "Salon samochodowy promuje nowe modele podczas targów i eventów w regionie",
+        targetCustomer:
+          "Dla firm chcących zwiększyć rozpoznawalność marki lokalnie",
+        useCase:
+          "Salon samochodowy promuje nowe modele podczas targów i eventów w regionie",
         pricing: {
           mobile: {
             name: "Billboard mobilny",
@@ -284,7 +323,8 @@ const translations = {
       specialDeals: {
         title: "Oferty specjalne",
         subtitle: "Promocje i rabaty do -50%",
-        description: "Wyjątkowe oferty dla nowych klientów i długoterminowych partnerów",
+        description:
+          "Wyjątkowe oferty dla nowych klientów i długoterminowych partnerów",
         benefits: [
           "Pakiety powitalne z rabatem -30%",
           "Program poleceń -25%",
@@ -293,8 +333,10 @@ const translations = {
           "Bezpłatny dzień próbny",
           "Elastyczne warunki płatności",
         ],
-        targetCustomer: "Dla wszystkich nowych klientów i firm planujących długoterminową współpracę",
-        useCase: "Startup skorzystał z pakietu powitalnego i zaoszczędził 2000 zł w pierwszym roku",
+        targetCustomer:
+          "Dla wszystkich nowych klientów i firm planujących długoterminową współpracę",
+        useCase:
+          "Startup skorzystał z pakietu powitalnego i zaoszczędził 2000 zł w pierwszym roku",
         deals: {
           welcome: {
             name: "Pakiet powitalny",
@@ -367,7 +409,8 @@ const translations = {
     },
     cta: {
       title: "Gotowy na rozwój swojego biznesu?",
-      subtitle: "Skontaktuj się z nami już dziś i skorzystaj z bezpłatnej konsultacji",
+      subtitle:
+        "Skontaktuj się z nami już dziś i skorzystaj z bezpłatnej konsultacji",
       freeConsultation: "Bezpłatna konsultacja",
       visitUs: "Odwiedź nas",
       freeDay: "Wypróbuj coworking za darmo",
@@ -394,7 +437,8 @@ const translations = {
               "Tak, recepcja jest dostępna w godzinach 8:00-18:00. Goście mogą czekać w wygodnej strefie oczekiwania. Oferujemy również obsługę spotkań biznesowych w naszych salach konferencyjnych.",
           },
           {
-            question: "Jakie dokumenty potrzebuję do założenia biura wirtualnego?",
+            question:
+              "Jakie dokumenty potrzebuję do założenia biura wirtualnego?",
             answer:
               "Potrzebujesz tylko dowodu osobistego i wypełnionej umowy. Proces zajmuje maksymalnie 24 godziny, a adres jest dostępny natychmiast po podpisaniu umowy.",
           },
@@ -449,7 +493,8 @@ const translations = {
     },
     footer: {
       company: "Gliwicka 111",
-      description: "Profesjonalne zarządzanie nieruchomościami i kompleksowe usługi biznesowe.",
+      description:
+        "Profesjonalne zarządzanie nieruchomościami i kompleksowe usługi biznesowe.",
       quickLinks: "Szybkie linki",
       services: "Usługi",
       contact: "Kontakt",
@@ -493,13 +538,15 @@ const translations = {
     offer: {
       title: "Our Offer",
       subtitle: "Comprehensive solutions for your business",
-      description: "Choose a service tailored to your needs and grow your business in a professional environment",
+      description:
+        "Choose a service tailored to your needs and grow your business in a professional environment",
     },
     services: {
       virtualOffice: {
         title: "Virtual Office",
         subtitle: "Prestigious address from 99 PLN/month",
-        description: "Professional business address with full mail handling service",
+        description:
+          "Professional business address with full mail handling service",
         benefits: [
           "Company registration address",
           "Mail collection and forwarding",
@@ -508,21 +555,33 @@ const translations = {
           "Document scanning on demand",
           "Professional phone service",
         ],
-        targetCustomer: "Perfect for freelancers, online companies and startups",
-        useCase: "IT company from Katowice uses our address for registration and official document collection",
+        targetCustomer:
+          "Perfect for freelancers, online companies and startups",
+        useCase:
+          "IT company from Katowice uses our address for registration and official document collection",
         pricing: {
           basic: {
             name: "Basic",
             price: "99 PLN/month",
             originalPrice: "129 PLN",
-            features: ["Business address", "Mail collection", "SMS/email notifications", "Reception 8-18"],
+            features: [
+              "Business address",
+              "Mail collection",
+              "SMS/email notifications",
+              "Reception 8-18",
+            ],
             popular: false,
           },
           standard: {
             name: "Standard",
             price: "149 PLN/month",
             originalPrice: "199 PLN",
-            features: ["Everything from basic", "Call forwarding", "2h conference room/month", "Document scanning"],
+            features: [
+              "Everything from basic",
+              "Call forwarding",
+              "2h conference room/month",
+              "Document scanning",
+            ],
             popular: true,
           },
           premium: {
@@ -553,13 +612,20 @@ const translations = {
           "24/7 access with card",
         ],
         targetCustomer: "For freelancers, small teams and growing companies",
-        useCase: "Marketing team rents dedicated desk for 6 months during a major project implementation",
+        useCase:
+          "Marketing team rents dedicated desk for 6 months during a major project implementation",
         pricing: {
           hotDesk: {
             name: "Hot Desk",
             price: "25 PLN/day",
             monthlyPrice: "450 PLN/month",
-            features: ["Flexible workspace", "1Gb/s Wi-Fi", "Coffee/tea", "Conference room", "Printers"],
+            features: [
+              "Flexible workspace",
+              "1Gb/s Wi-Fi",
+              "Coffee/tea",
+              "Conference room",
+              "Printers",
+            ],
             popular: false,
           },
           dedicatedDesk: {
@@ -602,21 +668,35 @@ const translations = {
           "Technical support",
           "Air conditioning and LED lighting",
         ],
-        targetCustomer: "For companies organizing meetings, training and presentations",
-        useCase: "Law firm organizes monthly partner meetings in our medium room",
+        targetCustomer:
+          "For companies organizing meetings, training and presentations",
+        useCase:
+          "Law firm organizes monthly partner meetings in our medium room",
         pricing: {
           small: {
             name: "Small room (2-6 people)",
             price: "30 PLN/h",
             dayPrice: "200 PLN/day",
-            features: ["4K Projector", "Flipchart", "Wi-Fi", "Air conditioning", "Coffee/tea"],
+            features: [
+              "4K Projector",
+              "Flipchart",
+              "Wi-Fi",
+              "Air conditioning",
+              "Coffee/tea",
+            ],
             popular: false,
           },
           medium: {
             name: "Medium room (6-12 people)",
             price: "50 PLN/h",
             dayPrice: "350 PLN/day",
-            features: ['65" Large screen', "Audio system", "Video conferencing", "Catering", "Interactive board"],
+            features: [
+              '65" Large screen',
+              "Audio system",
+              "Video conferencing",
+              "Catering",
+              "Interactive board",
+            ],
             popular: true,
           },
           large: {
@@ -636,7 +716,13 @@ const translations = {
             name: "Conference hall (20-50 people)",
             price: "150 PLN/h",
             dayPrice: "1000 PLN/day",
-            features: ["Full AV equipment", "Event management", "Premium catering", "VIP parking", "Hostess"],
+            features: [
+              "Full AV equipment",
+              "Event management",
+              "Premium catering",
+              "VIP parking",
+              "Hostess",
+            ],
             popular: false,
           },
         },
@@ -644,7 +730,8 @@ const translations = {
       advertising: {
         title: "Outdoor Advertising",
         subtitle: "Mobile billboard from 350 PLN/week",
-        description: "Effective mobile advertising reaching thousands of potential customers",
+        description:
+          "Effective mobile advertising reaching thousands of potential customers",
         benefits: [
           "Large advertising space 5m x 3m",
           "Mobility - reach different locations",
@@ -653,21 +740,35 @@ const translations = {
           "Professional ad installation",
           "GPS route reporting",
         ],
-        targetCustomer: "For companies wanting to increase local brand recognition",
-        useCase: "Car dealership promotes new models during fairs and events in the region",
+        targetCustomer:
+          "For companies wanting to increase local brand recognition",
+        useCase:
+          "Car dealership promotes new models during fairs and events in the region",
         pricing: {
           mobile: {
             name: "Mobile billboard",
             price: "350 PLN/week",
             monthlyPrice: "1200 PLN/month",
-            features: ["5m x 3m trailer", "Flexible routes", "High visibility", "Full service", "GPS reporting"],
+            features: [
+              "5m x 3m trailer",
+              "Flexible routes",
+              "High visibility",
+              "Full service",
+              "GPS reporting",
+            ],
             popular: true,
           },
           static: {
             name: "Static billboard",
             price: "200 PLN/week",
             monthlyPrice: "700 PLN/month",
-            features: ["Fixed location", "24/7 visibility", "Main road", "Long-term exposure", "LED lighting"],
+            features: [
+              "Fixed location",
+              "24/7 visibility",
+              "Main road",
+              "Long-term exposure",
+              "LED lighting",
+            ],
             popular: false,
           },
           digital: {
@@ -688,7 +789,8 @@ const translations = {
       specialDeals: {
         title: "Special Deals",
         subtitle: "Promotions and discounts up to -50%",
-        description: "Exceptional offers for new clients and long-term partners",
+        description:
+          "Exceptional offers for new clients and long-term partners",
         benefits: [
           "Welcome packages with -30% discount",
           "Referral program -25%",
@@ -697,8 +799,10 @@ const translations = {
           "Free trial day",
           "Flexible payment terms",
         ],
-        targetCustomer: "For all new clients and companies planning long-term cooperation",
-        useCase: "Startup used welcome package and saved 2000 PLN in the first year",
+        targetCustomer:
+          "For all new clients and companies planning long-term cooperation",
+        useCase:
+          "Startup used welcome package and saved 2000 PLN in the first year",
         deals: {
           welcome: {
             name: "Welcome package",
@@ -788,7 +892,8 @@ const translations = {
               "Yes, our address can be used for business registration and companies. We provide all necessary documents and confirmations required by KRS and CEIDG.",
           },
           {
-            question: "How quickly will I receive information about correspondence?",
+            question:
+              "How quickly will I receive information about correspondence?",
             answer:
               "We send notifications immediately after receiving mail - SMS and email within 15 minutes. Additionally, we offer scanning of important documents and sending them electronically.",
           },
@@ -853,7 +958,8 @@ const translations = {
     },
     footer: {
       company: "Gliwicka 111",
-      description: "Professional property management and comprehensive business services.",
+      description:
+        "Professional property management and comprehensive business services.",
       quickLinks: "Quick Links",
       services: "Services",
       contact: "Contact",
@@ -868,24 +974,32 @@ const translations = {
       emergency: "Emergency contact: +48 791 554 674",
     },
   },
-}
+};
 
 export default function HomePage() {
-  const { language, toggleLanguage } = useLanguage()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const { language, toggleLanguage } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const t = translations[language]
+  const t = translations[language];
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const ServiceCard = ({ service, icon: Icon, href }: { service: any; icon: any; href: string }) => (
+  const ServiceCard = ({
+    service,
+    icon: Icon,
+    href,
+  }: {
+    service: any;
+    icon: any;
+    href: string;
+  }) => (
     <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-teal-200 h-full">
       <CardHeader className="text-center pb-4">
         <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
@@ -895,7 +1009,9 @@ export default function HomePage() {
         <Badge variant="secondary" className="mx-auto">
           {service.subtitle}
         </Badge>
-        <CardDescription className="mt-2">{service.description}</CardDescription>
+        <CardDescription className="mt-2">
+          {service.description}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1">
@@ -903,17 +1019,20 @@ export default function HomePage() {
             {language === "pl" ? "Kluczowe korzyści:" : "Key benefits:"}
           </h4>
           <ul className="space-y-1">
-            {service.benefits.slice(0, 3).map((benefit: string, index: number) => (
-              <li key={index} className="flex items-start text-sm">
-                <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{benefit}</span>
-              </li>
-            ))}
+            {service.benefits
+              .slice(0, 3)
+              .map((benefit: string, index: number) => (
+                <li key={index} className="flex items-start text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>{benefit}</span>
+                </li>
+              ))}
           </ul>
         </div>
         <div className="pt-2 border-t">
           <p className="text-xs text-gray-600 mb-3">
-            <strong>{language === "pl" ? "Dla kogo:" : "Target:"}</strong> {service.targetCustomer}
+            <strong>{language === "pl" ? "Dla kogo:" : "Target:"}</strong>{" "}
+            {service.targetCustomer}
           </p>
           <Button asChild className="w-full bg-teal-600 hover:bg-teal-700">
             <Link href={href}>
@@ -924,10 +1043,18 @@ export default function HomePage() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 
-  const PricingCard = ({ plan, isPopular = false }: { plan: any; isPopular?: boolean }) => (
-    <Card className={`relative h-full ${isPopular ? "border-2 border-teal-500 shadow-lg scale-105" : ""}`}>
+  const PricingCard = ({
+    plan,
+    isPopular = false,
+  }: {
+    plan: any;
+    isPopular?: boolean;
+  }) => (
+    <Card
+      className={`relative h-full ${isPopular ? "border-2 border-teal-500 shadow-lg scale-105" : ""}`}
+    >
       {isPopular && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
           <Badge className="bg-teal-600 text-white px-4 py-1">
@@ -939,9 +1066,17 @@ export default function HomePage() {
         <CardTitle className="text-lg">{plan.name}</CardTitle>
         <div className="space-y-1">
           <div className="text-3xl font-bold text-teal-600">{plan.price}</div>
-          {plan.originalPrice && <div className="text-sm text-gray-500 line-through">{plan.originalPrice}</div>}
-          {plan.monthlyPrice && <div className="text-sm text-gray-600">({plan.monthlyPrice})</div>}
-          {plan.dayPrice && <div className="text-sm text-gray-600">({plan.dayPrice})</div>}
+          {plan.originalPrice && (
+            <div className="text-sm text-gray-500 line-through">
+              {plan.originalPrice}
+            </div>
+          )}
+          {plan.monthlyPrice && (
+            <div className="text-sm text-gray-600">({plan.monthlyPrice})</div>
+          )}
+          {plan.dayPrice && (
+            <div className="text-sm text-gray-600">({plan.dayPrice})</div>
+          )}
         </div>
       </CardHeader>
       <CardContent className="flex-1">
@@ -954,11 +1089,13 @@ export default function HomePage() {
           ))}
         </ul>
         <Button asChild className="w-full mt-6 bg-teal-600 hover:bg-teal-700">
-          <Link href="/contact">{language === "pl" ? "Wybierz plan" : "Choose Plan"}</Link>
+          <Link href="/contact">
+            {language === "pl" ? "Wybierz plan" : "Choose Plan"}
+          </Link>
         </Button>
       </CardContent>
     </Card>
-  )
+  );
 
   const TestimonialCard = ({ testimonial }: { testimonial: any }) => (
     <Card className="hover:shadow-lg transition-shadow h-full">
@@ -976,7 +1113,9 @@ export default function HomePage() {
             </Badge>
           )}
         </div>
-        <blockquote className="text-slate-700 mb-4 italic flex-1">&ldquo;{testimonial.text}&rdquo;</blockquote>
+        <blockquote className="text-slate-700 mb-4 italic flex-1">
+          &ldquo;{testimonial.text}&rdquo;
+        </blockquote>
         <div className="flex items-center">
           <Image
             src={testimonial.avatar || "/placeholder.svg"}
@@ -993,32 +1132,42 @@ export default function HomePage() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white shadow-sm"
+          isScrolled
+            ? "bg-white/95 backdrop-blur-md shadow-md"
+            : "bg-white shadow-sm"
         } border-b border-gray-100`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            >
               <div className="w-10 h-10 bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Gliwicka 111</h1>
+                <h1 className="text-xl font-bold text-slate-900">
+                  Gliwicka 111
+                </h1>
                 <p className="text-xs text-slate-600">Property Management</p>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6">
-              <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.home}
               </Link>
               <div className="relative group">
@@ -1061,10 +1210,16 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <Link href="/about" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/about"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.about}
               </Link>
-              <Link href="/contact" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/contact"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.contact}
               </Link>
 
@@ -1091,8 +1246,16 @@ export default function HomePage() {
                 <Globe className="w-4 h-4" />
                 <span>{language.toUpperCase()}</span>
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </Button>
             </div>
           </div>
@@ -1101,28 +1264,52 @@ export default function HomePage() {
           {mobileMenuOpen && (
             <div className="lg:hidden border-t border-gray-100 py-4 bg-white">
               <nav className="flex flex-col space-y-4">
-                <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="#virtual-office" className="text-slate-700 hover:text-teal-600 font-medium pl-4">
+                <Link
+                  href="#virtual-office"
+                  className="text-slate-700 hover:text-teal-600 font-medium pl-4"
+                >
                   {t.nav.virtualOffice}
                 </Link>
-                <Link href="#coworking" className="text-slate-700 hover:text-teal-600 font-medium pl-4">
+                <Link
+                  href="#coworking"
+                  className="text-slate-700 hover:text-teal-600 font-medium pl-4"
+                >
                   {t.nav.coworking}
                 </Link>
-                <Link href="#meeting-rooms" className="text-slate-700 hover:text-teal-600 font-medium pl-4">
+                <Link
+                  href="#meeting-rooms"
+                  className="text-slate-700 hover:text-teal-600 font-medium pl-4"
+                >
                   {t.nav.meetingRooms}
                 </Link>
-                <Link href="#advertising" className="text-slate-700 hover:text-teal-600 font-medium pl-4">
+                <Link
+                  href="#advertising"
+                  className="text-slate-700 hover:text-teal-600 font-medium pl-4"
+                >
                   {t.nav.advertising}
                 </Link>
-                <Link href="#special-deals" className="text-slate-700 hover:text-teal-600 font-medium pl-4">
+                <Link
+                  href="#special-deals"
+                  className="text-slate-700 hover:text-teal-600 font-medium pl-4"
+                >
                   {t.nav.specialDeals}
                 </Link>
-                <Link href="/about" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/about"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.about}
                 </Link>
-                <Link href="/contact" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/contact"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.contact}
                 </Link>
               </nav>
@@ -1138,39 +1325,63 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center mb-6">
-                <Badge variant="outline" className="mr-3 bg-teal-50 border-teal-200">
+                <Badge
+                  variant="outline"
+                  className="mr-3 bg-teal-50 border-teal-200"
+                >
                   <Award className="w-3 h-3 mr-1 text-teal-600" />
                   {t.hero.trustBadge}
                 </Badge>
               </div>
-              <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-4 leading-tight">{t.hero.title}</h1>
-              <h2 className="text-2xl lg:text-3xl font-semibold text-teal-600 mb-6">{t.hero.subtitle}</h2>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">{t.hero.description}</p>
+              <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-4 leading-tight">
+                {t.hero.title}
+              </h1>
+              <h2 className="text-2xl lg:text-3xl font-semibold text-teal-600 mb-6">
+                {t.hero.subtitle}
+              </h2>
+              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                {t.hero.description}
+              </p>
 
               {/* Hero Stats */}
               <div className="grid grid-cols-3 gap-4 mb-8">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-teal-600">150+</div>
-                  <div className="text-sm text-slate-600">{language === "pl" ? "Klientów" : "Clients"}</div>
+                  <div className="text-sm text-slate-600">
+                    {language === "pl" ? "Klientów" : "Clients"}
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-teal-600">99.9%</div>
-                  <div className="text-sm text-slate-600">{language === "pl" ? "Dostępność" : "Uptime"}</div>
+                  <div className="text-sm text-slate-600">
+                    {language === "pl" ? "Dostępność" : "Uptime"}
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-teal-600">24/7</div>
-                  <div className="text-sm text-slate-600">{language === "pl" ? "Wsparcie" : "Support"}</div>
+                  <div className="text-sm text-slate-600">
+                    {language === "pl" ? "Wsparcie" : "Support"}
+                  </div>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-teal-600 hover:bg-teal-700 shadow-lg">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-teal-600 hover:bg-teal-700 shadow-lg"
+                >
                   <Link href="#offer">
                     {t.hero.cta}
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="border-2 bg-transparent">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="border-2 bg-transparent"
+                >
                   <Link href="/contact">{t.hero.contact}</Link>
                 </Button>
               </div>
@@ -1189,7 +1400,9 @@ export default function HomePage() {
               <div className="absolute -top-4 -right-4 bg-white rounded-lg shadow-lg p-3">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-sm font-medium">{language === "pl" ? "Dostępne teraz" : "Available now"}</span>
+                  <span className="text-sm font-medium">
+                    {language === "pl" ? "Dostępne teraz" : "Available now"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1215,7 +1428,9 @@ export default function HomePage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">{t.stats.title}</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              {t.stats.title}
+            </h2>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
             {t.stats.items.map((stat, index) => (
@@ -1223,7 +1438,9 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-4">
                   <stat.icon className="w-8 h-8 text-teal-600" />
                 </div>
-                <div className="text-3xl font-bold text-slate-900 mb-2">{stat.number}</div>
+                <div className="text-3xl font-bold text-slate-900 mb-2">
+                  {stat.number}
+                </div>
                 <div className="text-slate-600">{stat.label}</div>
               </div>
             ))}
@@ -1235,18 +1452,44 @@ export default function HomePage() {
       <section id="offer" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t.offer.title}</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">{t.offer.subtitle}</p>
-            <p className="text-slate-600 max-w-2xl mx-auto">{t.offer.description}</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              {t.offer.title}
+            </h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
+              {t.offer.subtitle}
+            </p>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              {t.offer.description}
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ServiceCard service={t.services.virtualOffice} icon={MapPin} href="#virtual-office" />
-            <ServiceCard service={t.services.coworking} icon={Users} href="#coworking" />
-            <ServiceCard service={t.services.meetingRooms} icon={Calendar} href="#meeting-rooms" />
-            <ServiceCard service={t.services.advertising} icon={Megaphone} href="#advertising" />
+            <ServiceCard
+              service={t.services.virtualOffice}
+              icon={MapPin}
+              href="#virtual-office"
+            />
+            <ServiceCard
+              service={t.services.coworking}
+              icon={Users}
+              href="#coworking"
+            />
+            <ServiceCard
+              service={t.services.meetingRooms}
+              icon={Calendar}
+              href="#meeting-rooms"
+            />
+            <ServiceCard
+              service={t.services.advertising}
+              icon={Megaphone}
+              href="#advertising"
+            />
             <div className="md:col-span-2 lg:col-span-1">
-              <ServiceCard service={t.services.specialDeals} icon={Gift} href="#special-deals" />
+              <ServiceCard
+                service={t.services.specialDeals}
+                icon={Gift}
+                href="#special-deals"
+              />
             </div>
           </div>
         </div>
@@ -1262,19 +1505,27 @@ export default function HomePage() {
                   <MapPin className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-slate-900">{t.services.virtualOffice.title}</h2>
-                  <p className="text-blue-600 font-medium">{t.services.virtualOffice.subtitle}</p>
+                  <h2 className="text-3xl font-bold text-slate-900">
+                    {t.services.virtualOffice.title}
+                  </h2>
+                  <p className="text-blue-600 font-medium">
+                    {t.services.virtualOffice.subtitle}
+                  </p>
                 </div>
               </div>
-              <p className="text-lg text-slate-600 mb-6">{t.services.virtualOffice.description}</p>
+              <p className="text-lg text-slate-600 mb-6">
+                {t.services.virtualOffice.description}
+              </p>
 
               <div className="space-y-3 mb-6">
-                {t.services.virtualOffice.benefits.map((benefit: string, index: number) => (
-                  <div key={index} className="flex items-start">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>{benefit}</span>
-                  </div>
-                ))}
+                {t.services.virtualOffice.benefits.map(
+                  (benefit: string, index: number) => (
+                    <div key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </div>
+                  ),
+                )}
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg mb-6">
@@ -1282,18 +1533,30 @@ export default function HomePage() {
                   <Target className="w-4 h-4 mr-2 text-blue-600" />
                   {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
                 </h4>
-                <p className="text-sm text-slate-700">{t.services.virtualOffice.useCase}</p>
+                <p className="text-sm text-slate-700">
+                  {t.services.virtualOffice.useCase}
+                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
                   <Link href="/contact">
-                    {language === "pl" ? "Zamów biuro wirtualne" : "Order Virtual Office"}
+                    {language === "pl"
+                      ? "Zamów biuro wirtualne"
+                      : "Order Virtual Office"}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="/contact">{language === "pl" ? "Bezpłatna konsultacja" : "Free Consultation"}</Link>
+                  <Link href="/contact">
+                    {language === "pl"
+                      ? "Bezpłatna konsultacja"
+                      : "Free Consultation"}
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -1313,7 +1576,10 @@ export default function HomePage() {
           {/* Virtual Office Pricing */}
           <div className="grid md:grid-cols-3 gap-6">
             <PricingCard plan={t.services.virtualOffice.pricing.basic} />
-            <PricingCard plan={t.services.virtualOffice.pricing.standard} isPopular={true} />
+            <PricingCard
+              plan={t.services.virtualOffice.pricing.standard}
+              isPopular={true}
+            />
             <PricingCard plan={t.services.virtualOffice.pricing.premium} />
           </div>
         </div>
@@ -1340,19 +1606,27 @@ export default function HomePage() {
                   <Users className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-slate-900">{t.services.coworking.title}</h2>
-                  <p className="text-green-600 font-medium">{t.services.coworking.subtitle}</p>
+                  <h2 className="text-3xl font-bold text-slate-900">
+                    {t.services.coworking.title}
+                  </h2>
+                  <p className="text-green-600 font-medium">
+                    {t.services.coworking.subtitle}
+                  </p>
                 </div>
               </div>
-              <p className="text-lg text-slate-600 mb-6">{t.services.coworking.description}</p>
+              <p className="text-lg text-slate-600 mb-6">
+                {t.services.coworking.description}
+              </p>
 
               <div className="space-y-3 mb-6">
-                {t.services.coworking.benefits.map((benefit: string, index: number) => (
-                  <div key={index} className="flex items-start">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>{benefit}</span>
-                  </div>
-                ))}
+                {t.services.coworking.benefits.map(
+                  (benefit: string, index: number) => (
+                    <div key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </div>
+                  ),
+                )}
               </div>
 
               <div className="bg-green-50 p-4 rounded-lg mb-6">
@@ -1360,13 +1634,21 @@ export default function HomePage() {
                   <Target className="w-4 h-4 mr-2 text-green-600" />
                   {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
                 </h4>
-                <p className="text-sm text-slate-700">{t.services.coworking.useCase}</p>
+                <p className="text-sm text-slate-700">
+                  {t.services.coworking.useCase}
+                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-green-600 hover:bg-green-700">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-green-600 hover:bg-green-700"
+                >
                   <Link href="/contact">
-                    {language === "pl" ? "Zarezerwuj miejsce" : "Book Workspace"}
+                    {language === "pl"
+                      ? "Zarezerwuj miejsce"
+                      : "Book Workspace"}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
@@ -1380,7 +1662,10 @@ export default function HomePage() {
           {/* Coworking Pricing */}
           <div className="grid md:grid-cols-3 gap-6">
             <PricingCard plan={t.services.coworking.pricing.hotDesk} />
-            <PricingCard plan={t.services.coworking.pricing.dedicatedDesk} isPopular={true} />
+            <PricingCard
+              plan={t.services.coworking.pricing.dedicatedDesk}
+              isPopular={true}
+            />
             <PricingCard plan={t.services.coworking.pricing.privateOffice} />
           </div>
         </div>
@@ -1396,19 +1681,27 @@ export default function HomePage() {
                   <Calendar className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-slate-900">{t.services.meetingRooms.title}</h2>
-                  <p className="text-purple-600 font-medium">{t.services.meetingRooms.subtitle}</p>
+                  <h2 className="text-3xl font-bold text-slate-900">
+                    {t.services.meetingRooms.title}
+                  </h2>
+                  <p className="text-purple-600 font-medium">
+                    {t.services.meetingRooms.subtitle}
+                  </p>
                 </div>
               </div>
-              <p className="text-lg text-slate-600 mb-6">{t.services.meetingRooms.description}</p>
+              <p className="text-lg text-slate-600 mb-6">
+                {t.services.meetingRooms.description}
+              </p>
 
               <div className="space-y-3 mb-6">
-                {t.services.meetingRooms.benefits.map((benefit: string, index: number) => (
-                  <div key={index} className="flex items-start">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>{benefit}</span>
-                  </div>
-                ))}
+                {t.services.meetingRooms.benefits.map(
+                  (benefit: string, index: number) => (
+                    <div key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </div>
+                  ),
+                )}
               </div>
 
               <div className="bg-purple-50 p-4 rounded-lg mb-6">
@@ -1416,11 +1709,17 @@ export default function HomePage() {
                   <Target className="w-4 h-4 mr-2 text-purple-600" />
                   {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
                 </h4>
-                <p className="text-sm text-slate-700">{t.services.meetingRooms.useCase}</p>
+                <p className="text-sm text-slate-700">
+                  {t.services.meetingRooms.useCase}
+                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
                   <Link href="/contact">
                     {language === "pl" ? "Zarezerwuj salę" : "Book Room"}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -1447,7 +1746,10 @@ export default function HomePage() {
           {/* Meeting Rooms Pricing */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <PricingCard plan={t.services.meetingRooms.pricing.small} />
-            <PricingCard plan={t.services.meetingRooms.pricing.medium} isPopular={true} />
+            <PricingCard
+              plan={t.services.meetingRooms.pricing.medium}
+              isPopular={true}
+            />
             <PricingCard plan={t.services.meetingRooms.pricing.large} />
             <PricingCard plan={t.services.meetingRooms.pricing.conference} />
           </div>
@@ -1475,19 +1777,27 @@ export default function HomePage() {
                   <Megaphone className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-slate-900">{t.services.advertising.title}</h2>
-                  <p className="text-orange-600 font-medium">{t.services.advertising.subtitle}</p>
+                  <h2 className="text-3xl font-bold text-slate-900">
+                    {t.services.advertising.title}
+                  </h2>
+                  <p className="text-orange-600 font-medium">
+                    {t.services.advertising.subtitle}
+                  </p>
                 </div>
               </div>
-              <p className="text-lg text-slate-600 mb-6">{t.services.advertising.description}</p>
+              <p className="text-lg text-slate-600 mb-6">
+                {t.services.advertising.description}
+              </p>
 
               <div className="space-y-3 mb-6">
-                {t.services.advertising.benefits.map((benefit: string, index: number) => (
-                  <div key={index} className="flex items-start">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span>{benefit}</span>
-                  </div>
-                ))}
+                {t.services.advertising.benefits.map(
+                  (benefit: string, index: number) => (
+                    <div key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </div>
+                  ),
+                )}
               </div>
 
               <div className="bg-orange-50 p-4 rounded-lg mb-6">
@@ -1495,10 +1805,16 @@ export default function HomePage() {
                   <Target className="w-4 h-4 mr-2 text-orange-600" />
                   {language === "pl" ? "Przykład użycia:" : "Use Case Example:"}
                 </h4>
-                <p className="text-sm text-slate-700">{t.services.advertising.useCase}</p>
+                <p className="text-sm text-slate-700">
+                  {t.services.advertising.useCase}
+                </p>
               </div>
 
-              <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700">
+              <Button
+                asChild
+                size="lg"
+                className="bg-orange-600 hover:bg-orange-700"
+              >
                 <Link href="/contact">
                   {language === "pl" ? "Zamów kampanię" : "Order Campaign"}
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -1509,7 +1825,10 @@ export default function HomePage() {
 
           {/* Advertising Pricing */}
           <div className="grid md:grid-cols-3 gap-6">
-            <PricingCard plan={t.services.advertising.pricing.mobile} isPopular={true} />
+            <PricingCard
+              plan={t.services.advertising.pricing.mobile}
+              isPopular={true}
+            />
             <PricingCard plan={t.services.advertising.pricing.static} />
             <PricingCard plan={t.services.advertising.pricing.digital} />
           </div>
@@ -1525,45 +1844,60 @@ export default function HomePage() {
                 <Gift className="w-6 h-6 text-red-600" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">{t.services.specialDeals.title}</h2>
-                <p className="text-red-600 font-medium">{t.services.specialDeals.subtitle}</p>
+                <h2 className="text-3xl font-bold text-slate-900">
+                  {t.services.specialDeals.title}
+                </h2>
+                <p className="text-red-600 font-medium">
+                  {t.services.specialDeals.subtitle}
+                </p>
               </div>
             </div>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">{t.services.specialDeals.description}</p>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
+              {t.services.specialDeals.description}
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {Object.entries(t.services.specialDeals.deals).map(([key, deal]: [string, any]) => (
-              <Card
-                key={key}
-                className="relative border-2 border-red-200 hover:border-red-300 transition-colors h-full"
-              >
-                <div className="absolute -top-3 -right-3">
-                  <Badge className="bg-red-600 text-white px-3 py-1 text-lg font-bold">{deal.discount}</Badge>
-                </div>
-                <CardHeader className="text-center pb-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Star className="w-6 h-6 text-red-600" />
-                  </div>
-                  <CardTitle className="text-lg">{deal.name}</CardTitle>
-                  <CardDescription className="text-sm">{deal.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="text-center">
-                    <Badge variant="outline" className="text-xs">
-                      <Clock className="w-3 h-3 mr-1" />
-                      {language === "pl" ? "Ważne do:" : "Valid until:"} {deal.validUntil}
+            {Object.entries(t.services.specialDeals.deals).map(
+              ([key, deal]: [string, any]) => (
+                <Card
+                  key={key}
+                  className="relative border-2 border-red-200 hover:border-red-300 transition-colors h-full"
+                >
+                  <div className="absolute -top-3 -right-3">
+                    <Badge className="bg-red-600 text-white px-3 py-1 text-lg font-bold">
+                      {deal.discount}
                     </Badge>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardHeader className="text-center pb-4">
+                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <Star className="w-6 h-6 text-red-600" />
+                    </div>
+                    <CardTitle className="text-lg">{deal.name}</CardTitle>
+                    <CardDescription className="text-sm">
+                      {deal.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="text-center">
+                      <Badge variant="outline" className="text-xs">
+                        <Clock className="w-3 h-3 mr-1" />
+                        {language === "pl" ? "Ważne do:" : "Valid until:"}{" "}
+                        {deal.validUntil}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ),
+            )}
           </div>
 
           <div className="bg-red-50 p-6 rounded-lg mb-8">
             <h4 className="font-semibold mb-2 flex items-center">
               <TrendingUp className="w-4 h-4 mr-2 text-red-600" />
-              {language === "pl" ? "Przykład oszczędności:" : "Savings Example:"}
+              {language === "pl"
+                ? "Przykład oszczędności:"
+                : "Savings Example:"}
             </h4>
             <p className="text-slate-700">{t.services.specialDeals.useCase}</p>
           </div>
@@ -1571,7 +1905,9 @@ export default function HomePage() {
           <div className="text-center">
             <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
               <Link href="/contact">
-                {language === "pl" ? "Sprawdź oferty specjalne" : "Check Special Offers"}
+                {language === "pl"
+                  ? "Sprawdź oferty specjalne"
+                  : "Check Special Offers"}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
@@ -1583,7 +1919,9 @@ export default function HomePage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t.testimonials.title}</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              {t.testimonials.title}
+            </h2>
             <p className="text-lg text-slate-600">{t.testimonials.subtitle}</p>
           </div>
 
@@ -1599,7 +1937,9 @@ export default function HomePage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">{t.partnerships.title}</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              {t.partnerships.title}
+            </h2>
             <p className="text-lg text-slate-600">{t.partnerships.subtitle}</p>
           </div>
 
@@ -1611,7 +1951,9 @@ export default function HomePage() {
                     <Building2 className="w-6 h-6 text-teal-600" />
                   </div>
                   <h3 className="font-semibold mb-2">{partner.name}</h3>
-                  <p className="text-sm text-slate-600 mb-3">{partner.service}</p>
+                  <p className="text-sm text-slate-600 mb-3">
+                    {partner.service}
+                  </p>
                   <Badge variant="secondary" className="text-xs">
                     {partner.discount}
                   </Badge>
@@ -1626,7 +1968,9 @@ export default function HomePage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t.faq.title}</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              {t.faq.title}
+            </h2>
           </div>
 
           <Tabs defaultValue="virtual-office" className="w-full">
@@ -1637,16 +1981,15 @@ export default function HomePage() {
               >
                 {t.nav.virtualOffice}
               </TabsTrigger>
-              <TabsTrigger
-                value="coworking"
-                data-testid="tab-faq-coworking"
-              >
+              <TabsTrigger value="coworking" data-testid="tab-faq-coworking">
                 {t.nav.coworking}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="virtual-office" className="space-y-4">
-              <h3 className="text-xl font-semibold mb-6">{t.faq.virtualOffice.title}</h3>
+              <h3 className="text-xl font-semibold mb-6">
+                {t.faq.virtualOffice.title}
+              </h3>
               {t.faq.virtualOffice.items.map((item: any, index: number) => (
                 <Card key={index}>
                   <CardContent className="p-6">
@@ -1661,7 +2004,9 @@ export default function HomePage() {
             </TabsContent>
 
             <TabsContent value="coworking" className="space-y-4">
-              <h3 className="text-xl font-semibold mb-6">{t.faq.coworking.title}</h3>
+              <h3 className="text-xl font-semibold mb-6">
+                {t.faq.coworking.title}
+              </h3>
               {t.faq.coworking.items.map((item: any, index: number) => (
                 <Card key={index}>
                   <CardContent className="p-6">
@@ -1681,8 +2026,12 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-slate-900 to-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">{t.cta.title}</h2>
-          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">{t.cta.subtitle}</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+            {t.cta.title}
+          </h2>
+          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+            {t.cta.subtitle}
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-teal-600 hover:bg-teal-700">
               <Link href="/contact">
@@ -1731,7 +2080,9 @@ export default function HomePage() {
                   <p className="text-sm text-slate-400">Property Management</p>
                 </div>
               </div>
-              <p className="text-slate-400 mb-6 max-w-md">{t.footer.description}</p>
+              <p className="text-slate-400 mb-6 max-w-md">
+                {t.footer.description}
+              </p>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-slate-400">
                   <MapPin className="w-4 h-4" />
@@ -1754,21 +2105,38 @@ export default function HomePage() {
 
             {/* Services */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t.footer.services}</h4>
+              <h4 className="text-lg font-semibold mb-4">
+                {t.footer.services}
+              </h4>
               <nav className="space-y-2">
-                <Link href="#virtual-office" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="#virtual-office"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.virtualOffice}
                 </Link>
-                <Link href="#coworking" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="#coworking"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.coworking}
                 </Link>
-                <Link href="#meeting-rooms" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="#meeting-rooms"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.meetingRooms}
                 </Link>
-                <Link href="#advertising" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="#advertising"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.advertising}
                 </Link>
-                <Link href="#special-deals" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="#special-deals"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.specialDeals}
                 </Link>
               </nav>
@@ -1776,18 +2144,32 @@ export default function HomePage() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t.footer.quickLinks}</h4>
+              <h4 className="text-lg font-semibold mb-4">
+                {t.footer.quickLinks}
+              </h4>
               <nav className="space-y-2">
-                <Link href="/" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="/about" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/about"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.about}
                 </Link>
-                <Link href="/contact" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/contact"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.contact}
                 </Link>
-                <Link href="/forms" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/forms"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {language === "pl" ? "Formularze" : "Forms"}
                 </Link>
               </nav>
@@ -1795,7 +2177,9 @@ export default function HomePage() {
 
             {/* Working Hours & Legal */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t.footer.workingHours}</h4>
+              <h4 className="text-lg font-semibold mb-4">
+                {t.footer.workingHours}
+              </h4>
               <div className="space-y-2 text-slate-400 mb-6">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4" />
@@ -1813,10 +2197,16 @@ export default function HomePage() {
 
               <h4 className="text-lg font-semibold mb-4">{t.footer.legal}</h4>
               <nav className="space-y-2">
-                <Link href="/privacy" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/privacy"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.footer.privacy}
                 </Link>
-                <Link href="/terms" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/terms"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.footer.terms}
                 </Link>
               </nav>
@@ -1832,5 +2222,5 @@ export default function HomePage() {
       {/* Consent Banner */}
       <ConsentBanner />
     </div>
-  )
+  );
 }

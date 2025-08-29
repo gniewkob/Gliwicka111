@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
   Card,
@@ -21,28 +21,41 @@ import {
   SelectValue,
   Alert,
   AlertDescription,
-} from "@/components/ui"
-import { meetingRoomFormSchema, type MeetingRoomFormData } from "@/lib/validation-schemas"
-import { submitMeetingRoomForm } from "@/lib/server-actions"
-import { analyticsClient } from "@/lib/analytics-client"
-import { useFormAnalytics } from "@/hooks/use-form-analytics"
-import { messages } from "@/lib/i18n"
-import { Calendar, Clock, Users, Coffee, Shield, CheckCircle } from "lucide-react"
+} from "@/components/ui";
+import {
+  meetingRoomFormSchema,
+  type MeetingRoomFormData,
+} from "@/lib/validation-schemas";
+import { submitMeetingRoomForm } from "@/lib/server-actions";
+import { analyticsClient } from "@/lib/analytics-client";
+import { useFormAnalytics } from "@/hooks/use-form-analytics";
+import { messages } from "@/lib/i18n";
+import {
+  Calendar,
+  Clock,
+  Users,
+  Coffee,
+  Shield,
+  CheckCircle,
+} from "lucide-react";
 
 interface MeetingRoomFormProps {
-  language?: "pl" | "en"
+  language?: "pl" | "en";
 }
 
-export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(
-    null,
-  )
+export default function MeetingRoomForm({
+  language = "pl",
+}: MeetingRoomFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   const analytics = useFormAnalytics({
     formType: "meeting-room",
     enabled: true,
-  })
+  });
 
   const {
     register,
@@ -61,13 +74,14 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
       equipment: [],
       attendees: 1,
     },
-  })
+  });
 
   const content = {
     pl: {
       title: "Sale Konferencyjne",
       subtitle: "Profesjonalne sale od 30 zł/godzinę",
-      description: "Zarezerwuj w pełni wyposażoną salę konferencyjną dla swojego zespołu",
+      description:
+        "Zarezerwuj w pełni wyposażoną salę konferencyjną dla swojego zespołu",
       roomTypes: {
         small: {
           name: "Sala Mała",
@@ -79,19 +93,34 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
           name: "Sala Średnia",
           capacity: "6-12 osób",
           price: "50 zł/h",
-          features: ["Duży ekran", "System audio", "Telekonferencje", "Catering"],
+          features: [
+            "Duży ekran",
+            "System audio",
+            "Telekonferencje",
+            "Catering",
+          ],
         },
         large: {
           name: "Sala Duża",
           capacity: "12-20 osób",
           price: "80 zł/h",
-          features: ["Profesjonalny sprzęt AV", "Streaming", "Tłumaczenia", "Obsługa techniczna"],
+          features: [
+            "Profesjonalny sprzęt AV",
+            "Streaming",
+            "Tłumaczenia",
+            "Obsługa techniczna",
+          ],
         },
         conference: {
           name: "Sala Konferencyjna",
           capacity: "20-50 osób",
           price: "150 zł/h",
-          features: ["Pełne wyposażenie", "Obsługa eventów", "Catering premium", "Parking VIP"],
+          features: [
+            "Pełne wyposażenie",
+            "Obsługa eventów",
+            "Catering premium",
+            "Parking VIP",
+          ],
         },
       },
       fields: {
@@ -112,7 +141,8 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
         recurringPattern: "Częstotliwość",
         message: "Dodatkowe informacje",
         gdprConsent: "Wyrażam zgodę na przetwarzanie moich danych osobowych",
-        marketingConsent: "Wyrażam zgodę na otrzymywanie informacji marketingowych",
+        marketingConsent:
+          "Wyrażam zgodę na otrzymywanie informacji marketingowych",
       },
       equipmentList: [
         "Dodatkowy projektor",
@@ -150,19 +180,34 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
           name: "Medium Room",
           capacity: "6-12 people",
           price: "50 PLN/h",
-          features: ["Large screen", "Audio system", "Video conferencing", "Catering"],
+          features: [
+            "Large screen",
+            "Audio system",
+            "Video conferencing",
+            "Catering",
+          ],
         },
         large: {
           name: "Large Room",
           capacity: "12-20 people",
           price: "80 PLN/h",
-          features: ["Professional AV equipment", "Streaming", "Translation", "Technical support"],
+          features: [
+            "Professional AV equipment",
+            "Streaming",
+            "Translation",
+            "Technical support",
+          ],
         },
         conference: {
           name: "Conference Hall",
           capacity: "20-50 people",
           price: "150 PLN/h",
-          features: ["Full equipment", "Event management", "Premium catering", "VIP parking"],
+          features: [
+            "Full equipment",
+            "Event management",
+            "Premium catering",
+            "VIP parking",
+          ],
         },
       },
       fields: {
@@ -206,64 +251,66 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
       submit: "Book Room",
       submitting: "Booking...",
     },
-  }
+  };
 
-  const t = content[language]
+  const t = content[language];
 
   const onSubmit = async (data: MeetingRoomFormData) => {
-    setIsSubmitting(true)
-    setSubmitResult(null)
-    analytics.trackSubmissionAttempt()
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    analytics.trackSubmissionAttempt();
 
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item))
+          value.forEach((item) => formData.append(key, item));
         } else {
-          formData.append(key, String(value))
+          formData.append(key, String(value));
         }
-      })
+      });
 
-      formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitMeetingRoomForm(formData)
+      formData.append("sessionId", analyticsClient.getSessionId());
+      const result = await submitMeetingRoomForm(formData);
       const message =
         result.message ??
         (result.success
           ? messages.form.success[language]
-          : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
+          : messages.form.serverError[language]);
+      setSubmitResult({ success: result.success, message });
       if (result.success) {
-        analytics.trackSubmissionSuccess()
-        reset()
+        analytics.trackSubmissionSuccess();
+        reset();
       } else {
-        analytics.trackSubmissionError(message)
+        analytics.trackSubmissionError(message);
       }
     } catch (error) {
       const errorMessage =
-        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
-      analytics.trackSubmissionError(errorMessage)
-      setSubmitResult({ success: false, message: errorMessage })
+        language === "en"
+          ? "An unexpected error occurred"
+          : "Wystąpił nieoczekiwany błąd";
+      analytics.trackSubmissionError(errorMessage);
+      setSubmitResult({ success: false, message: errorMessage });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFieldFocus = (fieldName: string) => {
-    analytics.trackFieldFocus(fieldName)
+    analytics.trackFieldFocus(fieldName);
     if (!watch("firstName") && fieldName === "firstName") {
-      analytics.trackFormStart()
+      analytics.trackFormStart();
     }
-  }
+  };
 
   const handleFieldBlur = (fieldName: string) => {
-    analytics.trackFieldBlur(fieldName)
-  }
+    analytics.trackFieldBlur(fieldName);
+  };
 
   const handleFieldError = (fieldName: string, error?: string) => {
-    if (!error) return
-    analytics.trackFieldError(fieldName, error)
-  }
+    if (!error) return;
+    analytics.trackFieldError(fieldName, error);
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -284,11 +331,16 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
       {/* Room Types */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {Object.entries(t.roomTypes).map(([key, room]) => (
-          <Card key={key} className="relative hover:shadow-lg transition-shadow">
+          <Card
+            key={key}
+            className="relative hover:shadow-lg transition-shadow"
+          >
             <CardHeader className="text-center">
               <CardTitle className="text-lg">{room.name}</CardTitle>
               <div className="text-sm text-gray-600">{room.capacity}</div>
-              <div className="text-2xl font-bold text-purple-600">{room.price}</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {room.price}
+              </div>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
@@ -311,7 +363,9 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
             <Calendar className="w-5 h-5 mr-2" />
             Formularz rezerwacji
           </CardTitle>
-          <CardDescription>Zarezerwuj salę konferencyjną dostosowaną do Twoich potrzeb</CardDescription>
+          <CardDescription>
+            Zarezerwuj salę konferencyjną dostosowaną do Twoich potrzeb
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {submitResult && (
@@ -452,7 +506,9 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="roomType">{t.fields.roomType} *</Label>
-                <Select onValueChange={(value) => setValue("roomType", value as any)}>
+                <Select
+                  onValueChange={(value) => setValue("roomType", value as any)}
+                >
                   <SelectTrigger
                     id="roomType"
                     className={errors.roomType ? "border-red-500" : ""}
@@ -461,10 +517,18 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     <SelectValue placeholder="Wybierz typ sali" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="small">Sala Mała (2-6 osób) - 30 zł/h</SelectItem>
-                    <SelectItem value="medium">Sala Średnia (6-12 osób) - 50 zł/h</SelectItem>
-                    <SelectItem value="large">Sala Duża (12-20 osób) - 80 zł/h</SelectItem>
-                    <SelectItem value="conference">Sala Konferencyjna (20-50 osób) - 150 zł/h</SelectItem>
+                    <SelectItem value="small">
+                      Sala Mała (2-6 osób) - 30 zł/h
+                    </SelectItem>
+                    <SelectItem value="medium">
+                      Sala Średnia (6-12 osób) - 50 zł/h
+                    </SelectItem>
+                    <SelectItem value="large">
+                      Sala Duża (12-20 osób) - 80 zł/h
+                    </SelectItem>
+                    <SelectItem value="conference">
+                      Sala Konferencyjna (20-50 osób) - 150 zł/h
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.roomType && (
@@ -598,14 +662,14 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     <Checkbox
                       id={`equipment-${index}`}
                       onCheckedChange={(checked) => {
-                        const current = watch("equipment") || []
+                        const current = watch("equipment") || [];
                         if (checked) {
-                          setValue("equipment", [...current, equipment])
+                          setValue("equipment", [...current, equipment]);
                         } else {
                           setValue(
                             "equipment",
                             current.filter((e) => e !== equipment),
-                          )
+                          );
                         }
                       }}
                     />
@@ -619,10 +683,7 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
             {/* Catering Options */}
             <div className="space-y-4">
-              <Label
-                htmlFor="catering"
-                className="cursor-pointer"
-              >
+              <Label htmlFor="catering" className="cursor-pointer">
                 <Checkbox id="catering" {...register("catering")} />
                 <span className="flex items-center">
                   <Coffee className="w-4 h-4 mr-1 pointer-events-none" />
@@ -633,7 +694,11 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               {watch("catering") && (
                 <div>
                   <Label htmlFor="cateringType">{t.fields.cateringType}</Label>
-                  <Select onValueChange={(value) => setValue("cateringType", value as any)}>
+                  <Select
+                    onValueChange={(value) =>
+                      setValue("cateringType", value as any)
+                    }
+                  >
                     <SelectTrigger
                       id="cateringType"
                       data-testid="cateringType-select"
@@ -661,8 +726,14 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
 
               {watch("recurring") && (
                 <div>
-                  <Label htmlFor="recurringPattern">{t.fields.recurringPattern}</Label>
-                  <Select onValueChange={(value) => setValue("recurringPattern", value as any)}>
+                  <Label htmlFor="recurringPattern">
+                    {t.fields.recurringPattern}
+                  </Label>
+                  <Select
+                    onValueChange={(value) =>
+                      setValue("recurringPattern", value as any)
+                    }
+                  >
                     <SelectTrigger
                       id="recurringPattern"
                       data-testid="recurringPattern-select"
@@ -670,11 +741,13 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                       <SelectValue placeholder="Wybierz częstotliwość" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(t.recurringPatterns).map(([key, label]) => (
-                        <SelectItem key={key} value={key}>
-                          {label}
-                        </SelectItem>
-                      ))}
+                      {Object.entries(t.recurringPatterns).map(
+                        ([key, label]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
+                          </SelectItem>
+                        ),
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -720,7 +793,8 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
                     {t.fields.gdprConsent} *
                   </Label>
                   <p className="text-xs text-gray-600 mt-1">
-                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu realizacji rezerwacji i kontaktu z Tobą.
+                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu
+                    realizacji rezerwacji i kontaktu z Tobą.
                   </p>
                 </div>
               </div>
@@ -737,7 +811,10 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
               )}
 
               <div className="flex items-start space-x-2">
-                <Checkbox id="marketingConsent" {...register("marketingConsent")} />
+                <Checkbox
+                  id="marketingConsent"
+                  {...register("marketingConsent")}
+                />
                 <Label htmlFor="marketingConsent" className="text-sm">
                   {t.fields.marketingConsent}
                 </Label>
@@ -745,12 +822,16 @@ export default function MeetingRoomForm({ language = "pl" }: MeetingRoomFormProp
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" disabled={isSubmitting} className="w-full bg-purple-600 hover:bg-purple-700">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-purple-600 hover:bg-purple-700"
+            >
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

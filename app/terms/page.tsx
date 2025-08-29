@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useLanguage } from "@/components/language-provider"
-import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react"
-import { Button, Card, CardContent, CardHeader, CardTitle } from "@/components/ui"
-import Link from "next/link"
-import { navTranslations, backTranslations } from "@/lib/i18n"
+import { useState } from "react";
+import { useLanguage } from "@/components/language-provider";
+import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui";
+import Link from "next/link";
+import { navTranslations, backTranslations } from "@/lib/i18n";
 
 const translations = {
   pl: {
@@ -42,7 +48,8 @@ const translations = {
       },
       usage: {
         title: "Zasady korzystania ze strony internetowej",
-        content: "Korzystając ze Strony internetowej, Użytkownik zobowiązuje się do:",
+        content:
+          "Korzystając ze Strony internetowej, Użytkownik zobowiązuje się do:",
         list: [
           "Używania Strony zgodnie z jej przeznaczeniem i obowiązującym prawem",
           "Niepodejmowania działań mogących zakłócić funkcjonowanie Strony",
@@ -182,13 +189,13 @@ const translations = {
     },
     back: backTranslations.en,
   },
-}
+};
 
 export default function TermsPage() {
-  const { language, toggleLanguage } = useLanguage()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { language, toggleLanguage } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const t = translations[language]
+  const t = translations[language];
 
   return (
     <div className="min-h-screen bg-white">
@@ -202,23 +209,37 @@ export default function TermsPage() {
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Gliwicka 111</h1>
+                <h1 className="text-xl font-bold text-slate-900">
+                  Gliwicka 111
+                </h1>
                 <p className="text-xs text-slate-600">Property Management</p>
               </div>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.home}
               </Link>
-              <Link href="/properties" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/properties"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.properties}
               </Link>
-              <Link href="/about" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/about"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.about}
               </Link>
-              <Link href="/contact" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/contact"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.contact}
               </Link>
 
@@ -245,8 +266,16 @@ export default function TermsPage() {
                 <Globe className="w-4 h-4" />
                 <span>{language.toUpperCase()}</span>
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </Button>
             </div>
           </div>
@@ -255,16 +284,28 @@ export default function TermsPage() {
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-gray-100 py-4">
               <nav className="flex flex-col space-y-4">
-                <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="/properties" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/properties"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.properties}
                 </Link>
-                <Link href="/about" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/about"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.about}
                 </Link>
-                <Link href="/contact" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/contact"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.contact}
                 </Link>
               </nav>
@@ -276,7 +317,10 @@ export default function TermsPage() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <Button asChild variant="ghost" className="mb-8">
-          <Link href="/" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900">
+          <Link
+            href="/"
+            className="flex items-center space-x-2 text-slate-600 hover:text-slate-900"
+          >
             <ArrowLeft className="w-4 h-4" />
             <span>{t.back}</span>
           </Link>
@@ -291,14 +335,19 @@ export default function TermsPage() {
           {Object.entries(t.sections).map(([key, section]) => (
             <Card key={key}>
               <CardHeader>
-                <CardTitle className="text-xl text-slate-900">{section.title}</CardTitle>
+                <CardTitle className="text-xl text-slate-900">
+                  {section.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 mb-4">{section.content}</p>
                 {"list" in section && section.list && (
                   <ul className="space-y-2 mb-4">
                     {section.list.map((item, index) => (
-                      <li key={index} className="flex items-start space-x-2 text-slate-600">
+                      <li
+                        key={index}
+                        className="flex items-start space-x-2 text-slate-600"
+                      >
                         <div className="w-1.5 h-1.5 bg-teal-600 rounded-full mt-2 flex-shrink-0"></div>
                         <span>{item}</span>
                       </li>
@@ -314,5 +363,5 @@ export default function TermsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

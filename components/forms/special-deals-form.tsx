@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Alert,
   AlertDescription,
@@ -22,29 +22,34 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
-} from "@/components/ui"
-import { specialDealsFormSchema, type SpecialDealsFormData } from "@/lib/validation-schemas"
-import { submitSpecialDealsForm } from "@/lib/server-actions"
-import { analyticsClient } from "@/lib/analytics-client"
-import { useFormAnalytics } from "@/hooks/use-form-analytics"
-import { messages } from "@/lib/i18n"
-import { Gift, Percent, Star, Shield } from "lucide-react"
+} from "@/components/ui";
+import {
+  specialDealsFormSchema,
+  type SpecialDealsFormData,
+} from "@/lib/validation-schemas";
+import { submitSpecialDealsForm } from "@/lib/server-actions";
+import { analyticsClient } from "@/lib/analytics-client";
+import { useFormAnalytics } from "@/hooks/use-form-analytics";
+import { messages } from "@/lib/i18n";
+import { Gift, Percent, Star, Shield } from "lucide-react";
 
 interface SpecialDealsFormProps {
-  language?: "pl" | "en"
+  language?: "pl" | "en";
 }
 
-export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+export default function SpecialDealsForm({
+  language = "pl",
+}: SpecialDealsFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
-    success: boolean
-    message: string
-  } | null>(null)
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   const analytics = useFormAnalytics({
     formType: "special-deals",
     enabled: true,
-  })
+  });
 
   const {
     register,
@@ -60,43 +65,69 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
       marketingConsent: false,
       interestedServices: [],
     },
-  })
+  });
 
   const content = {
     pl: {
       title: "Oferty Specjalne",
       subtitle: "Promocje i rabaty do -50%",
-      description: "Skorzystaj z naszych wyjątkowych ofert i zaoszczędź na usługach biznesowych",
+      description:
+        "Skorzystaj z naszych wyjątkowych ofert i zaoszczędź na usługach biznesowych",
       dealTypes: {
         "welcome-package": {
           name: "Pakiet Powitalny",
           discount: "-30%",
           description: "Rabat dla nowych klientów na pierwsze 3 miesiące",
-          features: ["30% rabatu", "Bezpłatna konsultacja", "Elastyczne warunki", "Wsparcie 24/7"],
+          features: [
+            "30% rabatu",
+            "Bezpłatna konsultacja",
+            "Elastyczne warunki",
+            "Wsparcie 24/7",
+          ],
         },
         referral: {
           name: "Program Poleceń",
           discount: "-25%",
           description: "Rabat za polecenie nowego klienta",
-          features: ["25% rabatu", "Bonus za polecenie", "Dodatkowe korzyści", "Długoterminowe oszczędności"],
+          features: [
+            "25% rabatu",
+            "Bonus za polecenie",
+            "Dodatkowe korzyści",
+            "Długoterminowe oszczędności",
+          ],
         },
         student: {
           name: "Oferta Studencka",
           discount: "-40%",
           description: "Specjalne ceny dla studentów i absolwentów",
-          features: ["40% rabatu", "Elastyczne płatności", "Dodatkowe usługi", "Wsparcie startupów"],
+          features: [
+            "40% rabatu",
+            "Elastyczne płatności",
+            "Dodatkowe usługi",
+            "Wsparcie startupów",
+          ],
         },
         startup: {
           name: "Pakiet Startup",
           discount: "-35%",
           description: "Wsparcie dla młodych firm i przedsiębiorców",
-          features: ["35% rabatu", "Mentoring biznesowy", "Networking", "Elastyczne warunki"],
+          features: [
+            "35% rabatu",
+            "Mentoring biznesowy",
+            "Networking",
+            "Elastyczne warunki",
+          ],
         },
         "long-term": {
           name: "Umowa Długoterminowa",
           discount: "-50%",
           description: "Największe oszczędności przy umowach rocznych",
-          features: ["50% rabatu", "Gwarancja ceny", "Priorytetowe wsparcie", "Dodatkowe usługi"],
+          features: [
+            "50% rabatu",
+            "Gwarancja ceny",
+            "Priorytetowe wsparcie",
+            "Dodatkowe usługi",
+          ],
         },
       },
       fields: {
@@ -113,7 +144,8 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
         specificNeeds: "Szczególne potrzeby",
         message: "Dodatkowe informacje",
         gdprConsent: "Wyrażam zgodę na przetwarzanie moich danych osobowych",
-        marketingConsent: "Wyrażam zgodę na otrzymywanie informacji marketingowych",
+        marketingConsent:
+          "Wyrażam zgodę na otrzymywanie informacji marketingowych",
       },
       servicesList: [
         "Biuro wirtualne",
@@ -141,37 +173,63 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
     en: {
       title: "Special Deals",
       subtitle: "Promotions and discounts up to -50%",
-      description: "Take advantage of our exceptional offers and save on business services",
+      description:
+        "Take advantage of our exceptional offers and save on business services",
       dealTypes: {
         "welcome-package": {
           name: "Welcome Package",
           discount: "-30%",
           description: "Discount for new clients for the first 3 months",
-          features: ["30% discount", "Free consultation", "Flexible terms", "24/7 support"],
+          features: [
+            "30% discount",
+            "Free consultation",
+            "Flexible terms",
+            "24/7 support",
+          ],
         },
         referral: {
           name: "Referral Program",
           discount: "-25%",
           description: "Discount for referring a new client",
-          features: ["25% discount", "Referral bonus", "Additional benefits", "Long-term savings"],
+          features: [
+            "25% discount",
+            "Referral bonus",
+            "Additional benefits",
+            "Long-term savings",
+          ],
         },
         student: {
           name: "Student Offer",
           discount: "-40%",
           description: "Special prices for students and graduates",
-          features: ["40% discount", "Flexible payments", "Additional services", "Startup support"],
+          features: [
+            "40% discount",
+            "Flexible payments",
+            "Additional services",
+            "Startup support",
+          ],
         },
         startup: {
           name: "Startup Package",
           discount: "-35%",
           description: "Support for young companies and entrepreneurs",
-          features: ["35% discount", "Business mentoring", "Networking", "Flexible terms"],
+          features: [
+            "35% discount",
+            "Business mentoring",
+            "Networking",
+            "Flexible terms",
+          ],
         },
         "long-term": {
           name: "Long-term Contract",
           discount: "-50%",
           description: "Biggest savings with annual contracts",
-          features: ["50% discount", "Price guarantee", "Priority support", "Additional services"],
+          features: [
+            "50% discount",
+            "Price guarantee",
+            "Priority support",
+            "Additional services",
+          ],
         },
       },
       fields: {
@@ -213,64 +271,66 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
       submit: "Send Inquiry",
       submitting: "Sending...",
     },
-  }
+  };
 
-  const t = content[language]
+  const t = content[language];
 
   const onSubmit = async (data: SpecialDealsFormData) => {
-    setIsSubmitting(true)
-    setSubmitResult(null)
-    analytics.trackSubmissionAttempt()
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    analytics.trackSubmissionAttempt();
 
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item))
+          value.forEach((item) => formData.append(key, item));
         } else {
-          formData.append(key, String(value))
+          formData.append(key, String(value));
         }
-      })
+      });
 
-      formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitSpecialDealsForm(formData)
+      formData.append("sessionId", analyticsClient.getSessionId());
+      const result = await submitSpecialDealsForm(formData);
       const message =
         result.message ??
         (result.success
           ? messages.form.success[language]
-          : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
+          : messages.form.serverError[language]);
+      setSubmitResult({ success: result.success, message });
       if (result.success) {
-        analytics.trackSubmissionSuccess()
-        reset()
+        analytics.trackSubmissionSuccess();
+        reset();
       } else {
-        analytics.trackSubmissionError(message)
+        analytics.trackSubmissionError(message);
       }
     } catch (error) {
       const errorMessage =
-        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
-      analytics.trackSubmissionError(errorMessage)
-      setSubmitResult({ success: false, message: errorMessage })
+        language === "en"
+          ? "An unexpected error occurred"
+          : "Wystąpił nieoczekiwany błąd";
+      analytics.trackSubmissionError(errorMessage);
+      setSubmitResult({ success: false, message: errorMessage });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFieldFocus = (fieldName: string) => {
-    analytics.trackFieldFocus(fieldName)
+    analytics.trackFieldFocus(fieldName);
     if (!watch("firstName") && fieldName === "firstName") {
-      analytics.trackFormStart()
+      analytics.trackFormStart();
     }
-  }
+  };
 
   const handleFieldBlur = (fieldName: string) => {
-    analytics.trackFieldBlur(fieldName)
-  }
+    analytics.trackFieldBlur(fieldName);
+  };
 
   const handleFieldError = (fieldName: string, error?: string) => {
-    if (!error) return
-    analytics.trackFieldError(fieldName, error)
-  }
+    if (!error) return;
+    analytics.trackFieldError(fieldName, error);
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -291,16 +351,23 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
       {/* Deal Types */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {Object.entries(t.dealTypes).map(([key, deal]) => (
-          <Card key={key} className="relative hover:shadow-lg transition-shadow border-2 hover:border-red-200">
+          <Card
+            key={key}
+            className="relative hover:shadow-lg transition-shadow border-2 hover:border-red-200"
+          >
             <div className="absolute -top-3 -right-3">
-              <Badge className="bg-red-600 text-white px-3 py-1 text-lg font-bold">{deal.discount}</Badge>
+              <Badge className="bg-red-600 text-white px-3 py-1 text-lg font-bold">
+                {deal.discount}
+              </Badge>
             </div>
             <CardHeader className="text-center">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <Percent className="w-6 h-6 text-red-600" />
               </div>
               <CardTitle className="text-lg">{deal.name}</CardTitle>
-              <CardDescription className="text-sm">{deal.description}</CardDescription>
+              <CardDescription className="text-sm">
+                {deal.description}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
@@ -323,7 +390,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
             <Gift className="w-5 h-5 mr-2" />
             Formularz oferty specjalnej
           </CardTitle>
-          <CardDescription>Wypełnij formularz, a przygotujemy dla Ciebie spersonalizowaną ofertę</CardDescription>
+          <CardDescription>
+            Wypełnij formularz, a przygotujemy dla Ciebie spersonalizowaną
+            ofertę
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {submitResult && (
@@ -463,16 +533,28 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
             {/* Deal Configuration */}
             <div>
               <Label htmlFor="dealType">{t.fields.dealType} *</Label>
-              <Select onValueChange={(value) => setValue("dealType", value as any)}>
-                <SelectTrigger className={errors.dealType ? "border-red-500" : ""}>
+              <Select
+                onValueChange={(value) => setValue("dealType", value as any)}
+              >
+                <SelectTrigger
+                  className={errors.dealType ? "border-red-500" : ""}
+                >
                   <SelectValue placeholder="Wybierz typ oferty" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="welcome-package">Pakiet Powitalny (-30%)</SelectItem>
-                  <SelectItem value="referral">Program Poleceń (-25%)</SelectItem>
-                  <SelectItem value="student">Oferta Studencka (-40%)</SelectItem>
+                  <SelectItem value="welcome-package">
+                    Pakiet Powitalny (-30%)
+                  </SelectItem>
+                  <SelectItem value="referral">
+                    Program Poleceń (-25%)
+                  </SelectItem>
+                  <SelectItem value="student">
+                    Oferta Studencka (-40%)
+                  </SelectItem>
                   <SelectItem value="startup">Pakiet Startup (-35%)</SelectItem>
-                  <SelectItem value="long-term">Umowa Długoterminowa (-50%)</SelectItem>
+                  <SelectItem value="long-term">
+                    Umowa Długoterminowa (-50%)
+                  </SelectItem>
                 </SelectContent>
               </Select>
               {errors.dealType && (
@@ -497,14 +579,14 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                     <Checkbox
                       id={`service-${index}`}
                       onCheckedChange={(checked) => {
-                        const current = watch("interestedServices") || []
+                        const current = watch("interestedServices") || [];
                         if (checked) {
-                          setValue("interestedServices", [...current, service])
+                          setValue("interestedServices", [...current, service]);
                         } else {
                           setValue(
                             "interestedServices",
                             current.filter((s) => s !== service),
-                          )
+                          );
                         }
                       }}
                     />
@@ -532,9 +614,17 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="currentSituation">{t.fields.currentSituation} *</Label>
-                <Select onValueChange={(value) => setValue("currentSituation", value as any)}>
-                  <SelectTrigger className={errors.currentSituation ? "border-red-500" : ""}>
+                <Label htmlFor="currentSituation">
+                  {t.fields.currentSituation} *
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setValue("currentSituation", value as any)
+                  }
+                >
+                  <SelectTrigger
+                    className={errors.currentSituation ? "border-red-500" : ""}
+                  >
                     <SelectValue placeholder="Wybierz sytuację" />
                   </SelectTrigger>
                   <SelectContent>
@@ -547,7 +637,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                 </Select>
                 {errors.currentSituation && (
                   <>
-                    {handleFieldError("currentSituation", errors.currentSituation.message)}
+                    {handleFieldError(
+                      "currentSituation",
+                      errors.currentSituation.message,
+                    )}
                     <p
                       data-testid="special-deals-currentSituation-error"
                       className="text-red-500 text-sm mt-1"
@@ -560,8 +653,12 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
 
               <div>
                 <Label htmlFor="timeline">{t.fields.timeline} *</Label>
-                <Select onValueChange={(value) => setValue("timeline", value as any)}>
-                  <SelectTrigger className={errors.timeline ? "border-red-500" : ""}>
+                <Select
+                  onValueChange={(value) => setValue("timeline", value as any)}
+                >
+                  <SelectTrigger
+                    className={errors.timeline ? "border-red-500" : ""}
+                  >
                     <SelectValue placeholder="Wybierz harmonogram" />
                   </SelectTrigger>
                   <SelectContent>
@@ -598,7 +695,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               />
               {errors.referralSource && (
                 <>
-                  {handleFieldError("referralSource", errors.referralSource.message)}
+                  {handleFieldError(
+                    "referralSource",
+                    errors.referralSource.message,
+                  )}
                   <p
                     data-testid="special-deals-referralSource-error"
                     className="text-red-500 text-sm mt-1"
@@ -622,7 +722,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               />
               {errors.specificNeeds && (
                 <>
-                  {handleFieldError("specificNeeds", errors.specificNeeds.message)}
+                  {handleFieldError(
+                    "specificNeeds",
+                    errors.specificNeeds.message,
+                  )}
                   <p
                     data-testid="special-deals-specificNeeds-error"
                     className="text-red-500 text-sm mt-1"
@@ -672,7 +775,8 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
                     {t.fields.gdprConsent} *
                   </Label>
                   <p className="text-xs text-gray-600 mt-1">
-                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu przygotowania oferty i kontaktu z Tobą.
+                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu
+                    przygotowania oferty i kontaktu z Tobą.
                   </p>
                 </div>
               </div>
@@ -689,7 +793,10 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
               )}
 
               <div className="flex items-start space-x-2">
-                <Checkbox id="marketingConsent" {...register("marketingConsent")} />
+                <Checkbox
+                  id="marketingConsent"
+                  {...register("marketingConsent")}
+                />
                 <Label htmlFor="marketingConsent" className="text-sm">
                   {t.fields.marketingConsent}
                 </Label>
@@ -697,12 +804,16 @@ export default function SpecialDealsForm({ language = "pl" }: SpecialDealsFormPr
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" disabled={isSubmitting} className="w-full bg-red-600 hover:bg-red-700">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-red-600 hover:bg-red-700"
+            >
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

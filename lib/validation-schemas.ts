@@ -1,12 +1,16 @@
-import { z } from "zod"
+import { z } from "zod";
 
 // Common validation patterns
-const phoneRegex = /^(\+48\s?)?(\d{3}\s?\d{3}\s?\d{3}|\d{2}\s?\d{3}\s?\d{2}\s?\d{2})$/
-const nipRegex = /^\d{10}$/
+const phoneRegex =
+  /^(\+48\s?)?(\d{3}\s?\d{3}\s?\d{3}|\d{2}\s?\d{3}\s?\d{2}\s?\d{2})$/;
+const nipRegex = /^\d{10}$/;
 
 // Base form schema
 const baseFormSchema = z.object({
-  firstName: z.string().min(2, "Imię musi mieć co najmniej 2 znaki").max(50, "Imię nie może być dłuższe niż 50 znaków"),
+  firstName: z
+    .string()
+    .min(2, "Imię musi mieć co najmniej 2 znaki")
+    .max(50, "Imię nie może być dłuższe niż 50 znaków"),
   lastName: z
     .string()
     .min(2, "Nazwisko musi mieć co najmniej 2 znaki")
@@ -20,10 +24,18 @@ const baseFormSchema = z.object({
     .min(2, "Nazwa firmy musi mieć co najmniej 2 znaki")
     .max(100, "Nazwa firmy nie może być dłuższa niż 100 znaków")
     .optional(),
-  message: z.string().max(1000, "Wiadomość nie może być dłuższa niż 1000 znaków").optional(),
-  gdprConsent: z.boolean().refine((val) => val === true, "Zgoda na przetwarzanie danych jest wymagana"),
+  message: z
+    .string()
+    .max(1000, "Wiadomość nie może być dłuższa niż 1000 znaków")
+    .optional(),
+  gdprConsent: z
+    .boolean()
+    .refine(
+      (val) => val === true,
+      "Zgoda na przetwarzanie danych jest wymagana",
+    ),
   marketingConsent: z.boolean().optional(),
-})
+});
 
 // Virtual Office Form Schema
 export const virtualOfficeFormSchema = baseFormSchema.extend({
@@ -38,7 +50,7 @@ export const virtualOfficeFormSchema = baseFormSchema.extend({
   businessType: z.enum(["sole-proprietorship", "llc", "corporation", "other"], {
     required_error: "Typ działalności jest wymagany",
   }),
-})
+});
 
 // Coworking Form Schema
 export const coworkingFormSchema = baseFormSchema.extend({
@@ -51,10 +63,16 @@ export const coworkingFormSchema = baseFormSchema.extend({
   startDate: z
     .string({ required_error: "Data rozpoczęcia jest wymagana" })
     .min(1, "Data rozpoczęcia jest wymagana"),
-  teamSize: z.number().min(1, "Wielkość zespołu musi być co najmniej 1").max(50, "Maksymalna wielkość zespołu to 50"),
-  specialRequirements: z.string().max(500, "Wymagania specjalne nie mogą być dłuższe niż 500 znaków").optional(),
+  teamSize: z
+    .number()
+    .min(1, "Wielkość zespołu musi być co najmniej 1")
+    .max(50, "Maksymalna wielkość zespołu to 50"),
+  specialRequirements: z
+    .string()
+    .max(500, "Wymagania specjalne nie mogą być dłuższe niż 500 znaków")
+    .optional(),
   trialDay: z.boolean().optional(),
-})
+});
 
 // Meeting Room Form Schema
 export const meetingRoomFormSchema = baseFormSchema.extend({
@@ -73,7 +91,7 @@ export const meetingRoomFormSchema = baseFormSchema.extend({
   cateringType: z.enum(["coffee", "lunch", "snacks", "full"]).optional(),
   recurring: z.boolean().optional(),
   recurringPattern: z.enum(["weekly", "monthly"]).optional(),
-})
+});
 
 // Advertising Form Schema
 export const advertisingFormSchema = baseFormSchema.extend({
@@ -89,33 +107,50 @@ export const advertisingFormSchema = baseFormSchema.extend({
   budget: z.enum(["under-1000", "1000-5000", "5000-10000", "over-10000"], {
     required_error: "Budżet jest wymagany",
   }),
-  targetAudience: z.string().max(300, "Opis grupy docelowej nie może być dłuższy niż 300 znaków").optional(),
+  targetAudience: z
+    .string()
+    .max(300, "Opis grupy docelowej nie może być dłuższy niż 300 znaków")
+    .optional(),
   campaignGoals: z.array(z.string()).optional(),
   previousExperience: z.boolean().optional(),
-})
+});
 
 // Special Deals Form Schema
 export const specialDealsFormSchema = baseFormSchema.extend({
-  dealType: z.enum(["welcome-package", "referral", "student", "startup", "long-term"], {
-    required_error: "Typ oferty jest wymagany",
-  }),
-  interestedServices: z.array(z.string()).min(1, "Wybierz co najmniej jedną usługę"),
-  currentSituation: z.enum(["new-business", "expanding", "relocating", "cost-cutting"], {
-    required_error: "Obecna sytuacja jest wymagana",
-  }),
+  dealType: z.enum(
+    ["welcome-package", "referral", "student", "startup", "long-term"],
+    {
+      required_error: "Typ oferty jest wymagany",
+    },
+  ),
+  interestedServices: z
+    .array(z.string())
+    .min(1, "Wybierz co najmniej jedną usługę"),
+  currentSituation: z.enum(
+    ["new-business", "expanding", "relocating", "cost-cutting"],
+    {
+      required_error: "Obecna sytuacja jest wymagana",
+    },
+  ),
   timeline: z.enum(["immediate", "1-month", "3-months", "6-months"], {
     required_error: "Harmonogram jest wymagany",
   }),
-  referralSource: z.string().max(100, "Źródło polecenia nie może być dłuższe niż 100 znaków").optional(),
-  specificNeeds: z.string().max(500, "Szczególne potrzeby nie mogą być dłuższe niż 500 znaków").optional(),
-})
+  referralSource: z
+    .string()
+    .max(100, "Źródło polecenia nie może być dłuższe niż 100 znaków")
+    .optional(),
+  specificNeeds: z
+    .string()
+    .max(500, "Szczególne potrzeby nie mogą być dłuższe niż 500 znaków")
+    .optional(),
+});
 
 // Export all schemas
-export { baseFormSchema, phoneRegex, nipRegex }
+export { baseFormSchema, phoneRegex, nipRegex };
 
 // Type exports
-export type VirtualOfficeFormData = z.infer<typeof virtualOfficeFormSchema>
-export type CoworkingFormData = z.infer<typeof coworkingFormSchema>
-export type MeetingRoomFormData = z.infer<typeof meetingRoomFormSchema>
-export type AdvertisingFormData = z.infer<typeof advertisingFormSchema>
-export type SpecialDealsFormData = z.infer<typeof specialDealsFormSchema>
+export type VirtualOfficeFormData = z.infer<typeof virtualOfficeFormSchema>;
+export type CoworkingFormData = z.infer<typeof coworkingFormSchema>;
+export type MeetingRoomFormData = z.infer<typeof meetingRoomFormSchema>;
+export type AdvertisingFormData = z.infer<typeof advertisingFormSchema>;
+export type SpecialDealsFormData = z.infer<typeof specialDealsFormSchema>;

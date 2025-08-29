@@ -1,9 +1,9 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { z } from "zod"
-import { requireAuth } from "@/lib/analytics-auth"
-import { checkRateLimit } from "@/lib/rate-limit"
-import { type AnalyticsEventRow } from "@/lib/analytics-types"
-import type { Pool } from "pg"
+import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { requireAuth } from "@/lib/analytics-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { type AnalyticsEventRow } from "@/lib/analytics-types";
+import type { Pool } from "pg";
 
 // Analytics event schema
 const analyticsEventSchema = z.object({
@@ -26,74 +26,83 @@ const analyticsEventSchema = z.object({
   userAgent: z.string(),
   language: z.string(),
   formVersion: z.string().optional(),
-})
+});
 
 // Hash IP for privacy
 async function hashIP(ip: string): Promise<string> {
-  const crypto = await import("crypto")
-  const salt = process.env.IP_SALT
+  const crypto = await import("crypto");
+  const salt = process.env.IP_SALT;
   if (!salt) {
-    const message = "IP_SALT environment variable is not set"
+    const message = "IP_SALT environment variable is not set";
     if (process.env.NODE_ENV === "production") {
-      throw new Error(message)
+      throw new Error(message);
     } else {
-      console.warn(message)
+      console.warn(message);
     }
   }
   return crypto
     .createHash("sha256")
     .update(ip + (salt || "default-salt"))
     .digest("hex")
-    .substring(0, 16)
+    .substring(0, 16);
 }
 
 // Get client IP
 function getClientIP(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for")
-  const realIP = request.headers.get("x-real-ip")
+  const forwarded = request.headers.get("x-forwarded-for");
+  const realIP = request.headers.get("x-real-ip");
 
   if (forwarded) {
-    return forwarded.split(",")[0].trim()
+    return forwarded.split(",")[0].trim();
   }
 
   if (realIP) {
-    return realIP
+    return realIP;
   }
 
-  return "127.0.0.1"
+  return "127.0.0.1";
 }
 
 export async function POST(request: NextRequest) {
-  const unauthorized = requireAuth(request)
-  if (unauthorized) return unauthorized
+  const unauthorized = requireAuth(request);
+  if (unauthorized) return unauthorized;
   try {
-    const { getPool } = await import("@/lib/database/connection-pool")
-    let db: Pool
+    const { getPool } = await import("@/lib/database/connection-pool");
+    let db: Pool;
     try {
-      db = (await getPool()) as Pool
-      await db.query("SELECT 1")
+      db = (await getPool()) as Pool;
+      await db.query("SELECT 1");
     } catch {
-      return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
+      return NextResponse.json(
+        { error: "Database connection failed" },
+        { status: 500 },
+      );
     }
 
-    const clientIP = getClientIP(request)
-    const hashedIP = await hashIP(clientIP)
+    const clientIP = getClientIP(request);
+    const hashedIP = await hashIP(clientIP);
 
     // Rate limiting
     if (!(await checkRateLimit(db, hashedIP))) {
-      return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        { status: 429 },
+      );
     }
 
-    const body = await request.json()
+    const body = await request.json();
 
     // Validate the event data
-    const validationResult = analyticsEventSchema.safeParse(body)
+    const validationResult = analyticsEventSchema.safeParse(body);
 
     if (!validationResult.success) {
-      return NextResponse.json({ error: "Invalid event data", details: validationResult.error.errors }, { status: 400 })
+      return NextResponse.json(
+        { error: "Invalid event data", details: validationResult.error.errors },
+        { status: 400 },
+      );
     }
 
-    const event = validationResult.data
+    const event = validationResult.data;
 
     // Sanitize and enrich the event
     const sanitizedEvent = {
@@ -101,7 +110,7 @@ export async function POST(request: NextRequest) {
       ipHash: hashedIP,
       userAgent: event.userAgent.substring(0, 200),
       sessionId: event.sessionId.replace(/[^a-zA-Z0-9_-]/g, ""),
-    }
+    };
 
     await db.query(
       `INSERT INTO analytics_events (form_type, event_type, field_name, error_message, timestamp, session_id, user_agent, language, form_version, ip_hash, received_at)
@@ -118,55 +127,61 @@ export async function POST(request: NextRequest) {
         sanitizedEvent.formVersion ?? null,
         sanitizedEvent.ipHash,
       ],
-    )
+    );
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
 // GET endpoint for retrieving analytics data (admin only)
 export async function GET(request: NextRequest) {
-  const unauthorized = requireAuth(request)
-  if (unauthorized) return unauthorized
+  const unauthorized = requireAuth(request);
+  if (unauthorized) return unauthorized;
   try {
-    const { getPool } = await import("@/lib/database/connection-pool")
-    let db: Pool
+    const { getPool } = await import("@/lib/database/connection-pool");
+    let db: Pool;
     try {
-      db = (await getPool()) as Pool
-      await db.query("SELECT 1")
+      db = (await getPool()) as Pool;
+      await db.query("SELECT 1");
     } catch {
-      return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
+      return NextResponse.json(
+        { error: "Database connection failed" },
+        { status: 500 },
+      );
     }
 
-    const { searchParams } = new URL(request.url)
-    const formType = searchParams.get("formType")
-    const eventType = searchParams.get("eventType")
-    const limit = Number.parseInt(searchParams.get("limit") || "100")
+    const { searchParams } = new URL(request.url);
+    const formType = searchParams.get("formType");
+    const eventType = searchParams.get("eventType");
+    const limit = Number.parseInt(searchParams.get("limit") || "100");
 
-    const conditions: string[] = []
-    const params: any[] = []
+    const conditions: string[] = [];
+    const params: any[] = [];
 
     if (formType) {
-      conditions.push(`form_type = $${params.length + 1}`)
-      params.push(formType)
+      conditions.push(`form_type = $${params.length + 1}`);
+      params.push(formType);
     }
 
     if (eventType) {
-      conditions.push(`event_type = $${params.length + 1}`)
-      params.push(eventType)
+      conditions.push(`event_type = $${params.length + 1}`);
+      params.push(eventType);
     }
 
     let query =
-      'SELECT form_type AS "formType", event_type AS "eventType", field_name AS "fieldName", error_message AS "errorMessage", timestamp, session_id AS "sessionId", user_agent AS "userAgent", language, form_version AS "formVersion", ip_hash AS "ipHash", received_at AS "receivedAt" FROM analytics_events'
+      'SELECT form_type AS "formType", event_type AS "eventType", field_name AS "fieldName", error_message AS "errorMessage", timestamp, session_id AS "sessionId", user_agent AS "userAgent", language, form_version AS "formVersion", ip_hash AS "ipHash", received_at AS "receivedAt" FROM analytics_events';
     if (conditions.length) {
-      query += ` WHERE ${conditions.join(" AND ")}`
+      query += ` WHERE ${conditions.join(" AND ")}`;
     }
-    query += ` ORDER BY timestamp DESC LIMIT $${params.length + 1}`
-    params.push(limit)
+    query += ` ORDER BY timestamp DESC LIMIT $${params.length + 1}`;
+    params.push(limit);
 
-    const { rows } = await db.query<AnalyticsEventRow>(query, params)
+    const { rows } = await db.query<AnalyticsEventRow>(query, params);
 
     const sanitizedEvents = rows.map((event) => ({
       formType: event.formType,
@@ -177,14 +192,17 @@ export async function GET(request: NextRequest) {
       language: event.language,
       formVersion: event.formVersion,
       receivedAt: event.receivedAt,
-    }))
+    }));
 
     return NextResponse.json({
       events: sanitizedEvents,
       total: sanitizedEvents.length,
       filtered: sanitizedEvents.length,
-    })
+    });
   } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

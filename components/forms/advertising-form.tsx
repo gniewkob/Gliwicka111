@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
   Card,
@@ -21,29 +21,42 @@ import {
   SelectValue,
   Alert,
   AlertDescription,
-} from "@/components/ui"
-import { advertisingFormSchema, type AdvertisingFormData } from "@/lib/validation-schemas"
-import { submitAdvertisingForm } from "@/lib/server-actions"
-import { analyticsClient } from "@/lib/analytics-client"
-import { useFormAnalytics } from "@/hooks/use-form-analytics"
-import { messages } from "@/lib/i18n"
-import { Megaphone, Truck, Monitor, Target, Calendar, Shield, CheckCircle } from "lucide-react"
+} from "@/components/ui";
+import {
+  advertisingFormSchema,
+  type AdvertisingFormData,
+} from "@/lib/validation-schemas";
+import { submitAdvertisingForm } from "@/lib/server-actions";
+import { analyticsClient } from "@/lib/analytics-client";
+import { useFormAnalytics } from "@/hooks/use-form-analytics";
+import { messages } from "@/lib/i18n";
+import {
+  Megaphone,
+  Truck,
+  Monitor,
+  Target,
+  Calendar,
+  Shield,
+  CheckCircle,
+} from "lucide-react";
 
 interface AdvertisingFormProps {
-  language?: "pl" | "en"
+  language?: "pl" | "en";
 }
 
-export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+export default function AdvertisingForm({
+  language = "pl",
+}: AdvertisingFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
-    success: boolean
-    message: string
-  } | null>(null)
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   const analytics = useFormAnalytics({
     formType: "advertising",
     enabled: true,
-  })
+  });
 
   const {
     register,
@@ -60,7 +73,7 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
       previousExperience: false,
       campaignGoals: [],
     },
-  })
+  });
 
   const content = {
     pl: {
@@ -72,19 +85,34 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
           name: "Billboard Mobilny",
           price: "350 zł/tydzień",
           description: "Przyczepa reklamowa 5m x 3m poruszająca się po mieście",
-          features: ["Duża powierzchnia reklamowa", "Mobilność", "Wysoka widoczność", "Elastyczne trasy"],
+          features: [
+            "Duża powierzchnia reklamowa",
+            "Mobilność",
+            "Wysoka widoczność",
+            "Elastyczne trasy",
+          ],
         },
         "static-billboard": {
           name: "Billboard Stacjonarny",
           price: "200 zł/tydzień",
           description: "Stały billboard przy głównej drodze",
-          features: ["Stała lokalizacja", "24/7 widoczność", "Duży ruch", "Długoterminowa ekspozycja"],
+          features: [
+            "Stała lokalizacja",
+            "24/7 widoczność",
+            "Duży ruch",
+            "Długoterminowa ekspozycja",
+          ],
         },
         digital: {
           name: "Reklama Cyfrowa",
           price: "500 zł/tydzień",
           description: "Ekran LED z możliwością zmiany treści",
-          features: ["Dynamiczne treści", "Pełny kolor", "Animacje", "Zdalne zarządzanie"],
+          features: [
+            "Dynamiczne treści",
+            "Pełny kolor",
+            "Animacje",
+            "Zdalne zarządzanie",
+          ],
         },
       },
       fields: {
@@ -102,7 +130,8 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
         previousExperience: "Poprzednie doświadczenia z reklamą",
         message: "Dodatkowe informacje",
         gdprConsent: "Wyrażam zgodę na przetwarzanie moich danych osobowych",
-        marketingConsent: "Wyrażam zgodę na otrzymywanie informacji marketingowych",
+        marketingConsent:
+          "Wyrażam zgodę na otrzymywanie informacji marketingowych",
       },
       durations: {
         "1-week": "1 tydzień",
@@ -137,19 +166,34 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
           name: "Mobile Billboard",
           price: "350 PLN/week",
           description: "5m x 3m advertising trailer moving around the city",
-          features: ["Large advertising space", "Mobility", "High visibility", "Flexible routes"],
+          features: [
+            "Large advertising space",
+            "Mobility",
+            "High visibility",
+            "Flexible routes",
+          ],
         },
         "static-billboard": {
           name: "Static Billboard",
           price: "200 PLN/week",
           description: "Fixed billboard on main road",
-          features: ["Fixed location", "24/7 visibility", "High traffic", "Long-term exposure"],
+          features: [
+            "Fixed location",
+            "24/7 visibility",
+            "High traffic",
+            "Long-term exposure",
+          ],
         },
         digital: {
           name: "Digital Advertising",
           price: "500 PLN/week",
           description: "LED screen with content change capability",
-          features: ["Dynamic content", "Full color", "Animations", "Remote management"],
+          features: [
+            "Dynamic content",
+            "Full color",
+            "Animations",
+            "Remote management",
+          ],
         },
       },
       fields: {
@@ -193,64 +237,66 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
       submit: "Send Inquiry",
       submitting: "Sending...",
     },
-  }
+  };
 
-  const t = content[language]
+  const t = content[language];
 
   const onSubmit = async (data: AdvertisingFormData) => {
-    setIsSubmitting(true)
-    setSubmitResult(null)
-    analytics.trackSubmissionAttempt()
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    analytics.trackSubmissionAttempt();
 
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item))
+          value.forEach((item) => formData.append(key, item));
         } else {
-          formData.append(key, String(value))
+          formData.append(key, String(value));
         }
-      })
+      });
 
-      formData.append("sessionId", analyticsClient.getSessionId())
-      const result = await submitAdvertisingForm(formData)
+      formData.append("sessionId", analyticsClient.getSessionId());
+      const result = await submitAdvertisingForm(formData);
       const message =
         result.message ??
         (result.success
           ? messages.form.success[language]
-          : messages.form.serverError[language])
-      setSubmitResult({ success: result.success, message })
+          : messages.form.serverError[language]);
+      setSubmitResult({ success: result.success, message });
       if (result.success) {
-        analytics.trackSubmissionSuccess()
-        reset()
+        analytics.trackSubmissionSuccess();
+        reset();
       } else {
-        analytics.trackSubmissionError(message)
+        analytics.trackSubmissionError(message);
       }
     } catch (error) {
       const errorMessage =
-        language === "en" ? "An unexpected error occurred" : "Wystąpił nieoczekiwany błąd"
-      analytics.trackSubmissionError(errorMessage)
-      setSubmitResult({ success: false, message: errorMessage })
+        language === "en"
+          ? "An unexpected error occurred"
+          : "Wystąpił nieoczekiwany błąd";
+      analytics.trackSubmissionError(errorMessage);
+      setSubmitResult({ success: false, message: errorMessage });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFieldFocus = (fieldName: string) => {
-    analytics.trackFieldFocus(fieldName)
+    analytics.trackFieldFocus(fieldName);
     if (!watch("firstName") && fieldName === "firstName") {
-      analytics.trackFormStart()
+      analytics.trackFormStart();
     }
-  }
+  };
 
   const handleFieldBlur = (fieldName: string) => {
-    analytics.trackFieldBlur(fieldName)
-  }
+    analytics.trackFieldBlur(fieldName);
+  };
 
   const handleFieldError = (fieldName: string, error?: string) => {
-    if (!error) return
-    analytics.trackFieldError(fieldName, error)
-  }
+    if (!error) return;
+    analytics.trackFieldError(fieldName, error);
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -271,16 +317,29 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
       {/* Campaign Types */}
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         {Object.entries(t.campaignTypes).map(([key, campaign]) => (
-          <Card key={key} className="relative hover:shadow-lg transition-shadow">
+          <Card
+            key={key}
+            className="relative hover:shadow-lg transition-shadow"
+          >
             <CardHeader className="text-center">
               <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                {key === "mobile-billboard" && <Truck className="w-6 h-6 text-orange-600" />}
-                {key === "static-billboard" && <Megaphone className="w-6 h-6 text-orange-600" />}
-                {key === "digital" && <Monitor className="w-6 h-6 text-orange-600" />}
+                {key === "mobile-billboard" && (
+                  <Truck className="w-6 h-6 text-orange-600" />
+                )}
+                {key === "static-billboard" && (
+                  <Megaphone className="w-6 h-6 text-orange-600" />
+                )}
+                {key === "digital" && (
+                  <Monitor className="w-6 h-6 text-orange-600" />
+                )}
               </div>
               <CardTitle className="text-lg">{campaign.name}</CardTitle>
-              <div className="text-2xl font-bold text-orange-600">{campaign.price}</div>
-              <CardDescription className="text-sm">{campaign.description}</CardDescription>
+              <div className="text-2xl font-bold text-orange-600">
+                {campaign.price}
+              </div>
+              <CardDescription className="text-sm">
+                {campaign.description}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
@@ -303,7 +362,10 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
             <Target className="w-5 h-5 mr-2" />
             Formularz kampanii reklamowej
           </CardTitle>
-          <CardDescription>Opisz swoją kampanię, a przygotujemy dla Ciebie spersonalizowaną ofertę</CardDescription>
+          <CardDescription>
+            Opisz swoją kampanię, a przygotujemy dla Ciebie spersonalizowaną
+            ofertę
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {submitResult && (
@@ -444,19 +506,34 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="campaignType">{t.fields.campaignType} *</Label>
-                <Select onValueChange={(value) => setValue("campaignType", value as any)}>
-                  <SelectTrigger className={errors.campaignType ? "border-red-500" : ""}>
+                <Select
+                  onValueChange={(value) =>
+                    setValue("campaignType", value as any)
+                  }
+                >
+                  <SelectTrigger
+                    className={errors.campaignType ? "border-red-500" : ""}
+                  >
                     <SelectValue placeholder="Wybierz typ kampanii" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mobile-billboard">Billboard Mobilny (350 zł/tydzień)</SelectItem>
-                    <SelectItem value="static-billboard">Billboard Stacjonarny (200 zł/tydzień)</SelectItem>
-                    <SelectItem value="digital">Reklama Cyfrowa (500 zł/tydzień)</SelectItem>
+                    <SelectItem value="mobile-billboard">
+                      Billboard Mobilny (350 zł/tydzień)
+                    </SelectItem>
+                    <SelectItem value="static-billboard">
+                      Billboard Stacjonarny (200 zł/tydzień)
+                    </SelectItem>
+                    <SelectItem value="digital">
+                      Reklama Cyfrowa (500 zł/tydzień)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.campaignType && (
                   <>
-                    {handleFieldError("campaignType", errors.campaignType.message)}
+                    {handleFieldError(
+                      "campaignType",
+                      errors.campaignType.message,
+                    )}
                     <p
                       data-testid="advertising-campaignType-error"
                       className="text-red-500 text-sm mt-1"
@@ -469,8 +546,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
               <div>
                 <Label htmlFor="duration">{t.fields.duration} *</Label>
-                <Select onValueChange={(value) => setValue("duration", value as any)}>
-                  <SelectTrigger className={errors.duration ? "border-red-500" : ""}>
+                <Select
+                  onValueChange={(value) => setValue("duration", value as any)}
+                >
+                  <SelectTrigger
+                    className={errors.duration ? "border-red-500" : ""}
+                  >
                     <SelectValue placeholder="Wybierz czas trwania" />
                   </SelectTrigger>
                   <SelectContent>
@@ -524,8 +605,12 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
 
               <div>
                 <Label htmlFor="budget">{t.fields.budget} *</Label>
-                <Select onValueChange={(value) => setValue("budget", value as any)}>
-                  <SelectTrigger className={errors.budget ? "border-red-500" : ""}>
+                <Select
+                  onValueChange={(value) => setValue("budget", value as any)}
+                >
+                  <SelectTrigger
+                    className={errors.budget ? "border-red-500" : ""}
+                  >
                     <SelectValue placeholder="Wybierz budżet" />
                   </SelectTrigger>
                   <SelectContent>
@@ -563,7 +648,10 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
               />
               {errors.targetAudience && (
                 <>
-                  {handleFieldError("targetAudience", errors.targetAudience.message)}
+                  {handleFieldError(
+                    "targetAudience",
+                    errors.targetAudience.message,
+                  )}
                   <p
                     data-testid="advertising-targetAudience-error"
                     className="text-red-500 text-sm mt-1"
@@ -583,14 +671,14 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                     <Checkbox
                       id={`goal-${index}`}
                       onCheckedChange={(checked) => {
-                        const current = watch("campaignGoals") || []
+                        const current = watch("campaignGoals") || [];
                         if (checked) {
-                          setValue("campaignGoals", [...current, goal])
+                          setValue("campaignGoals", [...current, goal]);
                         } else {
                           setValue(
                             "campaignGoals",
                             current.filter((g) => g !== goal),
-                          )
+                          );
                         }
                       }}
                     />
@@ -603,8 +691,13 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
             </div>
 
             <div className="flex items-center space-x-2">
-              <Checkbox id="previousExperience" {...register("previousExperience")} />
-              <Label htmlFor="previousExperience">{t.fields.previousExperience}</Label>
+              <Checkbox
+                id="previousExperience"
+                {...register("previousExperience")}
+              />
+              <Label htmlFor="previousExperience">
+                {t.fields.previousExperience}
+              </Label>
             </div>
 
             <div>
@@ -646,8 +739,8 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
                     {t.fields.gdprConsent} *
                   </Label>
                   <p className="text-xs text-gray-600 mt-1">
-                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu realizacji kampanii reklamowej i kontaktu z
-                    Tobą.
+                    Zgodnie z RODO, Twoje dane będą przetwarzane w celu
+                    realizacji kampanii reklamowej i kontaktu z Tobą.
                   </p>
                 </div>
               </div>
@@ -664,7 +757,10 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
               )}
 
               <div className="flex items-start space-x-2">
-                <Checkbox id="marketingConsent" {...register("marketingConsent")} />
+                <Checkbox
+                  id="marketingConsent"
+                  {...register("marketingConsent")}
+                />
                 <Label htmlFor="marketingConsent" className="text-sm">
                   {t.fields.marketingConsent}
                 </Label>
@@ -672,12 +768,16 @@ export default function AdvertisingForm({ language = "pl" }: AdvertisingFormProp
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" disabled={isSubmitting} className="w-full bg-orange-600 hover:bg-orange-700">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-orange-600 hover:bg-orange-700"
+            >
               {isSubmitting ? t.submitting : t.submit}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

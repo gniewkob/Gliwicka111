@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
 export default function PropertiesError({
   error,
   reset,
 }: {
-  error: Error
-  reset: () => void
+  error: Error;
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Error in properties route', error)
-  }, [error])
+    console.error("Error in properties route", error);
+  }, [error]);
 
   return (
     <div className="p-4 text-center">
@@ -20,5 +20,5 @@ export default function PropertiesError({
         Try again
       </button>
     </div>
-  )
+  );
 }

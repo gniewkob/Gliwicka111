@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useLanguage } from "@/components/language-provider"
+import { useState } from "react";
+import { useLanguage } from "@/components/language-provider";
 import {
   Building2,
   MapPin,
@@ -15,11 +15,11 @@ import {
   Users,
   Award,
   TrendingUp,
-} from "lucide-react"
-import { Button, Card, CardContent } from "@/components/ui"
-import Link from "next/link"
-import Image from "next/image"
-import { navTranslations, backTranslations } from "@/lib/i18n"
+} from "lucide-react";
+import { Button, Card, CardContent } from "@/components/ui";
+import Link from "next/link";
+import Image from "next/image";
+import { navTranslations, backTranslations } from "@/lib/i18n";
 
 const translations = {
   pl: {
@@ -39,19 +39,23 @@ const translations = {
       title: "Nasze wartości",
       trust: {
         title: "Zaufanie",
-        description: "Budujemy relacje oparte na wzajemnym zaufaniu i transparentności w każdej transakcji.",
+        description:
+          "Budujemy relacje oparte na wzajemnym zaufaniu i transparentności w każdej transakcji.",
       },
       quality: {
         title: "Jakość",
-        description: "Oferujemy najwyższej jakości powierzchnie i usługi, dbając o każdy szczegół.",
+        description:
+          "Oferujemy najwyższej jakości powierzchnie i usługi, dbając o każdy szczegół.",
       },
       flexibility: {
         title: "Elastyczność",
-        description: "Dostosowujemy nasze oferty do indywidualnych potrzeb i wymagań klientów.",
+        description:
+          "Dostosowujemy nasze oferty do indywidualnych potrzeb i wymagań klientów.",
       },
       innovation: {
         title: "Innowacyjność",
-        description: "Stale rozwijamy nasze usługi i poszukujemy nowych rozwiązań dla klientów.",
+        description:
+          "Stale rozwijamy nasze usługi i poszukujemy nowych rozwiązań dla klientów.",
       },
     },
     story: {
@@ -70,7 +74,8 @@ const translations = {
     },
     cta: {
       title: "Rozpocznij współpracę z nami",
-      description: "Skontaktuj się z nami, aby dowiedzieć się więcej o naszych usługach i dostępnych nieruchomościach.",
+      description:
+        "Skontaktuj się z nami, aby dowiedzieć się więcej o naszych usługach i dostępnych nieruchomościach.",
       contact: "Skontaktuj się",
       properties: "Zobacz nieruchomości",
     },
@@ -93,19 +98,23 @@ const translations = {
       title: "Our values",
       trust: {
         title: "Trust",
-        description: "We build relationships based on mutual trust and transparency in every transaction.",
+        description:
+          "We build relationships based on mutual trust and transparency in every transaction.",
       },
       quality: {
         title: "Quality",
-        description: "We offer the highest quality spaces and services, paying attention to every detail.",
+        description:
+          "We offer the highest quality spaces and services, paying attention to every detail.",
       },
       flexibility: {
         title: "Flexibility",
-        description: "We adapt our offers to individual client needs and requirements.",
+        description:
+          "We adapt our offers to individual client needs and requirements.",
       },
       innovation: {
         title: "Innovation",
-        description: "We continuously develop our services and seek new solutions for clients.",
+        description:
+          "We continuously develop our services and seek new solutions for clients.",
       },
     },
     story: {
@@ -124,19 +133,20 @@ const translations = {
     },
     cta: {
       title: "Start working with us",
-      description: "Contact us to learn more about our services and available properties.",
+      description:
+        "Contact us to learn more about our services and available properties.",
       contact: "Contact Us",
       properties: "View Properties",
     },
     back: backTranslations.en,
   },
-}
+};
 
 export default function AboutPage() {
-  const { language, toggleLanguage } = useLanguage()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { language, toggleLanguage } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const t = translations[language]
+  const t = translations[language];
 
   const values = [
     {
@@ -159,7 +169,7 @@ export default function AboutPage() {
       title: t.values.innovation.title,
       description: t.values.innovation.description,
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -173,23 +183,34 @@ export default function AboutPage() {
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Gliwicka 111</h1>
+                <h1 className="text-xl font-bold text-slate-900">
+                  Gliwicka 111
+                </h1>
                 <p className="text-xs text-slate-600">Property Management</p>
               </div>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.home}
               </Link>
-              <Link href="/properties" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/properties"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.properties}
               </Link>
               <Link href="/about" className="text-teal-600 font-medium">
                 {t.nav.about}
               </Link>
-              <Link href="/contact" className="text-slate-700 hover:text-teal-600 font-medium transition-colors">
+              <Link
+                href="/contact"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
                 {t.nav.contact}
               </Link>
 
@@ -216,8 +237,16 @@ export default function AboutPage() {
                 <Globe className="w-4 h-4" />
                 <span>{language.toUpperCase()}</span>
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </Button>
             </div>
           </div>
@@ -226,16 +255,25 @@ export default function AboutPage() {
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-gray-100 py-4">
               <nav className="flex flex-col space-y-4">
-                <Link href="/" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="/properties" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/properties"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.properties}
                 </Link>
                 <Link href="/about" className="text-teal-600 font-medium">
                   {t.nav.about}
                 </Link>
-                <Link href="/contact" className="text-slate-700 hover:text-teal-600 font-medium">
+                <Link
+                  href="/contact"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
                   {t.nav.contact}
                 </Link>
               </nav>
@@ -249,14 +287,21 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Button asChild variant="ghost" className="mb-6">
-              <Link href="/" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900">
+              <Link
+                href="/"
+                className="flex items-center space-x-2 text-slate-600 hover:text-slate-900"
+              >
                 <ArrowLeft className="w-4 h-4" />
                 <span>{t.back}</span>
               </Link>
             </Button>
-            <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">{t.header.title}</h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+              {t.header.title}
+            </h1>
             <p className="text-xl text-teal-600 mb-6">{t.header.subtitle}</p>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">{t.header.description}</p>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              {t.header.description}
+            </p>
           </div>
         </div>
       </section>
@@ -266,8 +311,12 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">{t.mission.title}</h2>
-              <p className="text-lg text-slate-600 leading-relaxed">{t.mission.description}</p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
+                {t.mission.title}
+              </h2>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                {t.mission.description}
+              </p>
             </div>
             <div className="relative">
               <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center">
@@ -288,23 +337,30 @@ export default function AboutPage() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t.values.title}</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              {t.values.title}
+            </h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => {
-              const IconComponent = value.icon
+              const IconComponent = value.icon;
               return (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                <Card
+                  key={index}
+                  className="text-center hover:shadow-lg transition-shadow"
+                >
                   <CardContent className="p-6">
                     <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                       <IconComponent className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-semibold text-slate-900 mb-3">{value.title}</h3>
+                    <h3 className="text-xl font-semibold text-slate-900 mb-3">
+                      {value.title}
+                    </h3>
                     <p className="text-slate-600">{value.description}</p>
                   </CardContent>
                 </Card>
-              )
+              );
             })}
           </div>
         </div>
@@ -314,13 +370,21 @@ export default function AboutPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-8 text-center">{t.story.title}</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-8 text-center">
+              {t.story.title}
+            </h2>
 
             <div className="space-y-8">
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                <p className="text-lg text-slate-600 leading-relaxed mb-6">{t.story.description}</p>
-                <p className="text-lg text-slate-600 leading-relaxed mb-6">{t.story.present}</p>
-                <p className="text-lg text-slate-600 leading-relaxed">{t.story.future}</p>
+                <p className="text-lg text-slate-600 leading-relaxed mb-6">
+                  {t.story.description}
+                </p>
+                <p className="text-lg text-slate-600 leading-relaxed mb-6">
+                  {t.story.present}
+                </p>
+                <p className="text-lg text-slate-600 leading-relaxed">
+                  {t.story.future}
+                </p>
               </div>
             </div>
           </div>
@@ -343,8 +407,12 @@ export default function AboutPage() {
               </div>
             </div>
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">{t.team.title}</h2>
-              <p className="text-lg text-slate-600 leading-relaxed">{t.team.description}</p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
+                {t.team.title}
+              </h2>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                {t.team.description}
+              </p>
             </div>
           </div>
         </div>
@@ -353,8 +421,12 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-slate-900 to-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">{t.cta.title}</h2>
-          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">{t.cta.description}</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+            {t.cta.title}
+          </h2>
+          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+            {t.cta.description}
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-teal-600 hover:bg-teal-700">
               <Link href="/contact">
@@ -415,18 +487,32 @@ export default function AboutPage() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">{language === "pl" ? "Szybkie linki" : "Quick Links"}</h4>
+              <h4 className="text-lg font-semibold mb-4">
+                {language === "pl" ? "Szybkie linki" : "Quick Links"}
+              </h4>
               <nav className="space-y-2">
-                <Link href="/" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.home}
                 </Link>
-                <Link href="/properties" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/properties"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.properties}
                 </Link>
-                <Link href="/about" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/about"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.about}
                 </Link>
-                <Link href="/contact" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/contact"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {t.nav.contact}
                 </Link>
               </nav>
@@ -438,10 +524,18 @@ export default function AboutPage() {
                 {language === "pl" ? "Informacje prawne" : "Legal Information"}
               </h4>
               <nav className="space-y-2">
-                <Link href="/privacy" className="block text-slate-400 hover:text-white transition-colors">
-                  {language === "pl" ? "Polityka prywatności" : "Privacy Policy"}
+                <Link
+                  href="/privacy"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
+                  {language === "pl"
+                    ? "Polityka prywatności"
+                    : "Privacy Policy"}
                 </Link>
-                <Link href="/terms" className="block text-slate-400 hover:text-white transition-colors">
+                <Link
+                  href="/terms"
+                  className="block text-slate-400 hover:text-white transition-colors"
+                >
                   {language === "pl" ? "Regulamin" : "Terms of Service"}
                 </Link>
               </nav>
@@ -450,11 +544,14 @@ export default function AboutPage() {
 
           <div className="border-t border-slate-800 mt-12 pt-8 text-center text-slate-400">
             <p>
-              &copy; 2024 Gliwicka 111. {language === "pl" ? "Wszystkie prawa zastrzeżone." : "All rights reserved."}
+              &copy; 2024 Gliwicka 111.{" "}
+              {language === "pl"
+                ? "Wszystkie prawa zastrzeżone."
+                : "All rights reserved."}
             </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

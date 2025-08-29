@@ -38,7 +38,10 @@ export async function GET(request: NextRequest) {
     const { getPool } = await import("@/lib/database/connection-pool");
     db = (await getPool()) as Pool;
   } catch {
-    return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Database connection failed" },
+      { status: 500 },
+    );
   }
 
   const params = [METRICS_WINDOW_HOURS];
@@ -114,8 +117,7 @@ export async function GET(request: NextRequest) {
     submissionsHourly.reduce(
       (sum: number, r: SubmissionRow) => sum + r.avgProcessing,
       0,
-    ) /
-    (submissionsHourly.length || 1);
+    ) / (submissionsHourly.length || 1);
   const peakProcessingTime = Math.max(
     0,
     ...submissionsHourly.map((r: SubmissionRow) => r.maxProcessing),
@@ -124,8 +126,7 @@ export async function GET(request: NextRequest) {
     submissionsHourly.reduce(
       (sum: number, r: SubmissionRow) => sum + r.avgEmailLatency,
       0,
-    ) /
-    (submissionsHourly.length || 1);
+    ) / (submissionsHourly.length || 1);
   const peakEmailLatency = Math.max(
     0,
     ...submissionsHourly.map((r: SubmissionRow) => r.maxEmailLatency),
@@ -151,10 +152,7 @@ export async function GET(request: NextRequest) {
     0,
   );
   const avgRetryCount =
-    failedHourly.reduce(
-      (sum: number, r: FailureRow) => sum + r.avgRetry,
-      0,
-    ) /
+    failedHourly.reduce((sum: number, r: FailureRow) => sum + r.avgRetry, 0) /
     (failedHourly.length || 1);
   const peakRetryCount = Math.max(
     0,
@@ -172,10 +170,7 @@ export async function GET(request: NextRequest) {
   );
 
   const avgRateCount =
-    rateHourly.reduce(
-      (sum: number, r: RateLimitRow) => sum + r.avgCount,
-      0,
-    ) /
+    rateHourly.reduce((sum: number, r: RateLimitRow) => sum + r.avgCount, 0) /
     (rateHourly.length || 1);
   const peakRateCount = Math.max(
     0,
