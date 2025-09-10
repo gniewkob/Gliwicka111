@@ -40,3 +40,6 @@ next-env.d.ts
 
 # temp files
 /tmp/
+
+# Ignore PM2 logs
+.pm2/*.log
