@@ -1392,7 +1392,7 @@ export default function HomePage() {
                   src="/hala1.webp"
                   alt="Gliwicka 111 Building"
                   fill
-                  className="object-cover"
+                                  className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 500px"
                   priority
                 />
