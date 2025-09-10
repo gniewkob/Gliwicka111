@@ -1387,13 +1387,14 @@ export default function HomePage() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center shadow-2xl">
+              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-2xl overflow-hidden relative">
                 <Image
-                  src="/placeholder.svg?height=500&width=500&text=Gliwicka+111+Building"
+                  src="/hala1.webp"
                   alt="Gliwicka 111 Building"
-                  width={500}
-                  height={500}
-                  className="rounded-2xl object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 500px"
+                  priority
                 />
               </div>
               {/* Floating elements */}
