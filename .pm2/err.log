@@ -1,0 +1,668 @@
+2025-08-15T19:11:13: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:13:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:13:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:13:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:14: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:14:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:14:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:14:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:15: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:15:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:15:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:15:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:15: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:15:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:15:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:15:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:16: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:16:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:16:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:16:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:17: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:17:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:17:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:17:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:17: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:17:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:17:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:17:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:18: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:18:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:18:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:18:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:19: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:19:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:19:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:19:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:19: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:19:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:19:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:19:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:20: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:20:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:20:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:20:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:21: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:21:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:21:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:21:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:21: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:21:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:21:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:21:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:22: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:22:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:22:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:22:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:23: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:23:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:23:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:23:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:11:23: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:11:23:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:11:23:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:11:23:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:55: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:55:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:55:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:55:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:56: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:56:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:56:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:56:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:57: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:57:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:57:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:57:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:57: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:57:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:57:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:57:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:58: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:58:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:58:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:58:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:12:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:12:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:12:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:12:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:02: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:02:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:02:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:02:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:03: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:03:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:03:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:03:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:04:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:04:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:04:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:05: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:05:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:05:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:05:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:06: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:06:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:06:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:06:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:06: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:06:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:06:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:06:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:07: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:07:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:07:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:07:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:08: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:08:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:08:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:08:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:08: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:08:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:08:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:08:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:09: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:09:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:09:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:09:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-15T19:13:10: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-15T19:13:10:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-15T19:13:10:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-15T19:13:10:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:13: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:13:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:13:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:13:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:14: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:14:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:14:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:14:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:15: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:15:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:15:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:15:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:16: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:16:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:16:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:16:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:16: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:16:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:16:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:16:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:17: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:17:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:17:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:17:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:18: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:18:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:18:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:18:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:18: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:18:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:18:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:18:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:19: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:19:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:19:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:19:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:20: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:20:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:20:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:20:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:21: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:21:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:21:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:21:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:21: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:21:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:21:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:21:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:22: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:22:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:22:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:22:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:23: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:23:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:23:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:23:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:23: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:23:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:23:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:23:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:28:24: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:28:24:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:28:24:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:28:24:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:33:57: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:33:57:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:33:57:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:33:57:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:33:58: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:33:58:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:33:58:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:33:58:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:33:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:33:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:33:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:33:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:33:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:33:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:33:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:33:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:02: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:02:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:02:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:02:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:04:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:04:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:04:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:04:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:04:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:04:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:05: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:05:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:05:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:05:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:06: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:06:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:06:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:06:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:07: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:07:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:07:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:07:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:08: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:08:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:08:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:08:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:08: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:08:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:08:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:08:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:09: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:09:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:09:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:09:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:09: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:09:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:09:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:09:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:10: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:10:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:10:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:10:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:11: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:11:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:11:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:11:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:11: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:11:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:11:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:11:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:12: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:12:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:12:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:12:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:24: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:24:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:24:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:24:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:25: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:25:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:25:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:25:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:25: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:25:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:25:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:25:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:26: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:26:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:26:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:26:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:27: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:27:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:27:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:27:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:27: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:27:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:27:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:27:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:28: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:28:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:28:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:28:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:28: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:28:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:28:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:28:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:29: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:29:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:29:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:29:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:30: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:30:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:30:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:30:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:31: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:31:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:31:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:31:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:31: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:31:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:31:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:31:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:32: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:32:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:32:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:32:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:32: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:32:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:32:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:32:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:33: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:33:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:33:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:33:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-17T02:34:34: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-17T02:34:34:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-17T02:34:34:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-17T02:34:34:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:35: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:35:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:35:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:35:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:36: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:36:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:36:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:36:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:36: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:36:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:36:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:36:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:37: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:37:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:37:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:37:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:38: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:38:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:38:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:38:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:38: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:38:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:38:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:38:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:39: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:39:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:39:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:39:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:40: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:40:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:40:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:40:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:40: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:40:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:40:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:40:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:41: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:41:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:41:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:41:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:42: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:42:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:42:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:42:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:43: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:43:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:43:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:43:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:43: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:43:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:43:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:43:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:44: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:44:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:44:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:44:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:45: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:45:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:45:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:45:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-22T13:23:45: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-22T13:23:45:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-22T13:23:45:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-22T13:23:45:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:33:58: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:33:58:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:33:58:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:33:58:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:33:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:33:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:33:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:33:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:33:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:33:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:33:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:33:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:01: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:01:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:01:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:01:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:02: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:02:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:02:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:02:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:03: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:03:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:03:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:03:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:04:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:04:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:04:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:04:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:04:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:04:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:05: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:05:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:05:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:05:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:06: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:06:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:06:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:06:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:06: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:06:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:06:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:06:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:07: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:07:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:07:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:07:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:08: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:08:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:08:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:08:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:09: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:09:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:09:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:09:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:09: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:09:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:09:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:09:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:10: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:10:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:10:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:10:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-23T22:34:11: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-23T22:34:11:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-23T22:34:11:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-23T22:34:11:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:54: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:54:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:54:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:54:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:55: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:55:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:55:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:55:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:55: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:55:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:55:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:55:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:56: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:56:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:56:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:56:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:56: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:56:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:56:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:56:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:57: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:57:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:57:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:57:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:58: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:58:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:58:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:58:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:58: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:58:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:58:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:58:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:54:59: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:54:59:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:54:59:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:54:59:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:03: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:03:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:03:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:03:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:04:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:04:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:04:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:05: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:05:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:05:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:05:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:05: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:05:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:05:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:05:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:06: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:06:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:06:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:06:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:07: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:07:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:07:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:07:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T01:55:07: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T01:55:07:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T01:55:07:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T01:55:07:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:32: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:32:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:32:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:32:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:33: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:33:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:33:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:33:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:34: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:34:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:34:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:34:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:34: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:34:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:34:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:34:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:35: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:35:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:35:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:35:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:36: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:36:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:36:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:36:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:37: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:37:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:37:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:37:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:38: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:38:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:38:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:38:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:39: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:39:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:39:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:39:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:40: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:40:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:40:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:40:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:40: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:40:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:40:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:40:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:41: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:41:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:41:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:41:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:42: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:42:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:42:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:42:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:43: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:43:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:43:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:43:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:44: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:44:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:44:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:44:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:45: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:45:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:45:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:45:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:55:45: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:55:45:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:55:45:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:55:45:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:28: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:28:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:28:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:28:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:28: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:28:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:28:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:28:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:29: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:29:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:29:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:29:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:30: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:30:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:30:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:30:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:30: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:30:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:30:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:30:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:31: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:31:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:31:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:31:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:32: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:32:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:32:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:32:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:32: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:32:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:32:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:32:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:33: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:33:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:33:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:33:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:33: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:33:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:33:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:33:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:34: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:34:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:34:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:34:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:35: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:35:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:35:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:35:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:35: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:35:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:35:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:35:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:36: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:36:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:36:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:36:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:37: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:37:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:37:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:37:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
+2025-08-26T15:57:37: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-08-26T15:57:37:     at setupFsCheck (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-utils/filesystem.ts:157:13)
+2025-08-26T15:57:37:     at initialize (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/router-server.ts:96:21)
+2025-08-26T15:57:37:     at Server.<anonymous> (/usr/home/vetternkraft/apps/nodejs/Gliwicka111/node_modules/next/src/server/lib/start-server.ts:293:28)
