@@ -101,18 +101,23 @@ jobs:
             node -v || true
             echo 'NPM version:'
             npm -v || true
-            # Try to locate pm2
-            PM2_BIN=$(command -v pm2 || true)
-            if [ -z "$PM2_BIN" ]; then
-              PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
-              export PATH="$PREFIX/bin:$PATH"
+            # Prefer explicit pm2 path if present on server
+            if [ -x "/home/vetternkraft/.npm-global/bin/pm2" ]; then
+              PM2_BIN="/home/vetternkraft/.npm-global/bin/pm2"
+            else
+              # Fallback: try to locate pm2 in PATH or common prefixes
               PM2_BIN=$(command -v pm2 || true)
-            fi
-            if [ -z "$PM2_BIN" ] && [ -x "$HOME/.npm-global/bin/pm2" ]; then
-              PM2_BIN="$HOME/.npm-global/bin/pm2"
-            fi
-            if [ -z "$PM2_BIN" ] && [ -x "/usr/local/bin/pm2" ]; then
-              PM2_BIN="/usr/local/bin/pm2"
+              if [ -z "$PM2_BIN" ]; then
+                PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
+                export PATH="$PREFIX/bin:$PATH"
+                PM2_BIN=$(command -v pm2 || true)
+              fi
+              if [ -z "$PM2_BIN" ] && [ -x "$HOME/.npm-global/bin/pm2" ]; then
+                PM2_BIN="$HOME/.npm-global/bin/pm2"
+              fi
+              if [ -z "$PM2_BIN" ] && [ -x "/usr/local/bin/pm2" ]; then
+                PM2_BIN="/usr/local/bin/pm2"
+              fi
             fi
             if [ -z "$PM2_BIN" ]; then
               echo 'ERROR: pm2 not found in PATH or common locations.'
