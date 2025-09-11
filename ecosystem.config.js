@@ -2,12 +2,14 @@ module.exports = {
   apps: [
     {
       name: "gliwicka111",
-      // Use Next.js binary directly to avoid shell indirection
-      script: "node_modules/next/dist/bin/next",
-      args: "start -p 56788 -H 127.0.0.1",
+      // Run standalone server produced by `next build`
+      script: "node",
+      args: ".next/standalone/server.js",
       cwd: "./",
       env: {
-        NODE_ENV: "production"
+        NODE_ENV: "production",
+        PORT: "56788",
+        HOSTNAME: "127.0.0.1"
       },
       autorestart: true,
       watch: false,

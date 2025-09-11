@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: { useWasmBinary: true },
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
