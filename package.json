@@ -15,7 +15,7 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:bundle": "npx @next/bundle-analyzer",
-    "build": "next build",
+    "build": "next build && node scripts/prepare-standalone.js",
     "clean": "rimraf .next out dist coverage test-results",
     "dev": "next dev",
     "format": "prettier --write .",
