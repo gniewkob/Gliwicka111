@@ -38,6 +38,24 @@ jobs:
           remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
 
 
+      - name: Verify build artifacts on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd "${{ secrets.DEPLOY_PATH }}"
+            echo 'Listing .next on remote:'
+            ls -la .next || true
+            echo 'BUILD_ID:'
+            cat .next/BUILD_ID
+            echo 'Check standalone server.js:'
+            test -f .next/standalone/server.js && echo 'server.js OK' || (echo 'server.js missing' && exit 1)
+            echo 'Static assets count:'
+            find .next/static -type f | wc -l
+
       - name: Reload PM2 on server
         uses: appleboy/ssh-action@v1.0.3
         with:
