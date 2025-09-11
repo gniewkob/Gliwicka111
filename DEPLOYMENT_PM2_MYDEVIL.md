@@ -9,11 +9,11 @@
    ```bash
    npm ci
    ```
-3. Build production bundle:
+3. Build production bundle (copies static assets into `.next/standalone`):
    ```bash
    npm run build
    ```
-4. Start with PM2 using the ecosystem file:
+4. Start with PM2 using the ecosystem file (runs `server.js` from `.next/standalone`):
    ```bash
    pm2 start ecosystem.config.js
    pm2 save
