@@ -40,8 +40,13 @@ jobs:
       - name: Deploy build artifacts (standalone)
         uses: burnett01/rsync-deployments@7.0.2
         with:
-          switches: -avzr --delete
-          path: ".next/standalone .next/static .next/BUILD_ID public ecosystem.config.js"
+          switches: -avzR --delete
+          path: |
+          .next/standalone
+          .next/static
+          .next/BUILD_ID
+          public
+          ecosystem.config.js
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
@@ -65,6 +70,9 @@ jobs:
             test -f .next/standalone/server.js && echo 'server.js OK' || (echo 'server.js missing' && exit 1)
             echo 'Static assets count:'
             find .next/static -type f | wc -l
+            echo "Misplaced standalone check:"
+            [ -d .next/standalone ] && echo ".next/standalone OK" || echo ".next/standalone MISSING"
+            [ -d standalone ] && echo "Found ./standalone (wrong)" || true
 
       - name: Reload PM2 on server
         uses: appleboy/ssh-action@v1.0.3
