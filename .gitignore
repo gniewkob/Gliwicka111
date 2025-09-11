@@ -47,3 +47,6 @@ next-env.d.ts
 # Unused lockfiles
 pnpm-lock.yaml
 yarn.lock
+
+# playwright snapshots
+**/*-snapshots/
