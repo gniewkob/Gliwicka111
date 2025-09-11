@@ -95,14 +95,37 @@ jobs:
           script: |
             set -e
             cd "${{ secrets.DEPLOY_PATH }}"
+            echo 'PATH before:'
+            echo "$PATH"
             echo 'Node version:'
             node -v || true
+            echo 'NPM version:'
+            npm -v || true
+            # Try to locate pm2
+            PM2_BIN=$(command -v pm2 || true)
+            if [ -z "$PM2_BIN" ]; then
+              PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
+              export PATH="$PREFIX/bin:$PATH"
+              PM2_BIN=$(command -v pm2 || true)
+            fi
+            if [ -z "$PM2_BIN" ] && [ -x "$HOME/.npm-global/bin/pm2" ]; then
+              PM2_BIN="$HOME/.npm-global/bin/pm2"
+            fi
+            if [ -z "$PM2_BIN" ] && [ -x "/usr/local/bin/pm2" ]; then
+              PM2_BIN="/usr/local/bin/pm2"
+            fi
+            if [ -z "$PM2_BIN" ]; then
+              echo 'ERROR: pm2 not found in PATH or common locations.'
+              echo 'Consider installing pm2 globally (npm i -g pm2) or adding it to PATH.'
+              exit 1
+            fi
+            echo "Using PM2 at: $PM2_BIN"
             echo 'Force restart PM2 process to pick updated config:'
-            pm2 delete gliwicka111 || true
-            pm2 start ecosystem.config.js
-            pm2 status || true
+            "$PM2_BIN" delete gliwicka111 || true
+            "$PM2_BIN" start ecosystem.config.js
+            "$PM2_BIN" status || true
             echo 'Tail last pm2 logs:'
-            pm2 logs gliwicka111 --lines 50 --nostream || true
+            "$PM2_BIN" logs gliwicka111 --lines 50 --nostream || true
 
       - name: Verify deploy URL secret
         if: ${{ env.DEPLOY_URL == '' }}
