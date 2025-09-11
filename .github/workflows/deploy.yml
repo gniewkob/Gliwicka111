@@ -65,7 +65,14 @@ jobs:
           script: |
             set -e
             cd "${{ secrets.DEPLOY_PATH }}"
-            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+            echo 'Node version:'
+            node -v || true
+            echo 'Force restart PM2 process to pick updated config:'
+            pm2 delete gliwicka111 || true
+            pm2 start ecosystem.config.js
+            pm2 status || true
+            echo 'Tail last pm2 logs:'
+            pm2 logs gliwicka111 --lines 50 --nostream || true
 
       - name: Verify deploy URL secret
         if: ${{ env.DEPLOY_URL == '' }}
