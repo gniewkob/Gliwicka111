@@ -18,12 +18,15 @@ function getSecurityHeaders(req: NextRequest): Record<string, string> {
         ].join("; ")
       : [
           "default-src 'self'",
-          "img-src 'self' data: https://stats0.mydevil.net",
-          "script-src 'self' https://stats0.mydevil.net",
-          "style-src 'self'",
-          "font-src 'self'",
+          // Allow images from self, data URIs and blob URLs (e.g. responsive images)
+          "img-src 'self' data: blob: https://stats0.mydevil.net",
+          // Allow analytics domain; permit inline scripts for Next runtime/bootstrap
+          "script-src 'self' https://stats0.mydevil.net 'unsafe-inline'",
+          // Permit inline styles used by UI libs / style attributes
+          "style-src 'self' 'unsafe-inline'",
+          "font-src 'self' data:",
           "connect-src 'self' https://stats0.mydevil.net",
-        ].join("; ");
+        ].join("; " );
 
   return {
     "Content-Security-Policy": csp,
