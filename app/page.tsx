@@ -1387,14 +1387,18 @@ export default function HomePage() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-2xl overflow-hidden relative">
+              <div
+                className="w-full aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-2xl overflow-hidden relative"
+                data-testid="hero-image-placeholder"
+              >
                 <Image
                   src="/hala1.webp"
                   alt="Gliwicka 111 Building"
                   fill
-                                  className="object-cover object-center"
-                  sizes="(max-width: 768px) 100vw, 500px"
+                  className="object-cover object-center"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 50vw"
                   priority
+                  data-testid="hero-image"
                 />
               </div>
               {/* Floating elements */}
