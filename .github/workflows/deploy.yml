@@ -37,23 +37,32 @@ jobs:
           echo 'Local standalone server.js:'
           test -f .next/standalone/server.js && echo 'server.js OK' || (echo 'server.js missing' && exit 1)
 
-      - name: Deploy build artifacts (standalone)
-        uses: burnett01/rsync-deployments@7.0.2
+      - name: Create deployment archive
+        run: |
+          set -e
+          tar -czf deploy.tgz .next/standalone .next/static .next/BUILD_ID public ecosystem.config.js
+
+      - name: Upload archive via SCP
+        uses: appleboy/scp-action@v0.1.7
         with:
-          switches: >
-            -az --delete
-            --include='/.next/'
-            --include='/.next/standalone/***'
-            --include='/.next/static/***'
-            --include='/.next/BUILD_ID'
-            --include='/public/***'
-            --include='/ecosystem.config.js'
-            --exclude='*'
-          path: .
-          remote_path: ${{ secrets.DEPLOY_PATH }}
-          remote_host: ${{ secrets.DEPLOY_HOST }}
-          remote_user: ${{ secrets.DEPLOY_USER }}
-          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: deploy.tgz
+          target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Unpack archive on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd "${{ secrets.DEPLOY_PATH }}"
+            tar -xzf deploy.tgz
+            rm -f deploy.tgz
+            ls -la .next || true
 
 
       - name: Verify build artifacts on server
