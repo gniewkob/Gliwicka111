@@ -27,6 +27,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Show local BUILD_ID (CI)
+        run: |
+          set -e
+          echo 'Local BUILD_ID:'
+          cat .next/BUILD_ID
+          echo 'Local static assets count:'
+          find .next/static -type f | wc -l
+          echo 'Local standalone server.js:'
+          test -f .next/standalone/server.js && echo 'server.js OK' || (echo 'server.js missing' && exit 1)
+
       - name: Deploy build artifacts (standalone)
         uses: burnett01/rsync-deployments@7.0.2
         with:
