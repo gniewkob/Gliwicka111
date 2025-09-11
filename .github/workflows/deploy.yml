@@ -31,7 +31,7 @@ jobs:
         uses: burnett01/rsync-deployments@7.0.2
         with:
           switches: -avzr --delete
-          path: ".next/standalone .next/static public ecosystem.config.js"
+          path: ".next/standalone .next/static .next/BUILD_ID public ecosystem.config.js"
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
