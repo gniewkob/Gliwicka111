@@ -5,9 +5,8 @@ module.exports = {
       // Run the Next.js production server via npm
       script: "npm",
       args: "start",
-      env: {
-        NODE_ENV: "production"
-      },
+      // Environment variables like PORT, HOSTNAME, and NODE_ENV should
+      // be provided by the hosting environment, not within this file.
       autorestart: true,
       watch: false,
       max_memory_restart: "400M",
