@@ -139,6 +139,36 @@ jobs:
           echo "Missing DEPLOY_URL secret"
           exit 1
 
+      - name: Validate deployment URL host
+        if: ${{ env.DEPLOY_URL != '' }}
+        run: |
+          set -e
+          DEPLOY_HOST_EXPECTED="${{ secrets.DEPLOY_HOST }}"
+          DEPLOY_HOST_ACTUAL=$(node -p "new URL(process.env.DEPLOY_URL).hostname")
+          IP_EXPECTED=$(getent hosts "$DEPLOY_HOST_EXPECTED" | awk '{ print $1 }')
+          IP_ACTUAL=$(getent hosts "$DEPLOY_HOST_ACTUAL" | awk '{ print $1 }')
+          echo "DEPLOY_URL host: $DEPLOY_HOST_ACTUAL ($IP_ACTUAL)"
+          echo "Expected host: $DEPLOY_HOST_EXPECTED ($IP_EXPECTED)"
+          if [ "$IP_ACTUAL" != "$IP_EXPECTED" ]; then
+            echo "DEPLOY_URL does not resolve to DEPLOY_HOST"
+            exit 1
+          fi
+
+      - name: Wait for service to start
+        if: ${{ env.DEPLOY_URL != '' }}
+        run: |
+          set -e
+          echo 'Waiting for service to be ready...'
+          for i in {1..10}; do
+            if curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
+              echo 'Service is up.'
+              break
+            fi
+            echo "Attempt $i failed; retrying in 5s..."
+            sleep 5
+          done
+          curl -fsS "$DEPLOY_URL" >/dev/null 2>&1 || (echo 'Service failed to start in time' && exit 1)
+
       - name: Smoke test
         if: ${{ env.DEPLOY_URL != '' }}
         run: |
