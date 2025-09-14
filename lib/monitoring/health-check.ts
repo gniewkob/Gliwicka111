@@ -271,29 +271,35 @@ export class HealthCheckService {
 
   private async checkFormSubmissionEndpoint(): Promise<HealthCheckResult> {
     const startTime = performance.now();
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const endpoints = [
+      "/api/forms/virtual-office",
+      "/api/forms/coworking",
+      "/api/forms/meeting-room",
+      "/api/forms/advertising",
+      "/api/forms/special-deals",
+    ];
 
     try {
-      // Test form submission endpoint with dummy data
-      const testData = new FormData();
-      testData.append("test", "health-check");
+      const results = await Promise.allSettled(
+        endpoints.map(async (endpoint) => {
+          const res = await fetch(`${baseUrl}${endpoint}`, { method: "GET" });
+          return res.ok || res.status === 405;
+        }),
+      );
 
-      // This would be a real test in production
-      const isEndpointHealthy = true; // Placeholder
+      const allHealthy = results.every(
+        (r) => r.status === "fulfilled" && r.value,
+      );
 
       return {
         service: "form-submission",
-        status: isEndpointHealthy ? "healthy" : "unhealthy",
+        status: allHealthy ? "healthy" : "unhealthy",
         responseTime: performance.now() - startTime,
-        message: "Form submission endpoints operational",
-        details: {
-          endpoints: [
-            "/api/forms/virtual-office",
-            "/api/forms/coworking",
-            "/api/forms/meeting-room",
-            "/api/forms/advertising",
-            "/api/forms/special-deals",
-          ],
-        },
+        message: allHealthy
+          ? "Form submission endpoints operational"
+          : "One or more form endpoints are unavailable",
+        details: { endpoints },
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
