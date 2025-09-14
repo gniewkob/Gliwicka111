@@ -60,6 +60,7 @@ jobs:
           script: |
             set -e
             cd "${{ secrets.DEPLOY_PATH }}"
+            rm -rf standalone static BUILD_ID
             tar -xzf deploy.tgz
             rm -f deploy.tgz
             ls -la .next || true

@@ -50,3 +50,7 @@ yarn.lock
 
 # playwright snapshots
 **/*-snapshots/
+# Build artifacts copied by CI/CD (not generated locally)
+/BUILD_ID
+/standalone/
+/static/
