@@ -25,6 +25,7 @@ async function main() {
 
   await copy(safeJoin(root, 'public'), safeJoin(standalone, 'public'));
   await copy(safeJoin(root, '.next', 'static'), safeJoin(standalone, '.next', 'static'));
+  await copy(safeJoin(root, 'tmp'), safeJoin(standalone, 'tmp'));
 }
 
 main().catch(err => {

@@ -9,7 +9,7 @@
    ```bash
    npm ci
    ```
-3. Build production bundle (copies static assets into `.next/standalone`):
+3. Build production bundle (copies static assets and `tmp` into `.next/standalone`):
    ```bash
    npm run build
    ```
