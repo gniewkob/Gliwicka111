@@ -13,7 +13,7 @@
    ```bash
    npm run build
    ```
-4. Start with PM2 using the ecosystem file (runs `server.js` from `.next/standalone`):
+4. Start with PM2 using the ecosystem file (runs `npm start`):
    ```bash
    pm2 start ecosystem.config.js
    pm2 save
@@ -30,7 +30,7 @@ And insert (adjust the path to `pm2` from `which pm2`):
 ```
 
 ## Reverse proxy / domain mapping
-In the mydevil panel (WWW/Node.js), map your domain to the Node.js app listening on **127.0.0.1:56788**.
+In the mydevil panel (WWW/Node.js), map your domain to the Node.js app listening on the host and port provided via `HOSTNAME` and `PORT`.
 
 ## Useful commands
 ```bash
@@ -38,17 +38,9 @@ pm2 status
 pm2 logs gliwicka111
 pm2 restart gliwicka111 --update-env
 pm2 delete gliwicka111
-sockstat -4 -l | grep 56788   # Check if port is listening (FreeBSD)
+sockstat -4 -l | grep $PORT   # Check if port is listening (FreeBSD)
 ```
 
 ## Notes
-- The app binds to `127.0.0.1` (required on mydevil) and port `56788`.
+- The app binds to the host and port defined by `HOSTNAME` and `PORT` environment variables.
 - `next start` requires an up-to-date build; re-run `npm run build` after code changes.
-- If you prefer env vars instead of CLI args, you can change the app to:
-  ```js
-  script: "npm",
-  args: "start",
-  env: { NODE_ENV: "production", PORT: "56788", HOST: "127.0.0.1" }
-  ```
-  and set your `package.json` "start" to `"next start"`.
-```

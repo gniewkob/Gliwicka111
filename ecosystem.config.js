@@ -2,13 +2,11 @@ module.exports = {
   apps: [
     {
       name: "gliwicka111",
-      // Run standalone server from the prepared runtime directory
-      script: "server.js",
-      cwd: ".next/standalone",
+      // Run the Next.js production server via npm
+      script: "npm",
+      args: "start",
       env: {
-        NODE_ENV: "production",
-        PORT: "56788",
-        HOSTNAME: "127.0.0.1"
+        NODE_ENV: "production"
       },
       autorestart: true,
       watch: false,
