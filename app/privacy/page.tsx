@@ -1,8 +1,4 @@
-"use client";
-
-import { useState } from "react";
-import { useLanguage } from "@/components/language-provider";
-import { Building2, Globe, Menu, X, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import {
   Button,
   Card,
@@ -12,6 +8,8 @@ import {
 } from "@/components/ui";
 import Link from "next/link";
 import { navTranslations, backTranslations } from "@/lib/i18n";
+import { PageNav } from "@/components/page-nav";
+import { getCurrentLanguage } from "@/lib/get-current-language";
 
 const translations = {
   pl: {
@@ -180,128 +178,15 @@ const translations = {
   },
 };
 
-export default function PrivacyPage() {
-  const { language, toggleLanguage } = useLanguage();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export const dynamic = "force-static";
 
+export default async function PrivacyPage() {
+  const language = await getCurrentLanguage();
   const t = translations[language];
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-900">
-                  Gliwicka 111
-                </h1>
-                <p className="text-xs text-slate-600">Property Management</p>
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link
-                href="/"
-                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
-              >
-                {t.nav.home}
-              </Link>
-              <Link
-                href="/properties"
-                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
-              >
-                {t.nav.properties}
-              </Link>
-              <Link
-                href="/about"
-                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
-              >
-                {t.nav.about}
-              </Link>
-              <Link
-                href="/contact"
-                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
-              >
-                {t.nav.contact}
-              </Link>
-
-              {/* Language Switcher */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={toggleLanguage}
-                className="flex items-center space-x-1 bg-transparent"
-              >
-                <Globe className="w-4 h-4" />
-                <span>{language.toUpperCase()}</span>
-              </Button>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={toggleLanguage}
-                className="flex items-center space-x-1 bg-transparent"
-              >
-                <Globe className="w-4 h-4" />
-                <span>{language.toUpperCase()}</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                {mobileMenuOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Menu className="w-5 h-5" />
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden border-t border-gray-100 py-4">
-              <nav className="flex flex-col space-y-4">
-                <Link
-                  href="/"
-                  className="text-slate-700 hover:text-teal-600 font-medium"
-                >
-                  {t.nav.home}
-                </Link>
-                <Link
-                  href="/properties"
-                  className="text-slate-700 hover:text-teal-600 font-medium"
-                >
-                  {t.nav.properties}
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-slate-700 hover:text-teal-600 font-medium"
-                >
-                  {t.nav.about}
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-slate-700 hover:text-teal-600 font-medium"
-                >
-                  {t.nav.contact}
-                </Link>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <PageNav nav={t.nav} />
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
