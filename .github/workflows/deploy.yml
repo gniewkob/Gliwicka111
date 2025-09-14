@@ -145,6 +145,9 @@ jobs:
           set -e
           DEPLOY_HOST_EXPECTED="${{ secrets.DEPLOY_HOST }}"
           DEPLOY_HOST_ACTUAL=$(node -p "new URL(process.env.DEPLOY_URL).hostname")
+          if [ -z "$DEPLOY_HOST_EXPECTED" ]; then
+            DEPLOY_HOST_EXPECTED="$DEPLOY_HOST_ACTUAL"
+          fi
           IP_EXPECTED=$(getent hosts "$DEPLOY_HOST_EXPECTED" | awk '{ print $1 }')
           IP_ACTUAL=$(getent hosts "$DEPLOY_HOST_ACTUAL" | awk '{ print $1 }')
           echo "DEPLOY_URL host: $DEPLOY_HOST_ACTUAL ($IP_ACTUAL)"
