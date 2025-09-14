@@ -279,18 +279,29 @@ export class HealthCheckService {
       "/api/forms/advertising",
       "/api/forms/special-deals",
     ];
+    const TIMEOUT_MS = 5000;
 
     try {
-      const results = await Promise.allSettled(
+      const results = await Promise.all(
         endpoints.map(async (endpoint) => {
-          const res = await fetch(`${baseUrl}${endpoint}`, { method: "GET" });
-          return res.ok || res.status === 405;
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+          try {
+            const res = await fetch(`${baseUrl}${endpoint}`, {
+              method: "GET",
+              signal: controller.signal,
+            });
+            return res.ok || res.status === 405;
+          } catch {
+            return false;
+          } finally {
+            clearTimeout(timeout);
+          }
         }),
       );
 
-      const allHealthy = results.every(
-        (r) => r.status === "fulfilled" && r.value,
-      );
+      const allHealthy = results.every(Boolean);
 
       return {
         service: "form-submission",

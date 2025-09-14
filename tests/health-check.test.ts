@@ -25,4 +25,36 @@ describe("health check form endpoints", () => {
       "/api/forms/special-deals",
     ]);
   });
+
+  it("reports unhealthy when a request fails", async () => {
+    const service = HealthCheckService.getInstance();
+    const fetchMock = vi
+      .spyOn(globalThis, "fetch" as any)
+      .mockRejectedValue(new Error("network error"));
+
+    const result = await (service as any).checkFormSubmissionEndpoint();
+
+    expect(fetchMock).toHaveBeenCalledTimes(5);
+    expect(result.status).toBe("unhealthy");
+  });
+
+  it("reports unhealthy when a request times out", async () => {
+    vi.useFakeTimers();
+    const service = HealthCheckService.getInstance();
+    const fetchMock = vi
+      .spyOn(globalThis, "fetch" as any)
+      .mockImplementation((_url, { signal }: any) => {
+        return new Promise((_, reject) => {
+          signal.addEventListener("abort", () => reject(new Error("aborted")));
+        });
+      });
+
+    const promise = (service as any).checkFormSubmissionEndpoint();
+    vi.advanceTimersByTime(5000);
+    const result = await promise;
+
+    expect(fetchMock).toHaveBeenCalledTimes(5);
+    expect(result.status).toBe("unhealthy");
+    vi.useRealTimers();
+  });
 });
