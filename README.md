@@ -30,6 +30,10 @@ Migrations are orchestrated by `scripts/migrate.ts` which executes all SQL files
 
 ## Environment Variables
 
+### Server
+
+`HOSTNAME`, `PORT`
+
 ### Database
 
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL`, `MOCK_DB`

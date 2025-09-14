@@ -118,19 +118,22 @@ npm run retry:failed-emails
 
 The application requires several environment variables categorized by function:
 
-1. **Database Configuration**
+1. **Server Settings**
+   - Optional: `HOSTNAME`, `PORT`
+
+2. **Database Configuration**
    - Required: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
    - Optional: `DATABASE_URL`, `MOCK_DB`
 
-2. **Email Service**
+3. **Email Service**
    - Required: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
    - Optional: `SMTP_FROM`, `EMAIL_MAX_RETRIES`, `MOCK_EMAIL`
 
-3. **Security Settings**
+4. **Security Settings**
    - Required: `IP_SALT`, `ADMIN_AUTH_TOKEN`
    - Optional: `RATE_LIMIT_COUNT`, `RATE_LIMIT_WINDOW_MS`
 
-4. **Analytics & Admin Access**
+5. **Analytics & Admin Access**
    - Required: `ANALYTICS_AUTH_TOKEN`, `ADMIN_USER`, `ADMIN_PASS`
    - Optional: `NEXT_PUBLIC_ANALYTICS_TOKEN`, `METRICS_WINDOW_HOURS`
 
