@@ -2,12 +2,6 @@
 const nextConfig = {
   experimental: { useWasmBinary: true },
   output: 'standalone',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
     unoptimized: true,
   },
