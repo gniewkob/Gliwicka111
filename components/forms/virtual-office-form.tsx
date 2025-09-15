@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -89,13 +89,13 @@ export default function VirtualOfficeForm({
 
   const t = virtualOfficeCopy[language];
 
-  const logE2E = (...args: any[]) => {
-    if (isE2E && typeof window !== "undefined") {
+  const logE2E = useCallback((...args: any[]) => {
+    if (detectE2E() && typeof window !== "undefined") {
       // Prefix logs so they are easy to spot in the Playwright report
       // eslint-disable-next-line no-console
       console.log("[E2E]", ...args);
     }
-  };
+  }, []);
 
   // Using Controller for GDPR checkbox ensures proper registration and validation
 
