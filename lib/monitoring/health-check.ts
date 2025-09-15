@@ -327,24 +327,44 @@ export class HealthCheckService {
 
   private async checkAnalyticsService(): Promise<HealthCheckResult> {
     const startTime = performance.now();
+    const baseUrl = getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
+    const token = getEnv("ANALYTICS_AUTH_TOKEN", "dev-token");
 
     try {
-      // Check analytics service functionality
-      const { analyticsClient } = await import("@/lib/analytics-client");
-
-      // Test analytics client
-      const sessionId = analyticsClient.getSessionId();
-      const hasConsent = analyticsClient.hasConsent();
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const response = await fetch(`${baseUrl}/api/analytics/track`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          formType: "health-check",
+          eventType: "view",
+          timestamp: Date.now(),
+          sessionId: "health-check",
+          userAgent: "health-check",
+          language: "en",
+        }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+      const data = (await response.json().catch(() => ({}))) as {
+        success?: boolean;
+      };
+      const isHealthy = response.ok && data.success;
 
       return {
         service: "analytics",
-        status: "healthy",
+        status: isHealthy ? "healthy" : "degraded",
         responseTime: performance.now() - startTime,
-        message: "Analytics service operational",
+        message: isHealthy
+          ? "Analytics service operational"
+          : `Unexpected response: ${response.status}`,
         details: {
-          sessionId: sessionId ? "present" : "missing",
-          consentStatus: hasConsent ? "granted" : "not-granted",
-          clientInitialized: true,
+          status: response.status,
+          success: data.success ?? false,
         },
         timestamp: new Date().toISOString(),
       };
