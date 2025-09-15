@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireAdminAuth } from "@/lib/admin-auth";
 import type { Pool } from "pg";
+import { getEnv } from "@/lib/env";
 
-const METRICS_WINDOW_HOURS = Number(process.env.METRICS_WINDOW_HOURS || "24");
+const METRICS_WINDOW_HOURS = Number(getEnv("METRICS_WINDOW_HOURS", "24"));
 
 interface SubmissionRow {
   hour: Date;

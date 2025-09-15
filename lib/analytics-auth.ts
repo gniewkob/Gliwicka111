@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { getEnv } from "@/lib/env";
 
-const TOKEN = process.env.ANALYTICS_AUTH_TOKEN || "dev-token";
-const BASIC_USER = process.env.ANALYTICS_BASIC_USER;
-const BASIC_PASS = process.env.ANALYTICS_BASIC_PASS;
+const TOKEN = getEnv("ANALYTICS_AUTH_TOKEN", "dev-token");
+const BASIC_USER = getEnv("ANALYTICS_BASIC_USER", "");
+const BASIC_PASS = getEnv("ANALYTICS_BASIC_PASS", "");
 
 function isTokenValid(header: string | null): boolean {
   if (!header || !TOKEN) return false;

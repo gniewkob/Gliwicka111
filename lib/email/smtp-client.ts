@@ -2,21 +2,25 @@ import nodemailer, {
   type SendMailOptions,
   type SentMessageInfo,
 } from "nodemailer";
+import { getEnv } from "@/lib/env";
+
+const smtpPort = Number(getEnv("SMTP_PORT", "587"));
+const smtpUser = getEnv("SMTP_USER", "");
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 587),
-  secure: Number(process.env.SMTP_PORT || 587) === 465,
-  auth: process.env.SMTP_USER
+  host: getEnv("SMTP_HOST"),
+  port: smtpPort,
+  secure: smtpPort === 465,
+  auth: smtpUser
     ? {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: smtpUser,
+        pass: getEnv("SMTP_PASS"),
       }
     : undefined,
 });
 
 async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
-  if (process.env.MOCK_EMAIL === "true") {
+  if (getEnv("MOCK_EMAIL", "false") === "true") {
     return {
       envelope: {},
       messageId: "mocked-message-id",
@@ -28,8 +32,12 @@ async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
   }
 
   try {
+    const from = smtpUser
+      ? getEnv("SMTP_FROM", smtpUser)
+      : getEnv("SMTP_FROM");
+
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      from,
       ...options,
     });
     return info;

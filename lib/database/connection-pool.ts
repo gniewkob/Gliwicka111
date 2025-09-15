@@ -1,17 +1,16 @@
 import { Pool } from "pg";
+import { getEnv } from "@/lib/env";
 
 let pool: Pool | null = null;
 
 async function createPool(): Promise<Pool> {
-  const {
-    DB_HOST,
-    DB_PORT,
-    DB_NAME,
-    DB_USER,
-    DB_PASSWORD,
-    MOCK_DB,
-    DATABASE_URL,
-  } = process.env;
+  const DB_HOST = getEnv("DB_HOST", "");
+  const DB_PORT = getEnv("DB_PORT", "");
+  const DB_NAME = getEnv("DB_NAME", "");
+  const DB_USER = getEnv("DB_USER", "");
+  const DB_PASSWORD = getEnv("DB_PASSWORD", "");
+  const MOCK_DB = getEnv("MOCK_DB", "");
+  const DATABASE_URL = getEnv("DATABASE_URL", "");
 
   if (MOCK_DB === "true" || (!DB_HOST && !DATABASE_URL)) {
     return {
