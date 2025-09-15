@@ -27,16 +27,6 @@ import { hashIP } from "./security/ip";
 import { checkRateLimit } from "./rate-limit";
 import { getEnv } from "@/lib/env";
 
-// Email service configuration
-const EMAIL_CONFIG = {
-  from: getEnv("SMTP_FROM", "noreply@gliwicka111.pl"),
-  adminEmail: getEnv("ADMIN_EMAIL", "admin@gliwicka111.pl"),
-  smtpHost: getEnv("SMTP_HOST", "smtp.gmail.com"),
-  smtpPort: Number.parseInt(getEnv("SMTP_PORT", "587"), 10),
-  smtpUser: getEnv("SMTP_USER", ""),
-  smtpPass: getEnv("SMTP_PASS", ""),
-};
-
 // Service names mapping for admin notifications
 const SERVICE_NAMES = {
   "virtual-office": { pl: "biuro wirtualne", en: "virtual office" },
@@ -103,6 +93,15 @@ export async function handleFormSubmission<T>(
     }
     return { success: true, message: messages.form.success[lang] };
   }
+
+  const emailConfig = {
+    from: getEnv("SMTP_FROM", "noreply@gliwicka111.pl"),
+    adminEmail: getEnv("ADMIN_EMAIL", "admin@gliwicka111.pl"),
+    smtpHost: getEnv("SMTP_HOST", "smtp.gmail.com"),
+    smtpPort: Number.parseInt(getEnv("SMTP_PORT", "587"), 10),
+    smtpUser: getEnv("SMTP_USER", ""),
+    smtpPass: getEnv("SMTP_PASS", ""),
+  };
 
   try {
     const language = await getCurrentLanguage();
@@ -214,7 +213,12 @@ export async function handleFormSubmission<T>(
     // Attempt to send emails without affecting user response
     const emailResults = await Promise.allSettled([
       sendConfirmationEmail(sanitizedData, formType, language),
-      sendAdminNotification(sanitizedData, formType, language),
+      sendAdminNotification(
+        sanitizedData,
+        formType,
+        language,
+        emailConfig.adminEmail,
+      ),
     ]);
     const emailEnd = Date.now();
     const emailLatency = emailEnd - emailStart;
@@ -458,12 +462,14 @@ export async function sendConfirmationEmail(
  * @param {any} data - Sanitized submission data.
  * @param {string} formType - Type of form that was submitted.
  * @param {"pl" | "en"} language - Language for the email content.
+ * @param {string} adminEmail - Destination address for administrator alerts.
  * @returns {Promise<void>} Resolves when the email is queued.
  */
 export async function sendAdminNotification(
   data: any,
   formType: string,
   language: "pl" | "en",
+  adminEmail: string,
 ): Promise<void> {
   const serviceName =
     SERVICE_NAMES[formType as keyof typeof SERVICE_NAMES]?.[language] ||
@@ -487,7 +493,7 @@ export async function sendAdminNotification(
       : `Nowe zgłoszenie od ${data.firstName ?? ""} ${data.lastName ?? ""} (${data.email}, ${data.phone ?? ""}) dotyczące ${serviceName}.\nWiadomość: ${messageSummary}`;
 
   await emailClient.sendEmail({
-    to: EMAIL_CONFIG.adminEmail,
+    to: adminEmail,
     subject,
     text,
   });
