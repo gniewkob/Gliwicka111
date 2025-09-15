@@ -28,7 +28,7 @@
     "security:audit": "npm audit --audit-level moderate",
     "security:fix": "npm audit fix",
     "start": "next start",
-    "test": "vitest --passWithNoTests",
+    "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "cross-env NEXT_PUBLIC_E2E=true npm run build && playwright test -c e2e/playwright.config.ts",
     "test:e2e:freeport": "node scripts/free-port.js | xargs -I {} sh -c 'TEST_PORT={} cross-env NEXT_PUBLIC_E2E=true npm run build && TEST_PORT={} playwright test -c e2e/playwright.config.ts'",
