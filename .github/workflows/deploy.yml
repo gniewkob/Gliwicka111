@@ -147,18 +147,74 @@ jobs:
 
       - name: Wait for service to start
         if: ${{ env.DEPLOY_URL != '' }}
+        env:
+          PORT: 3000
+          HOST: 127.0.0.1
+          HOSTNAME: 127.0.0.1
         run: |
-          set -e
+          set -euo pipefail
+          export PORT HOST HOSTNAME
+          HEALTH_HOST="${HOST:-${HOSTNAME}}"
+          HEALTHCHECK_URL="http://${HEALTH_HOST}:${PORT}"
+          LOG_FILE=$(mktemp)
+          LOCAL_CHECK_PASSED=0
+
+          echo "Starting Next.js server in background on ${HEALTHCHECK_URL}..."
+          npm start >"$LOG_FILE" 2>&1 &
+          NEXT_PID=$!
+
+          cleanup() {
+            STATUS=$?
+            trap - EXIT
+            if [ -n "${NEXT_PID:-}" ] && kill -0 "$NEXT_PID" 2>/dev/null; then
+              echo "Stopping Next.js server (PID: $NEXT_PID)"
+              kill "$NEXT_PID" 2>/dev/null || true
+              wait "$NEXT_PID" 2>/dev/null || true
+            fi
+            if [ "$STATUS" -ne 0 ] && [ "${LOCAL_CHECK_PASSED}" -eq 0 ]; then
+              echo "---- Next.js server log (last 50 lines) ----"
+              tail -n 50 "$LOG_FILE" || true
+              echo "-------------------------------------------"
+            fi
+            exit "$STATUS"
+          }
+
+          trap cleanup EXIT
+
           echo 'Waiting for service to be ready...'
-          for i in {1..10}; do
-            if curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
-              echo 'Service is up.'
+          for i in $(seq 1 10); do
+            if curl -fsS "$HEALTHCHECK_URL" >/dev/null 2>&1; then
+              echo "Service is up at $HEALTHCHECK_URL."
+              LOCAL_CHECK_PASSED=1
               break
             fi
+
+            if ! kill -0 "$NEXT_PID" 2>/dev/null; then
+              echo 'Next.js server process exited unexpectedly.'
+              exit 1
+            fi
+
             echo "Attempt $i failed; retrying in 5s..."
             sleep 5
+
+            if [ "$i" -eq 10 ]; then
+              echo "Service did not respond after $i attempts."
+              exit 1
+            fi
           done
-          curl -fsS "$DEPLOY_URL" >/dev/null 2>&1 || (echo 'Service failed to start in time' && exit 1)
+
+          echo 'Local Next.js server readiness confirmed.'
+          if [ -n "${NEXT_PID:-}" ] && kill -0 "$NEXT_PID" 2>/dev/null; then
+            kill "$NEXT_PID" 2>/dev/null || true
+            wait "$NEXT_PID" 2>/dev/null || true
+            NEXT_PID=""
+          fi
+
+          echo "Verifying remote deployment at $DEPLOY_URL"
+          if ! curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
+            echo 'Service failed to start in time'
+            exit 1
+          fi
 
       - name: Smoke test
         if: ${{ env.DEPLOY_URL != '' }}
