@@ -81,7 +81,7 @@ const FIELD_LABELS = {
  * @param {string} formType - Identifier of the form variant being processed.
  * @returns {Promise<{ success: boolean; message: string; errors?: Record<string, string>; status?: number }>} Processing result.
  */
-async function handleFormSubmission<T>(
+export async function handleFormSubmission<T>(
   formData: FormData,
   schema: z.ZodSchema<T>,
   formType: string,
