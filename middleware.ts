@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminAuth } from "@/lib/admin-auth";
 
-function getSecurityHeaders(req: NextRequest): Record<string, string> {
+function getSecurityHeaders(
+  req: NextRequest,
+  nonce: string,
+): Record<string, string> {
   const isProd = process.env.NODE_ENV === "production";
   const isE2E = process.env.NEXT_PUBLIC_E2E === "true";
 
@@ -20,13 +23,13 @@ function getSecurityHeaders(req: NextRequest): Record<string, string> {
           "default-src 'self'",
           // Allow images from self, data URIs and blob URLs (e.g. responsive images)
           "img-src 'self' data: blob: https://stats0.mydevil.net",
-          // Allow analytics domain; permit inline scripts for Next runtime/bootstrap
-          "script-src 'self' https://stats0.mydevil.net 'unsafe-inline'",
+          // Allow analytics domain; use nonce for inline Next runtime/bootstrap
+          `script-src 'self' https://stats0.mydevil.net 'nonce-${nonce}'`,
           // Permit inline styles used by UI libs / style attributes
           "style-src 'self' 'unsafe-inline'",
           "font-src 'self' data:",
           "connect-src 'self' https://stats0.mydevil.net",
-        ].join("; " );
+        ].join("; ");
 
   return {
     "Content-Security-Policy": csp,
@@ -55,13 +58,22 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  const res = NextResponse.next();
+  const nonce = crypto.randomUUID();
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-nonce", nonce);
+
+  const res = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 
   // Apply security headers to all responses
-  const securityHeaders = getSecurityHeaders(req);
+  const securityHeaders = getSecurityHeaders(req, nonce);
   Object.entries(securityHeaders).forEach(([key, value]) => {
     res.headers.set(key, value);
   });
+  res.headers.set("x-nonce", nonce);
 
   // Ensure CSRF token cookie exists
   let csrfToken = req.cookies.get(CSRF_COOKIE)?.value;
