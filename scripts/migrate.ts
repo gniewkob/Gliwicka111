@@ -1,13 +1,10 @@
 import { readdir, readFile } from "fs/promises";
 import path from "path";
 import { Client } from "pg";
+import { getEnv } from "../lib/env";
 
 async function runMigrations() {
-  const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl) {
-    console.error("DATABASE_URL is not set");
-    process.exit(1);
-  }
+  const dbUrl = getEnv("DATABASE_URL");
 
   const client = new Client({ connectionString: dbUrl });
   await client.connect();

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { getEnv, isProd } from "@/lib/env";
 
 function isTokenValid(header: string | null, token?: string): boolean {
   if (!header || !token) return false;
@@ -16,13 +17,13 @@ function isBasicValid(
 }
 
 export function requireAdminAuth(request: NextRequest): NextResponse | null {
-  if (process.env.NODE_ENV === "development") {
+  if (!isProd) {
     return null;
   }
 
-  const token = process.env.ADMIN_AUTH_TOKEN;
-  const user = process.env.ADMIN_USER;
-  const pass = process.env.ADMIN_PASS;
+  const token = getEnv("ADMIN_AUTH_TOKEN", "");
+  const user = getEnv("ADMIN_USER", "");
+  const pass = getEnv("ADMIN_PASS", "");
 
   if (!token && !(user && pass)) {
     console.warn(

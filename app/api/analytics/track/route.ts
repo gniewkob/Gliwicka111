@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireAuth } from "@/lib/analytics-auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { type AnalyticsEventRow } from "@/lib/analytics-types";
+import { hashIP } from "@/lib/security/ip";
 import type { Pool } from "pg";
 
 // Analytics event schema
@@ -27,25 +28,6 @@ const analyticsEventSchema = z.object({
   language: z.string(),
   formVersion: z.string().optional(),
 });
-
-// Hash IP for privacy
-async function hashIP(ip: string): Promise<string> {
-  const crypto = await import("crypto");
-  const salt = process.env.IP_SALT;
-  if (!salt) {
-    const message = "IP_SALT environment variable is not set";
-    if (process.env.NODE_ENV === "production") {
-      throw new Error(message);
-    } else {
-      console.warn(message);
-    }
-  }
-  return crypto
-    .createHash("sha256")
-    .update(ip + (salt || "default-salt"))
-    .digest("hex")
-    .substring(0, 16);
-}
 
 // Get client IP
 function getClientIP(request: NextRequest): string {

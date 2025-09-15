@@ -8,10 +8,11 @@ import {
   sendAdminNotification,
 } from "@/lib/server-actions";
 import { emailClient } from "./smtp-client";
+import { getEnv } from "@/lib/env";
 
 export async function processFailedEmails() {
-  const MAX_RETRIES = Number(process.env.EMAIL_MAX_RETRIES || 3);
-  const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@gliwicka111.pl";
+  const MAX_RETRIES = Number(getEnv("EMAIL_MAX_RETRIES", "3"));
+  const ADMIN_EMAIL = getEnv("ADMIN_EMAIL", "admin@gliwicka111.pl");
   const failures = await getPendingFailedEmails();
   for (const failure of failures) {
     try {

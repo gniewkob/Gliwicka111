@@ -24,15 +24,16 @@ import { messages } from "./i18n";
 import { getCurrentLanguage } from "./get-current-language";
 import { hashIP } from "./security/ip";
 import { checkRateLimit } from "./rate-limit";
+import { getEnv } from "@/lib/env";
 
 // Email service configuration
 const EMAIL_CONFIG = {
-  from: process.env.SMTP_FROM || "noreply@gliwicka111.pl",
-  adminEmail: process.env.ADMIN_EMAIL || "admin@gliwicka111.pl",
-  smtpHost: process.env.SMTP_HOST || "smtp.gmail.com",
-  smtpPort: Number.parseInt(process.env.SMTP_PORT || "587"),
-  smtpUser: process.env.SMTP_USER,
-  smtpPass: process.env.SMTP_PASS,
+  from: getEnv("SMTP_FROM", "noreply@gliwicka111.pl"),
+  adminEmail: getEnv("ADMIN_EMAIL", "admin@gliwicka111.pl"),
+  smtpHost: getEnv("SMTP_HOST", "smtp.gmail.com"),
+  smtpPort: Number.parseInt(getEnv("SMTP_PORT", "587"), 10),
+  smtpUser: getEnv("SMTP_USER", ""),
+  smtpPass: getEnv("SMTP_PASS", ""),
 };
 
 // Service names mapping for admin notifications
@@ -90,10 +91,11 @@ async function handleFormSubmission<T>(
   status?: number;
 }> {
   const isTest =
-    process.env.MOCK_DB === "true" || process.env.MOCK_EMAIL === "true";
+    getEnv("MOCK_DB", "false") === "true" ||
+    getEnv("MOCK_EMAIL", "false") === "true";
   if (isTest) {
     const lang = await getCurrentLanguage();
-    if (process.env.FORCED_FORM_ERROR === "true") {
+    if (getEnv("FORCED_FORM_ERROR", "false") === "true") {
       return { success: false, message: messages.form.serverError[lang] };
     }
     return { success: true, message: messages.form.success[lang] };
@@ -104,8 +106,8 @@ async function handleFormSubmission<T>(
     const clientIP = getClientIP();
     const ipHash = await hashIP(clientIP);
 
-    const rateLimitCount = Number(process.env.RATE_LIMIT_COUNT ?? "100");
-    const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? "60000");
+    const rateLimitCount = Number(getEnv("RATE_LIMIT_COUNT", "100"));
+    const rateLimitWindow = Number(getEnv("RATE_LIMIT_WINDOW_MS", "60000"));
     let db: Pool;
     try {
       db = (await getDb()) as Pool;

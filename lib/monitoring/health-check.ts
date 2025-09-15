@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import type { Pool } from "pg";
+import { getEnv } from "@/lib/env";
 
 interface HealthCheckResult {
   service: string;
@@ -27,7 +28,7 @@ interface SystemHealth {
 export class HealthCheckService {
   private static instance: HealthCheckService;
   private startTime: number = Date.now();
-  private version: string = process.env.npm_package_version || "1.0.0";
+  private version: string = getEnv("npm_package_version", "1.0.0");
 
   static getInstance(): HealthCheckService {
     if (!HealthCheckService.instance) {
@@ -117,8 +118,8 @@ export class HealthCheckService {
         responseTime: performance.now() - startTime,
         message: "Email service connection successful",
         details: {
-          smtpHost: process.env.SMTP_HOST,
-          smtpPort: process.env.SMTP_PORT,
+          smtpHost: getEnv("SMTP_HOST", ""),
+          smtpPort: getEnv("SMTP_PORT", ""),
         },
         timestamp: new Date().toISOString(),
       };
@@ -271,7 +272,7 @@ export class HealthCheckService {
 
   private async checkFormSubmissionEndpoint(): Promise<HealthCheckResult> {
     const startTime = performance.now();
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
     const endpoints = [
       "/api/forms/virtual-office",
       "/api/forms/coworking",
