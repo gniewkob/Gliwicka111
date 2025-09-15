@@ -4,20 +4,24 @@ import nodemailer, {
 } from "nodemailer";
 import { getEnv } from "@/lib/env";
 
-const smtpPort = Number(getEnv("SMTP_PORT", "587"));
-const smtpUser = getEnv("SMTP_USER", "");
+function createTransporter() {
+  const smtpPort = Number(getEnv("SMTP_PORT", "587"));
+  const smtpUser = getEnv("SMTP_USER", "");
 
-const transporter = nodemailer.createTransport({
-  host: getEnv("SMTP_HOST"),
-  port: smtpPort,
-  secure: smtpPort === 465,
-  auth: smtpUser
-    ? {
-        user: smtpUser,
-        pass: getEnv("SMTP_PASS"),
-      }
-    : undefined,
-});
+  const transporter = nodemailer.createTransport({
+    host: getEnv("SMTP_HOST"),
+    port: smtpPort,
+    secure: smtpPort === 465,
+    auth: smtpUser
+      ? {
+          user: smtpUser,
+          pass: getEnv("SMTP_PASS"),
+        }
+      : undefined,
+  });
+
+  return { transporter, smtpUser };
+}
 
 async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
   if (getEnv("MOCK_EMAIL", "false") === "true") {
@@ -32,6 +36,7 @@ async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
   }
 
   try {
+    const { transporter, smtpUser } = createTransporter();
     const from = smtpUser
       ? getEnv("SMTP_FROM", smtpUser)
       : getEnv("SMTP_FROM");
@@ -48,7 +53,12 @@ async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
 }
 
 async function verifyConnection() {
+  if (getEnv("MOCK_EMAIL", "false") === "true") {
+    return true;
+  }
+
   try {
+    const { transporter } = createTransporter();
     await transporter.verify();
     return true;
   } catch (error) {

@@ -20,7 +20,7 @@ export async function processFailedEmails() {
       if (failure.email_type === "confirmation") {
         await sendConfirmationEmail(data, formType, language);
       } else {
-        await sendAdminNotification(data, formType, language);
+        await sendAdminNotification(data, formType, language, ADMIN_EMAIL);
       }
       await markEmailSent(failure.id);
     } catch (error) {
