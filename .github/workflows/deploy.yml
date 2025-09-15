@@ -10,7 +10,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+      PORT: 3000
+      DEPLOY_URL: ${{ secrets.DEPLOY_URL != '' && secrets.DEPLOY_URL || format('http://127.0.0.1:{0}', env.PORT) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -139,16 +140,35 @@ jobs:
             echo 'Tail last pm2 logs:'
             "$PM2_BIN" logs gliwicka111 --lines 50 --nostream || true
 
-      - name: Verify deploy URL secret
-        if: ${{ env.DEPLOY_URL == '' }}
+      - name: Preflight deployment configuration
         run: |
-          echo "Missing DEPLOY_URL secret"
-          exit 1
+          set -euo pipefail
+          DEPLOY_URL_VALUE="${DEPLOY_URL:-}"
+          PORT_VALUE="${PORT:-}"
+          if [ -z "$PORT_VALUE" ]; then
+            echo "Preflight: PORT is unset"
+          else
+            echo "Preflight: PORT='$PORT_VALUE'"
+          fi
+          if [ -z "$DEPLOY_URL_VALUE" ]; then
+            echo "Preflight: DEPLOY_URL is empty"
+            echo "ERROR: DEPLOY_URL must be provided before continuing."
+            exit 1
+          fi
+          echo "Preflight: DEPLOY_URL='$DEPLOY_URL_VALUE'"
+          if ! printf '%s' "$DEPLOY_URL_VALUE" | grep -Eq '^https?://[^[:space:]]+$'; then
+            echo "ERROR: DEPLOY_URL '$DEPLOY_URL_VALUE' is malformed. Expected to start with http:// or https://."
+            exit 1
+          fi
+          if [ -n "$PORT_VALUE" ] && ! printf '%s' "$PORT_VALUE" | grep -Eq '^[0-9]+$'; then
+            echo "ERROR: PORT '$PORT_VALUE' must be numeric when set."
+            exit 1
+          fi
 
       - name: Wait for service to start
         if: ${{ env.DEPLOY_URL != '' }}
         env:
-          PORT: 3000
+          PORT: ${{ env.PORT }}
           HOST: 127.0.0.1
           HOSTNAME: 127.0.0.1
         run: |
