@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { POST as virtualOfficeHandler } from "@/app/api/forms/virtual-office/route";
 import { POST as coworkingHandler } from "@/app/api/forms/coworking/route";
 import { POST as meetingRoomHandler } from "@/app/api/forms/meeting-room/route";
 import { POST as advertisingHandler } from "@/app/api/forms/advertising/route";
@@ -17,6 +18,23 @@ function toRequest(data: Record<string, any>) {
 }
 
 describe("form API handlers", () => {
+  it("virtual-office accepts valid data", async () => {
+    const req = toRequest({
+      firstName: "Jan",
+      lastName: "Kowalski",
+      email: "jan@example.com",
+      phone: "+48 123 123 123",
+      gdprConsent: "true",
+      package: "basic",
+      startDate: "2024-01-01",
+      businessType: "llc",
+    });
+    const res = await virtualOfficeHandler(req);
+    const json = await res.json();
+    expect(res.status).toBe(200);
+    expect(json.success).toBe(true);
+  });
+
   it("coworking accepts valid data", async () => {
     const req = toRequest({
       firstName: "Jan",
