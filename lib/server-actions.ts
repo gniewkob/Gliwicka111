@@ -2,6 +2,7 @@
 
 import type { z } from "zod";
 import type { Pool } from "pg";
+import { headers } from "next/headers";
 import {
   virtualOfficeFormSchema,
   coworkingFormSchema,
@@ -84,6 +85,8 @@ async function handleFormSubmission<T>(
   formData: FormData,
   schema: z.ZodSchema<T>,
   formType: string,
+  reqHeaders: Headers,
+  reqIp?: string,
 ): Promise<{
   success: boolean;
   message: string;
@@ -103,7 +106,7 @@ async function handleFormSubmission<T>(
 
   try {
     const language = await getCurrentLanguage();
-    const clientIP = getClientIP();
+    const clientIP = getClientIP(reqHeaders, reqIp);
     const ipHash = await hashIP(clientIP);
 
     const rateLimitCount = Number(getEnv("RATE_LIMIT_COUNT", "100"));
@@ -291,10 +294,12 @@ async function handleFormSubmission<T>(
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitVirtualOfficeForm(formData: FormData) {
+  const reqHeaders = headers();
   return handleFormSubmission(
     formData,
     virtualOfficeFormSchema,
     "virtual-office",
+    reqHeaders,
   );
 }
 
@@ -304,7 +309,13 @@ export async function submitVirtualOfficeForm(formData: FormData) {
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitCoworkingForm(formData: FormData) {
-  return handleFormSubmission(formData, coworkingFormSchema, "coworking");
+  const reqHeaders = headers();
+  return handleFormSubmission(
+    formData,
+    coworkingFormSchema,
+    "coworking",
+    reqHeaders,
+  );
 }
 
 /**
@@ -313,7 +324,13 @@ export async function submitCoworkingForm(formData: FormData) {
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitMeetingRoomForm(formData: FormData) {
-  return handleFormSubmission(formData, meetingRoomFormSchema, "meeting-room");
+  const reqHeaders = headers();
+  return handleFormSubmission(
+    formData,
+    meetingRoomFormSchema,
+    "meeting-room",
+    reqHeaders,
+  );
 }
 
 /**
@@ -322,7 +339,13 @@ export async function submitMeetingRoomForm(formData: FormData) {
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitAdvertisingForm(formData: FormData) {
-  return handleFormSubmission(formData, advertisingFormSchema, "advertising");
+  const reqHeaders = headers();
+  return handleFormSubmission(
+    formData,
+    advertisingFormSchema,
+    "advertising",
+    reqHeaders,
+  );
 }
 
 /**
@@ -331,10 +354,12 @@ export async function submitAdvertisingForm(formData: FormData) {
  * @param {FormData} formData - Raw form data from the client.
  */
 export async function submitSpecialDealsForm(formData: FormData) {
+  const reqHeaders = headers();
   return handleFormSubmission(
     formData,
     specialDealsFormSchema,
     "special-deals",
+    reqHeaders,
   );
 }
 
@@ -384,9 +409,25 @@ function generateSubmissionId(): string {
  *
  * @returns {string} Client IP address.
  */
-function getClientIP(): string {
-  // In a real application, you would extract this from headers
-  return "127.0.0.1";
+function getClientIP(reqHeaders: Headers, reqIp?: string): string {
+  const headersToCheck = [
+    "x-forwarded-for",
+    "x-real-ip",
+    "cf-connecting-ip",
+    "fastly-client-ip",
+    "x-cluster-client-ip",
+    "forwarded",
+  ];
+
+  for (const header of headersToCheck) {
+    const value = reqHeaders.get(header);
+    if (value) {
+      const [ip] = value.split(",").map((v) => v.trim()).filter(Boolean);
+      if (ip) return ip;
+    }
+  }
+
+  return reqIp ?? "";
 }
 
 /**
