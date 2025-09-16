@@ -76,6 +76,9 @@ jobs:
             tar -xzf deploy.tgz
             rm -f deploy.tgz
             ls -la .next || true
+            pwd
+            ls -la
+            test -f .next/standalone/server.js || (echo 'server.js missing after unpack' && exit 1)
 
 
       - name: Verify build artifacts on server
@@ -89,6 +92,9 @@ jobs:
             cd "${{ secrets.DEPLOY_PATH }}"
             echo 'Listing .next on remote:'
             ls -la .next || true
+            pwd
+            ls -la
+            test -f .next/standalone/server.js || (echo 'server.js missing after unpack' && exit 1)
             echo 'BUILD_ID:'
             cat .next/BUILD_ID
             echo 'Check standalone server.js:'
