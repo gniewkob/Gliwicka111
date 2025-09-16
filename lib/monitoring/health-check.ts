@@ -217,15 +217,17 @@ export class HealthCheckService {
     try {
       const memoryUsage = process.memoryUsage();
       const usagePercentage =
+      const degradedThreshold = Number(getEnv("HEALTHCHECK_MEM_DEGRADED", "90"));
+      const unhealthyThreshold = Number(getEnv("HEALTHCHECK_MEM_UNHEALTHY", "95"));
         (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
 
       let status: HealthCheckResult["status"] = "healthy";
       let message = `Memory usage: ${usagePercentage.toFixed(2)}%`;
 
-      if (usagePercentage > 90) {
+      if (usagePercentage > unhealthyThreshold) {
         status = "unhealthy";
         message += " - Critical memory usage";
-      } else if (usagePercentage > 75) {
+      } else if (usagePercentage > degradedThreshold) {
         status = "degraded";
         message += " - High memory usage";
       }
