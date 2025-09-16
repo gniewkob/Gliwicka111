@@ -273,7 +273,7 @@ jobs:
                 echo "pm2 not found on remote host. Showing recent Node processes:"
                 ps -ef | grep node || true
               fi
-              EOSSH
+          EOSSH
               then
                 echo "Remote diagnostics collected successfully."
               else
