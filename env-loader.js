@@ -1,0 +1,29 @@
+(function loadDotenv() {
+  try {
+    const path = require("path");
+    const fs = require("fs");
+    const envPath = path.resolve(__dirname, ".env");
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, "utf8");
+      content.split(/\r?\n/).forEach((line) => {
+        if (!line || /^\s*#/.test(line)) return;
+        const idx = line.indexOf("=");
+        if (idx === -1) return;
+        const key = line.slice(0, idx).trim();
+        let val = line.slice(idx + 1).trim();
+        if ((val.startsWith("\"") && val.endsWith("\"")) || (val.startsWith(") && val.endsWith("))) {
+          val = val.slice(1, -1);
+        }
+        if (process.env[key] === undefined || process.env[key] === "") {
+          process.env[key] = val;
+        }
+      });
+    }
+  } catch (e) {
+    console.error("Warning: failed to load .env:", e && e.message ? e.message : e);
+  }
+})();
+
+if (!process.env.NEXT_PUBLIC_APP_URL) {
+  process.env.NEXT_PUBLIC_APP_URL = "https://gliwicka111.pl";
+}
