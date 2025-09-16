@@ -1,3 +1,4 @@
+require("./env-loader");
 // Passenger entrypoint for Next.js standalone build
 const path = require('path');
 const fs = require('fs');
