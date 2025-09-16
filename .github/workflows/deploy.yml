@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PORT: 3000
+      # NOTE: DEPLOY_URL must reference the running deployment and be publicly reachable from GitHub Actions runners.
       DEPLOY_URL: ${{ secrets.DEPLOY_URL != '' && secrets.DEPLOY_URL || '' }}
     steps:
       - name: Checkout
@@ -175,6 +176,9 @@ jobs:
           PORT: ${{ env.PORT }}
           HOST: 127.0.0.1
           HOSTNAME: 127.0.0.1
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           set -euo pipefail
           export PORT HOST HOSTNAME
@@ -235,8 +239,52 @@ jobs:
           fi
 
           echo "Verifying remote deployment at $DEPLOY_URL"
-          if ! curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
-            echo 'Service failed to start in time'
+          REMOTE_CHECK_PASSED=0
+          REMOTE_RETRIES=10
+          for attempt in $(seq 1 "$REMOTE_RETRIES"); do
+            if curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
+              echo "Remote service is up at $DEPLOY_URL."
+              REMOTE_CHECK_PASSED=1
+              break
+            fi
+
+            echo "Remote attempt $attempt failed; retrying in 5s..."
+            if [ "$attempt" -lt "$REMOTE_RETRIES" ]; then
+              sleep 5
+            fi
+          done
+
+          if [ "$REMOTE_CHECK_PASSED" -ne 1 ]; then
+            echo "Remote service failed to respond after $REMOTE_RETRIES attempts."
+            echo "Attempting to capture remote logs for diagnostics..."
+            if [ -n "${DEPLOY_HOST:-}" ] && [ -n "${DEPLOY_USER:-}" ] && [ -n "${DEPLOY_SSH_KEY:-}" ]; then
+              SSH_KEY_FILE=$(mktemp)
+              printf '%s\n' "$DEPLOY_SSH_KEY" >"$SSH_KEY_FILE"
+              chmod 600 "$SSH_KEY_FILE"
+
+              if ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$DEPLOY_USER@$DEPLOY_HOST" <<'EOSSH'
+APP_NAME="gliwicka111"
+if command -v pm2 >/dev/null 2>&1; then
+  echo "---- Remote pm2 status ----"
+  pm2 status "$APP_NAME" || true
+  echo "---- Remote pm2 logs (last 100 lines) ----"
+  pm2 logs "$APP_NAME" --lines 100 --nostream || true
+else
+  echo "pm2 not found on remote host. Showing recent Node processes:"
+  ps -ef | grep node || true
+fi
+EOSSH
+              then
+                echo "Remote diagnostics collected successfully."
+              else
+                echo "SSH command failed while collecting remote logs."
+              fi
+
+              rm -f "$SSH_KEY_FILE"
+            else
+              echo "SSH credentials are not fully configured; unable to fetch remote logs."
+            fi
+
             exit 1
           fi
 
