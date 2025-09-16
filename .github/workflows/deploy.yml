@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PORT: 3000
-      DEPLOY_URL: ${{ secrets.DEPLOY_URL != '' && secrets.DEPLOY_URL || 'http://127.0.0.1:3000' }}
+      DEPLOY_URL: ${{ secrets.DEPLOY_URL != '' && secrets.DEPLOY_URL || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,6 +21,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
+
+      - name: Set fallback DEPLOY_URL
+        if: ${{ env.DEPLOY_URL == '' }}
+        run: echo "DEPLOY_URL=http://127.0.0.1:${PORT}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: npm ci
