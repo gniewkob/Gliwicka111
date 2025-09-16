@@ -41,8 +41,9 @@ next-env.d.ts
 # temp files
 /tmp/
 
-# Ignore PM2 logs
-.pm2/*.log
+# Passenger handles process; PM2 not used anymore
+# (keep placeholder in case local dev creates .pm2)
+.pm2/
 
 # Unused lockfiles
 pnpm-lock.yaml

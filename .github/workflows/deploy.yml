@@ -52,7 +52,7 @@ jobs:
       - name: Create deployment archive
         run: |
           set -e
-          tar -czf deploy.tgz .next/standalone .next/static .next/BUILD_ID public ecosystem.config.js
+          tar -czf deploy.tgz .next/standalone .next/static .next/BUILD_ID public
 
       - name: Upload archive via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -99,7 +99,7 @@ jobs:
             [ -d .next/standalone ] && echo ".next/standalone OK" || echo ".next/standalone MISSING"
             [ -d standalone ] && echo "Found ./standalone (wrong)" || true
 
-      - name: Reload PM2 on server
+      - name: Restart domain via devil (Passenger)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -107,43 +107,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-            cd "${{ secrets.DEPLOY_PATH }}"
-            echo 'PATH before:'
-            echo "$PATH"
-            echo 'Node version:'
-            node -v || true
-            echo 'NPM version:'
-            npm -v || true
-            # Prefer explicit pm2 path if present on server
-            if [ -x "/home/vetternkraft/.npm-global/bin/pm2" ]; then
-              PM2_BIN="/home/vetternkraft/.npm-global/bin/pm2"
-            else
-              # Fallback: try to locate pm2 in PATH or common prefixes
-              PM2_BIN=$(command -v pm2 || true)
-              if [ -z "$PM2_BIN" ]; then
-                PREFIX=$(npm config get prefix 2>/dev/null || echo "$HOME/.npm-global")
-                export PATH="$PREFIX/bin:$PATH"
-                PM2_BIN=$(command -v pm2 || true)
-              fi
-              if [ -z "$PM2_BIN" ] && [ -x "$HOME/.npm-global/bin/pm2" ]; then
-                PM2_BIN="$HOME/.npm-global/bin/pm2"
-              fi
-              if [ -z "$PM2_BIN" ] && [ -x "/usr/local/bin/pm2" ]; then
-                PM2_BIN="/usr/local/bin/pm2"
-              fi
-            fi
-            if [ -z "$PM2_BIN" ]; then
-              echo 'ERROR: pm2 not found in PATH or common locations.'
-              echo 'Consider installing pm2 globally (npm i -g pm2) or adding it to PATH.'
-              exit 1
-            fi
-            echo "Using PM2 at: $PM2_BIN"
-            echo 'Force restart PM2 process to pick updated config:'
-            "$PM2_BIN" delete gliwicka111 || true
-            "$PM2_BIN" start ecosystem.config.js
-            "$PM2_BIN" status || true
-            echo 'Tail last pm2 logs:'
-            "$PM2_BIN" logs gliwicka111 --lines 50 --nostream || true
+            devil www restart gliwicka111.pl
 
       - name: Preflight deployment configuration
         run: |
