@@ -263,17 +263,17 @@ jobs:
               chmod 600 "$SSH_KEY_FILE"
 
               if ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$DEPLOY_USER@$DEPLOY_HOST" <<'EOSSH'
-APP_NAME="gliwicka111"
-if command -v pm2 >/dev/null 2>&1; then
-  echo "---- Remote pm2 status ----"
-  pm2 status "$APP_NAME" || true
-  echo "---- Remote pm2 logs (last 100 lines) ----"
-  pm2 logs "$APP_NAME" --lines 100 --nostream || true
-else
-  echo "pm2 not found on remote host. Showing recent Node processes:"
-  ps -ef | grep node || true
-fi
-EOSSH
+              APP_NAME="gliwicka111"
+              if command -v pm2 >/dev/null 2>&1; then
+                echo "---- Remote pm2 status ----"
+                pm2 status "$APP_NAME" || true
+                echo "---- Remote pm2 logs (last 100 lines) ----"
+                pm2 logs "$APP_NAME" --lines 100 --nostream || true
+              else
+                echo "pm2 not found on remote host. Showing recent Node processes:"
+                ps -ef | grep node || true
+              fi
+              EOSSH
               then
                 echo "Remote diagnostics collected successfully."
               else
