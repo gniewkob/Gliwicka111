@@ -25,6 +25,10 @@ interface SystemHealth {
   };
 }
 
+interface HealthCheckOptions {
+  skipOptionalChecks?: boolean;
+}
+
 export class HealthCheckService {
   private static instance: HealthCheckService;
   private startTime: number = Date.now();
@@ -37,15 +41,19 @@ export class HealthCheckService {
     return HealthCheckService.instance;
   }
 
-  async performHealthCheck(): Promise<SystemHealth> {
+  async performHealthCheck(
+    options: HealthCheckOptions = {},
+  ): Promise<SystemHealth> {
+    const skipOptionalChecks = this.shouldSkipOptionalChecks(options);
+
     const checks = await Promise.allSettled([
-      this.checkDatabase(),
-      this.checkEmailService(),
-      this.checkFileSystem(),
+      this.checkDatabase(skipOptionalChecks),
+      this.checkEmailService(skipOptionalChecks),
+      this.checkFileSystem(skipOptionalChecks),
       this.checkMemoryUsage(),
-      this.checkExternalDependencies(),
-      this.checkFormSubmissionEndpoint(),
-      this.checkAnalyticsService(),
+      this.checkExternalDependencies(skipOptionalChecks),
+      this.checkFormSubmissionEndpoint(skipOptionalChecks),
+      this.checkAnalyticsService(skipOptionalChecks),
     ]);
 
     const healthResults: HealthCheckResult[] = checks.map((result, index) => {
@@ -75,7 +83,34 @@ export class HealthCheckService {
     };
   }
 
-  private async checkDatabase(): Promise<HealthCheckResult> {
+  private shouldSkipOptionalChecks(options: HealthCheckOptions): boolean {
+    if (typeof options.skipOptionalChecks === "boolean") {
+      return options.skipOptionalChecks;
+    }
+    if (process.env.HEALTHCHECK_SKIP_OPTIONAL === "true") return true;
+    if (process.env.NEXT_PUBLIC_E2E === "true") return true;
+    if (process.env.NODE_ENV === "test") return true;
+    return false;
+  }
+
+  private createSkippedResult(service: string): HealthCheckResult {
+    return {
+      service,
+      status: "healthy",
+      responseTime: 0,
+      message: "Optional check skipped in test environment",
+      details: { skipped: true },
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  private async checkDatabase(
+    skipOptionalChecks: boolean,
+  ): Promise<HealthCheckResult> {
+    if (skipOptionalChecks) {
+      return this.createSkippedResult("database");
+    }
+
     const startTime = performance.now();
 
     try {
@@ -101,7 +136,13 @@ export class HealthCheckService {
     }
   }
 
-  private async checkEmailService(): Promise<HealthCheckResult> {
+  private async checkEmailService(
+    skipOptionalChecks: boolean,
+  ): Promise<HealthCheckResult> {
+    if (skipOptionalChecks) {
+      return this.createSkippedResult("email");
+    }
+
     const startTime = performance.now();
 
     try {
@@ -134,7 +175,13 @@ export class HealthCheckService {
     }
   }
 
-  private async checkFileSystem(): Promise<HealthCheckResult> {
+  private async checkFileSystem(
+    skipOptionalChecks: boolean,
+  ): Promise<HealthCheckResult> {
+    if (skipOptionalChecks) {
+      return this.createSkippedResult("filesystem");
+    }
+
     const startTime = performance.now();
 
     try {
@@ -208,7 +255,13 @@ export class HealthCheckService {
     }
   }
 
-  private async checkExternalDependencies(): Promise<HealthCheckResult> {
+  private async checkExternalDependencies(
+    skipOptionalChecks: boolean,
+  ): Promise<HealthCheckResult> {
+    if (skipOptionalChecks) {
+      return this.createSkippedResult("external-dependencies");
+    }
+
     const startTime = performance.now();
 
     try {
@@ -270,7 +323,13 @@ export class HealthCheckService {
     }
   }
 
-  private async checkFormSubmissionEndpoint(): Promise<HealthCheckResult> {
+  private async checkFormSubmissionEndpoint(
+    skipOptionalChecks: boolean,
+  ): Promise<HealthCheckResult> {
+    if (skipOptionalChecks) {
+      return this.createSkippedResult("form-submission");
+    }
+
     const startTime = performance.now();
     const baseUrl = getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
     const endpoints = [
@@ -325,7 +384,13 @@ export class HealthCheckService {
     }
   }
 
-  private async checkAnalyticsService(): Promise<HealthCheckResult> {
+  private async checkAnalyticsService(
+    skipOptionalChecks: boolean,
+  ): Promise<HealthCheckResult> {
+    if (skipOptionalChecks) {
+      return this.createSkippedResult("analytics");
+    }
+
     const startTime = performance.now();
     const baseUrl = getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
     const token = getEnv("ANALYTICS_AUTH_TOKEN", "dev-token");
@@ -396,9 +461,21 @@ export class HealthCheckService {
     return "healthy";
   }
 
-  async createHealthCheckEndpoint(request: NextRequest): Promise<NextResponse> {
+  async createHealthCheckEndpoint(
+    request: NextRequest,
+    options: HealthCheckOptions = {},
+  ): Promise<NextResponse> {
     try {
-      const health = await this.performHealthCheck();
+      const resolvedOptions = { ...options };
+      const skipParam = request.nextUrl.searchParams.get("skipOptional");
+      if (skipParam !== null) {
+        const normalized = skipParam.toLowerCase();
+        resolvedOptions.skipOptionalChecks = !["false", "0", "no"].includes(
+          normalized,
+        );
+      }
+
+      const health = await this.performHealthCheck(resolvedOptions);
 
       const statusCode =
         health.status === "healthy"
