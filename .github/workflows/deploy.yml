@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Set fallback DEPLOY_URL
@@ -228,15 +228,11 @@ jobs:
 
               if ssh -o StrictHostKeyChecking=no -i "$SSH_KEY_FILE" "$DEPLOY_USER@$DEPLOY_HOST" <<'EOSSH'
               APP_NAME="gliwicka111"
-              if command -v pm2 >/dev/null 2>&1; then
-                echo "---- Remote pm2 status ----"
-                pm2 status "$APP_NAME" || true
-                echo "---- Remote pm2 logs (last 100 lines) ----"
-                pm2 logs "$APP_NAME" --lines 100 --nostream || true
-              else
-                echo "pm2 not found on remote host. Showing recent Node processes:"
-                ps -ef | grep node || true
-              fi
+              echo "---- Remote Passenger error.log (last 200 lines) ----"
+tail -n 200 /home/vetternkraft/domains/gliwicka111.pl/logs/error.log || true
+echo "---- Remote Node processes (grep node) ----"
+ps -ef | grep node || true
+fi
           EOSSH
               then
                 echo "Remote diagnostics collected successfully."
