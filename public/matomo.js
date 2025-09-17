@@ -6,6 +6,8 @@ _paq.push(['setRequestMethod', 'GET']);
   var u = 'https://stats0.mydevil.net/';
   _paq.push(['setTrackerUrl', u + 'matomo.php']);
   _paq.push(['setSiteId', '591']);
+  _paq.push(['setCookieDomain', '*.gliwicka111.pl']);
+  _paq.push(['setDomains', ['*.gliwicka111.pl']]);
   _paq.push(['enableLinkTracking']);
   _paq.push(['trackPageView']);
   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
