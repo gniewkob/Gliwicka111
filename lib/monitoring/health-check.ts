@@ -217,9 +217,9 @@ export class HealthCheckService {
     try {
       const memoryUsage = process.memoryUsage();
       const usagePercentage =
+        (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
       const degradedThreshold = Number(getEnv("HEALTHCHECK_MEM_DEGRADED", "90"));
       const unhealthyThreshold = Number(getEnv("HEALTHCHECK_MEM_UNHEALTHY", "95"));
-        (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
 
       let status: HealthCheckResult["status"] = "healthy";
       let message = `Memory usage: ${usagePercentage.toFixed(2)}%`;
