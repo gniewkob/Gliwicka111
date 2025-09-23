@@ -29,6 +29,7 @@ import {
 } from "@/components/ui";
 import Link from "next/link";
 import { navTranslations, backTranslations } from "@/lib/i18n";
+import PageNav from "@/components/page-nav";
 
 const translations = {
   pl: {

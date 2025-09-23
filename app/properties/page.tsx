@@ -27,7 +27,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { navTranslations, backTranslations } from "@/lib/i18n";
-import { PageNav } from "@/components/page-nav";
+import PageNav from "@/components/page-nav";
 
 const translations = {
   pl: {
