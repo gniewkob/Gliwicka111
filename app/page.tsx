@@ -1149,17 +1149,17 @@ export default function HomePage() {
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              className="flex items-center hover:opacity-80 transition-opacity"
+              aria-label="Gliwicka 111 — Property Management"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-900">
-                  Gliwicka 111
-                </h1>
-                <p className="text-xs text-slate-600">Property Management</p>
-              </div>
+              <Image
+                src="/gliwicka111.png"
+                alt="Gliwicka 111 — Property Management"
+                width={200}
+                height={40}
+                priority
+                className="h-10 w-auto"
+              />
             </Link>
 
             {/* Desktop Navigation */}
