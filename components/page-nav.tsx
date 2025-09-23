@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/components/language-provider";
-import { Building2, Globe, Menu, X } from "lucide-react";
+import { Globe, Menu, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui";
 
 interface NavTranslations {
@@ -31,10 +32,20 @@ export function PageNav({ nav, current }: PageNavProps) {
     <header className="border-b border-gray-100 sticky top-0 bg-white/80 backdrop-blur z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:py-6">
-          <div className="flex items-center space-x-2">
-            <Building2 className="w-8 h-8 text-teal-600" />
-            <span className="text-xl font-bold text-slate-900">Gliwicka 111</span>
-          </div>
+          <Link
+            href="/"
+            className="flex items-center hover:opacity-80 transition-opacity"
+            aria-label="Gliwicka 111 — Property Management"
+          >
+            <Image
+              src="/gliwicka111.png"
+              alt="Gliwicka 111 — Property Management"
+              width={200}
+              height={40}
+              priority
+              className="h-10 w-auto"
+            />
+          </Link>
           <nav className="hidden md:flex space-x-8">
             <Link href="/" className={linkClass("home")}>
               {nav.home}
