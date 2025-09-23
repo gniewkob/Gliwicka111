@@ -13,22 +13,25 @@ function getSecurityHeaders(
     !isProd || isE2E
       ? [
           "default-src 'self'",
-          "img-src 'self' data: blob: https://stats0.mydevil.net",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://stats0.mydevil.net",
-          "style-src 'self' 'unsafe-inline'",
-          "font-src 'self' data:",
-          "connect-src 'self' ws: http://localhost:* https://stats0.mydevil.net",
+          "img-src 'self' data: blob: https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com",
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+          "font-src 'self' data: https://fonts.gstatic.com",
+          "connect-src 'self' ws: http://localhost:* https://stats0.mydevil.net https://maps.googleapis.com",
+          "frame-src 'self' https://www.google.com",
         ].join("; ")
       : [
           "default-src 'self'",
-          // Allow images from self, data URIs and blob URLs (e.g. responsive images)
-          "img-src 'self' data: blob: https://stats0.mydevil.net",
-          // Allow analytics domain; use nonce for inline Next runtime/bootstrap
-          `script-src 'self' https://stats0.mydevil.net 'nonce-${nonce}'`,
-          // Permit inline styles used by UI libs / style attributes
-          "style-src 'self' 'unsafe-inline'",
-          "font-src 'self' data:",
-          "connect-src 'self' https://stats0.mydevil.net",
+          // Allow images from self, data URIs, blob URLs, and Google Maps
+          "img-src 'self' data: blob: https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com",
+          // Allow analytics domain and Google Maps; use nonce for inline Next runtime/bootstrap
+          `script-src 'self' https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com 'nonce-${nonce}'`,
+          // Permit inline styles used by UI libs / style attributes and Google Fonts
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+          "font-src 'self' data: https://fonts.gstatic.com",
+          "connect-src 'self' https://stats0.mydevil.net https://maps.googleapis.com",
+          // Allow Google Maps iframe
+          "frame-src 'self' https://www.google.com",
         ].join("; ");
 
   return {

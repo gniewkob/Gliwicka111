@@ -492,18 +492,18 @@ export default function ContactPage() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="aspect-video bg-slate-200 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <p className="text-slate-600">
-                  {language === "pl"
-                    ? "Mapa Google zostanie załadowana tutaj"
-                    : "Google Map will be loaded here"}
-                </p>
-                <p className="text-sm text-slate-500 mt-2">
-                  Gliwicka 111, 42-600 Tarnowskie Góry
-                </p>
-              </div>
+            <div className="aspect-video">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2548.0720834585965!2d18.846092877122503!3d50.36999599631825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716ce5b5c5c5c5b%3A0x123456789abcdef!2sGliwicka%20111%2C%2042-600%20Tarnowskie%20G%C3%B3ry%2C%20Polska!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Lokalizacja Gliwicka 111"
+                className="w-full h-full"
+              />
             </div>
           </div>
         </div>
