@@ -60,7 +60,7 @@ export function PageNav({ nav, current }: PageNavProps) {
       className={`sticky top-0 z-50 border-b transition-all duration-300 ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white shadow-sm"}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center ${isScrolled ? "h-16" : "py-4 md:py-6"}${isScrolled ? "py-2 md:py-3" : "py-4 md:py-6"}`}>
+        <div className={`flex justify-between items-center ${isScrolled ? "h-16" : "py-4 md:py-6"}`}>
           <Link
             href="/"
             className="flex items-center hover:opacity-80 transition-opacity"
