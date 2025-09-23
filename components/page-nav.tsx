@@ -58,7 +58,7 @@ export function PageNav({ nav, current }: PageNavProps) {
   return (
     <header
       style={{ height: isScrolled ? "64px" : "92px" }}
-      className={`sticky top-0 z-50 border-b ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white shadow-sm"} transition-[height,background-color,box-shadow] duration-300 ease-out`}
+      className={`sticky top-0 z-50 border-b ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-md border-transparent" : "bg-white shadow-sm border-gray-100"} transition-all duration-300 ease-out`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div className="flex justify-between items-center h-full">
