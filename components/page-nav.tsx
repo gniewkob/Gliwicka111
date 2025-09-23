@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/language-provider";
 import { Globe, Menu, X, ChevronDown } from "lucide-react"
 import Link from "next/link";
@@ -22,6 +22,14 @@ interface PageNavProps {
 export function PageNav({ nav, current }: PageNavProps) {
   const { language, toggleLanguage } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const linkClass = (key: keyof NavTranslations) =>
     current === key
@@ -48,9 +56,11 @@ export function PageNav({ nav, current }: PageNavProps) {
       };
 
   return (
-    <header className="border-b border-gray-100 sticky top-0 bg-white/80 backdrop-blur z-50">
+    <header
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white shadow-sm"}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:py-6">
+        <div className={`flex justify-between items-center ${isScrolled ? "py-2 md:py-3" : "py-4 md:py-6"}`}>
           <Link
             href="/"
             className="flex items-center hover:opacity-80 transition-opacity"
