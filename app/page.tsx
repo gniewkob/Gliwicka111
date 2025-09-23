@@ -520,6 +520,7 @@ const translations = {
       specialDeals: "Special Deals",
       about: "About",
       contact: "Contact",
+      properties: "Properties",
     },
     hero: {
       title: "Professional Property Management",
