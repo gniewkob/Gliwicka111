@@ -1158,7 +1158,6 @@ export default function HomePage() {
                 width={200}
                 height={40}
                 priority
-                className="h-10 w-auto"
               />
             </Link>
 
@@ -1210,6 +1209,12 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+              <Link
+                href="/properties"
+                className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
+              >
+                {t.nav.properties}
+              </Link>
               <Link
                 href="/about"
                 className="text-slate-700 hover:text-teal-600 font-medium transition-colors"
@@ -1293,6 +1298,12 @@ export default function HomePage() {
                   className="text-slate-700 hover:text-teal-600 font-medium pl-4"
                 >
                   {t.nav.advertising}
+                </Link>
+                <Link
+                  href="/properties"
+                  className="text-slate-700 hover:text-teal-600 font-medium"
+                >
+                  {t.nav.properties}
                 </Link>
                 <Link
                   href="#special-deals"
