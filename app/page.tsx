@@ -1146,7 +1146,7 @@ export default function HomePage() {
         } border-b border-gray-100`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex justify-between items-center ${isScrolled ? "h-16" : "py-4 md:py-6"}`}>
+          <div className={`flex justify-between items-center ${isScrolled ? "py-2 md:py-3" : "py-4 md:py-6"}`}>
             {/* Logo */}
             <Link
               href="/"
