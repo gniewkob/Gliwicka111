@@ -131,6 +131,59 @@ devil www restart gliwicka111.pl
 - Brak statycznych zasobów — sprawdź, czy `.next/static/**` został spakowany i rozpakowany do katalogu docelowego
 - Błędy CSP — potwierdź, że wymagane domeny są dozwolone w `middleware.ts`
 
+## Panel administratora (Admin Dashboard)
+
+- Produkcja: https://gliwicka111.pl/admin/dashboard
+- Autoryzacja (jedna z metod, ustaw w pliku /home/vetternkraft/apps/nodejs/Gliwicka111/.env):
+  - Basic Auth (dla przeglądarki):
+
+```bash path=null start=null
+ADMIN_USER=admin
+ADMIN_PASS=super-tajne-haslo
+```
+
+  - Bearer Token (dla API/CLI):
+
+```bash path=null start=null
+ADMIN_AUTH_TOKEN=twoj-bearer-token
+```
+
+- Po zmianach w .env zrestartuj domenę:
+
+```bash path=null start=null
+devil www restart gliwicka111.pl
+```
+
+- Lokalnie (dev):
+  - Skonfiguruj .env i uruchom: `npm ci && npm run dev`
+  - Wejdź: http://localhost:3000/admin/dashboard
+
+## Ustawienie GitHub Secrets (gh)
+
+Użyj GitHub CLI w katalogu repo (lub z flagą -R właściciel/repo). Przykład dla mydevil.net:
+
+```bash path=null start=null
+# Weryfikacja logowania
+gh auth status || gh auth login
+
+# Sekrety wymagane przez deploy.yml
+gh secret set DEPLOY_HOST --body "s0.mydevil.net"
+gh secret set DEPLOY_USER --body "vetternkraft"
+gh secret set DEPLOY_URL  --body "https://gliwicka111.pl"
+gh secret set DEPLOY_PATH --body "/home/vetternkraft/apps/nodejs/Gliwicka111"
+# prywatny klucz przez stdin (nie wypisuje zawartości)
+gh secret set DEPLOY_SSH_KEY < ~/.ssh/gh_actions_deploy
+
+# Podgląd sekretów
+gh secret list
+
+# (opcjonalnie) odpalenie deploy
+gh workflow run Deploy
+# i śledzenie
+gh run list --workflow="deploy.yml" --limit 1
+```
+
+
 ## Licencja
 MIT
 
