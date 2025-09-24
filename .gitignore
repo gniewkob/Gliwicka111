@@ -55,3 +55,11 @@ yarn.lock
 /BUILD_ID
 /standalone/
 /static/
+
+# backup/junk files
+*.bak
+*.backup
+*~
+.DS_Store
+*.swp
+*.swo

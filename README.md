@@ -1,112 +1,139 @@
-# Gliwicka 111
+# Gliwicka 111 — aplikacja WWW (Next.js, Passenger, mydevil.net)
 
-Modern commercial property management web application built with Next.js (App Router), TypeScript, Tailwind CSS, and PostgreSQL.
+Profesjonalna strona centrum biznesowego Gliwicka 111. Aplikacja oparta o Next.js (App Router) + TypeScript + Tailwind CSS, z rozbudowanymi formularzami, walidacją po stronie serwera, monitoringiem i gotowym pipeline CI/CD do hostingu na mydevil.net (FreeBSD, Passenger).
 
-## Features
-
-- **Multi-form contact system** for virtual offices, coworking, meeting rooms, advertising campaigns, and special deals, each wired to dedicated React components and server actions
-- **Server-side validation and analytics** using Zod schemas, rate-limited submission handlers, and an authenticated analytics API
-- **Robust email delivery with monitoring and retries**, including a mock mode for development and a retry worker for failed messages
-- **Built‑in rate limiting** at the database level to protect forms and analytics endpoints
-- **Operational health checks and admin-only metrics dashboard**, secured via HTTP Basic Auth
-
-## Quickstart
-
-```bash
-git clone https://github.com/your-org/Gliwicka111.git
-cd Gliwicka111
-cp .env.example .env.local             # configure environment variables
-npm install
-npm run migrate                        # run database migrations
-npm run dev                            # start development server
-npm run build                          # create production build
-npm test                               # unit tests
-npm run test:integration               # integration tests
-npm run test:e2e                       # end-to-end tests
-```
-
-Scripts for development, build, and testing are defined in `package.json`.  
-Migrations are orchestrated by `scripts/migrate.ts` which executes all SQL files in `migrations/`.
-
-## Environment Variables
-
-### Server
-
-`HOSTNAME`, `PORT`
-
-### Database
-
-`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL`, `MOCK_DB`
-
-### Email
-
-`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_EMAIL`, `EMAIL_MAX_RETRIES`, `MOCK_EMAIL`
-
-### Security & Rate Limiting
-
-`IP_SALT`, `ADMIN_AUTH_TOKEN`, `RATE_LIMIT_COUNT`, `RATE_LIMIT_WINDOW_MS`
-
-### Analytics
-
-`NEXT_PUBLIC_ANALYTICS_TOKEN`, `ANALYTICS_AUTH_TOKEN`, `ANALYTICS_BASIC_USER`, `ANALYTICS_BASIC_PASS`
-
-### Admin Dashboard
-
-`ADMIN_USER`, `ADMIN_PASS`, `NEXT_PUBLIC_ADMIN_USER`, `NEXT_PUBLIC_ADMIN_PASS`, `METRICS_WINDOW_HOURS`
-
-At least one of `ADMIN_AUTH_TOKEN` or the `ADMIN_USER`/`ADMIN_PASS` pair must be set.
-
-### Misc
-
-`CI`, `NODE_ENV`
-
-## Database Setup & Migration
-
-1. Configure the database variables in `.env.local`.
-2. Run `npm run migrate` to apply SQL files in the `migrations/` directory to your PostgreSQL instance.
-
-## Admin Dashboard & Metrics
-
-- Navigate to `/admin/dashboard` to view submission and rate-limit metrics.
-- Access requires either a bearer token (`ADMIN_AUTH_TOKEN`) or HTTP Basic credentials (`ADMIN_USER`/`ADMIN_PASS`; `NEXT_PUBLIC_ADMIN_USER`/`NEXT_PUBLIC_ADMIN_PASS` prefill the prompt).
-- Metrics are served from `/api/admin/metrics` and include submission processing times, email retry stats, and rate‑limit counts.
-- Health checks are available at `/api/health` for infrastructure monitoring.
-
-## Testing & CI/CD
-
-- **Playwright setup**: run `npx playwright install --with-deps` before executing Playwright tests.
-- **Unit & Integration Tests**: `npm test`, `npm run test:integration` (Vitest).
-- **End-to-End Tests**: `npm run test:e2e` (Playwright).
-  - E2E mode: build/run with `NEXT_PUBLIC_E2E=true` or append `?e2e=1` in dev.
-    - Auto-accepts consent banner, relaxes error boundaries on forms pages, and enables deterministic form UI hooks.
-    - Scripts: `npm run test:e2e`, `npm run dev:e2e`, `npm run test:e2e:existing`.
-- **Linting**: `npm run lint` (Next.js ESLint).
-- **Continuous Integration**: GitHub Actions workflow `ci.yml` runs lint, tests, and build on every push/PR.
-- **End-to-End & Deployment Pipelines**: `e2e.yml` executes Playwright tests, while `deploy.yml` ships builds to MyDevil (FreeBSD) after successful E2E runs.
-- For detailed linting, testing, and security audit steps, see [Quality checks](./docs/quality.md).
-
-## Deployment
-
-### Vercel
-
-1. Create a new Vercel project and link this repository.
-2. Add the environment variables from `.env.local`.
-3. Vercel automatically builds and deploys `main` using `next build`.
-
-### Traditional Node.js Hosting (e.g., MyDevil.net/FreeBSD)
-
-1. Install Node.js 18+ and PostgreSQL.
-2. Copy the project to the server (see `deploy.yml` for an SCP-based example).
-3. Provide `.env` values on the server, run `npm install`, `npm run build`, and `npm start` (behind a process manager or Phusion Passenger).
-
-## Further Documentation
-
-Additional notes and reviews live in the `docs/` directory, such as `docs/DEVELOPMENT_REVIEW.md`.
-
-## Support
-
-For help or commercial inquiries, email **tech@gliwicka111.pl** or **info@gliwicka111.pl**.
+Live: https://gliwicka111.pl
 
 ---
 
-**Gliwicka 111 – Business workspace solutions made simple.**
+## Spis treści
+- Architektura i technologie
+- Struktura repozytorium
+- Uruchomienie lokalne (dev)
+- Zmienne środowiskowe
+- Testy i jakość
+- Bezpieczeństwo i nagłówki CSP
+- CI/CD (GitHub Actions)
+- Wdrożenie na mydevil.net (Passenger)
+- Rozwiązywanie problemów
+- Licencja
+
+---
+
+## Architektura i technologie
+- Next.js 14 (App Router), React 18, TypeScript
+- Tailwind CSS + shadcn-ui (Radix UI), ikonografia lucide-react
+- Formularze: React Hook Form + Zod (walidacja)
+- API: trasy serverless w `app/api/*` (np. `/api/forms/*`, `/api/analytics/*`, `/api/health`)
+- E-mail: Nodemailer + mechanizm retry i store nieudanych wiadomości
+- Baza danych: PostgreSQL (połączenie puli w `lib/database/connection-pool.ts`)
+- Monitoring: health-checki + dashboard admina (HTTP Basic lub bearer token)
+- Analytics: prosty klient + endpointy kolekcji metryk
+- Hosting: mydevil.net (FreeBSD) z Passengerem, start standalone Next.js
+
+## Struktura repozytorium
+Poniżej skrócona mapa katalogów (kluczowe elementy):
+
+- `app/` — routing aplikacji (App Router)
+  - `app/page.tsx`, `app/about/page.tsx`, `app/contact/page.tsx`, ...
+  - `app/api/` — endpointy serwerowe: health, analytics, forms, admin/metrics
+- `components/forms/` — komponenty formularzy (coworking, virtual-office, meeting-room, advertising, special-deals)
+- `lib/` — logika wspólna: walidacja, email, monitoring, security, admin metrics
+- `scripts/` — skrypty pomocnicze (np. migracje, retry failed emails)
+- `e2e/`, `tests/` — Playwright i Vitest (unit/integration)
+- `middleware.ts` — nagłówki bezpieczeństwa (w tym CSP)
+- `next.config.mjs` — konfiguracja Next.js (output: 'standalone')
+- `.github/workflows/ci.yml` — lint + testy + build na push/PR
+- `.github/workflows/deploy.yml` — build w CI i wdrożenie na mydevil.net (Passenger)
+
+## Uruchomienie lokalne (dev)
+1) Zainstaluj zależności
+```
+npm ci
+```
+2) Skonfiguruj środowisko
+- Skopiuj plik `.env.example` do `.env` lub `.env.local` i uzupełnij wartości
+- Dla developmentu port domyślny to 3000 (fallback 3001 gdy port zajęty)
+
+3) Start dev server
+```
+npm run dev
+```
+4) Budowa (lokalnie nie jest wymagana, budujemy w CI)
+```
+npm run build
+```
+
+## Zmienne środowiskowe
+Wzór: `.env.example` (nie zawiera sekretów). Kluczowe grupy:
+- Serwer: `HOSTNAME`, `PORT`
+- Baza: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL`, `MOCK_DB`
+- E-mail: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_EMAIL`, `MOCK_EMAIL`, `EMAIL_MAX_RETRIES`
+- Bezpieczeństwo i limity: `IP_SALT`, `RATE_LIMIT_COUNT`, `RATE_LIMIT_WINDOW_MS`
+- Admin i Analytics: `ADMIN_AUTH_TOKEN` lub `ADMIN_USER`/`ADMIN_PASS`, `NEXT_PUBLIC_ANALYTICS_TOKEN`, `ANALYTICS_AUTH_TOKEN`, `ANALYTICS_BASIC_USER`, `ANALYTICS_BASIC_PASS`, `METRICS_WINDOW_HOURS`
+- Testy/E2E: `NEXT_PUBLIC_E2E`
+
+Uwaga: nie commitujemy realnych `.env`; sekretami zarządza CI/CD.
+
+## Testy i jakość
+- Lint: `npm run lint`
+- Unit/Integration (Vitest): `npm test`, `npm run test:integration`
+- E2E (Playwright): `npm run test:e2e` (w CI: instalacja przeglądarek `npx playwright install --with-deps`)
+- Formatowanie: `npm run format` / `npm run format:check`
+- Type-check: `npm run type-check`
+
+W trybie E2E (NEXT_PUBLIC_E2E=true) aplikacja luzuje pewne ograniczenia deweloperskie i zapewnia deterministykę UI.
+
+## Bezpieczeństwo i nagłówki CSP
+Nagłówki nadawane są globalnie w `middleware.ts`:
+- Content-Security-Policy (CSP) z osobnymi profilami dla dev/E2E i produkcji
+- Zezwolenie na domeny analityczne: `https://stats0.mydevil.net`
+- Zezwolenie na Google Maps (iframe + zasoby): `https://www.google.com`, `https://maps.googleapis.com`, `https://maps.gstatic.com`
+- Dodatkowe: HSTS, X-Frame-Options=DENY, X-Content-Type-Options=nosniff
+
+## CI/CD (GitHub Actions)
+Dwa workflowy w `.github/workflows/`:
+- `ci.yml` — lint, type-check, unit/integration/E2E testy oraz build na push/PR
+- `deploy.yml` — build w CI, spakowanie artefaktów (`.next/standalone`, `.next/static`, `.next/BUILD_ID`, `public`), wysyłka na serwer, rozpakowanie i restart domeny na mydevil.net
+
+Wymagane sekrety repozytorium:
+- `DEPLOY_HOST` — host SSH (np. sXX.mydevil.net)
+- `DEPLOY_USER` — użytkownik SSH (np. `vetternkraft`)
+- `DEPLOY_SSH_KEY` — prywatny klucz SSH z dostępem
+- `DEPLOY_URL` — publiczny URL wdrożenia (np. `https://gliwicka111.pl`)
+- (opcjonalnie) `DEPLOY_PATH` — katalog docelowy; domyślnie `/home/vetternkraft/apps/nodejs/Gliwicka111`
+
+Przebieg wdrożenia (`deploy.yml`):
+1. Budowa w CI: `next build` i przygotowanie trybu `standalone`
+2. Archiwizacja artefaktów: `deploy.tgz`
+3. Wysyłka na serwer (SCP) do `DEPLOY_PATH` lub ścieżki domyślnej
+4. Rozpakowanie na serwerze i utworzenie `app.js` (bootstrap dla Passenger)
+5. Restart domeny: `devil www restart gliwicka111.pl`
+
+## Wdrożenie na mydevil.net (Passenger)
+Konfiguracja domeny:
+- W panelu mydevil ustaw `public_nodejs` na `/home/vetternkraft/apps/nodejs/Gliwicka111/`
+- Passenger uruchomi `app.js` w tym katalogu, który startuje `/.next/standalone/server.js`
+
+Lokalizacja artefaktów na serwerze:
+- `/home/vetternkraft/apps/nodejs/Gliwicka111/.next/standalone/server.js`
+- `/home/vetternkraft/apps/nodejs/Gliwicka111/.next/static/**`
+- `/home/vetternkraft/apps/nodejs/Gliwicka111/app.js` (tworzony przez workflow)
+
+Restart usługi (z CI lub ręcznie przez SSH):
+```
+devil www restart gliwicka111.pl
+```
+
+## Rozwiązywanie problemów
+- „server.js missing” — upewnij się, że build w CI przesłał `.next/standalone`; sprawdź kroki „Show local BUILD_ID” oraz „Verify build artifacts on server” w pipeline
+- „Passenger spawn failed” — sprawdź logi błędów domeny, obecność `app.js` i `server.js`; zweryfikuj uprawnienia plików
+- Brak statycznych zasobów — sprawdź, czy `.next/static/**` został spakowany i rozpakowany do katalogu docelowego
+- Błędy CSP — potwierdź, że wymagane domeny są dozwolone w `middleware.ts`
+
+## Licencja
+MIT
+
+---
+
+Wkład i propozycje zmian są mile widziane — prosimy o PR/issue.
