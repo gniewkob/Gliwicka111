@@ -193,12 +193,25 @@ export default function ContactPage() {
       fd.set("gdprConsent", String(Boolean(formData.rodo)));
       fd.set("marketingConsent", String(Boolean(formData.marketing)));
 
+      const csrfToken = (() => {
+        try {
+          return document.cookie
+            .split('; ')
+            .find((c) => c.startsWith('csrf-token='))
+            ?.split('=')[1] || '';
+        } catch {
+          return '';
+        }
+      })();
+    
       const res = await fetch("/api/forms/contact", {
         method: "POST",
         body: fd,
         headers: {
           // Ensure server can detect lang
           "Accept-Language": language,
+          // CSRF protection header required by middleware
+          "x-csrf-token": csrfToken,
         },
       });
 
