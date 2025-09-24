@@ -13,6 +13,8 @@ jobs:
       PORT: 3000
       # NOTE: DEPLOY_URL must reference the running deployment and be publicly reachable from GitHub Actions runners.
       DEPLOY_URL: ${{ secrets.DEPLOY_URL != '' && secrets.DEPLOY_URL || '' }}
+      # Fallback path (will be overridden by secret when provided)
+      DEFAULT_DEPLOY_PATH: /home/vetternkraft/apps/nodejs/Gliwicka111
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
 
       - name: Set fallback DEPLOY_URL
@@ -61,7 +63,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: deploy.tgz
-          target: ${{ secrets.DEPLOY_PATH }}
+          target: ${{ secrets.DEPLOY_PATH != '' && secrets.DEPLOY_PATH || env.DEFAULT_DEPLOY_PATH }}
 
       - name: Unpack archive on server
         uses: appleboy/ssh-action@v1.0.3
@@ -71,10 +73,31 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-            cd "${{ secrets.DEPLOY_PATH }}"
-            rm -rf standalone static BUILD_ID
+            DEPLOY_DIR="${{ secrets.DEPLOY_PATH }}"
+            if [ -z "$DEPLOY_DIR" ]; then DEPLOY_DIR="${DEFAULT_DEPLOY_PATH}"; fi
+
+            mkdir -p "$DEPLOY_DIR"
+            cd "$DEPLOY_DIR"
+
+            # Clean previous build artifacts
+            rm -rf .next
+
+            # Unpack new artifacts
             tar -xzf deploy.tgz
             rm -f deploy.tgz
+
+            # Bootstrap file for Passenger (starts Next standalone server)
+            cat > app.js << 'EOS'
+            const path = require('path');
+            // Passenger provides PORT; if missing, default to 3000
+            if (!process.env.PORT) {
+              process.env.PORT = '3000';
+            }
+            require(path.join(__dirname, '.next', 'standalone', 'server.js'));
+            EOS
+            chmod 644 app.js
+
+            # Diagnostics
             ls -la .next || true
             pwd
             ls -la
@@ -89,7 +112,9 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-            cd "${{ secrets.DEPLOY_PATH }}"
+            DEPLOY_DIR="${{ secrets.DEPLOY_PATH }}"
+            if [ -z "$DEPLOY_DIR" ]; then DEPLOY_DIR="${DEFAULT_DEPLOY_PATH}"; fi
+            cd "$DEPLOY_DIR"
             echo 'Listing .next on remote:'
             ls -la .next || true
             pwd
