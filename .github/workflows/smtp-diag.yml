@@ -1,0 +1,93 @@
+name: SMTP Diag
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate admin token and mask
+        id: gen
+        run: |
+          set -euo pipefail
+          if command -v uuidgen >/dev/null 2>&1; then
+            TOKEN=$(uuidgen | tr -d '\n')
+          else
+            TOKEN=$(openssl rand -hex 16 | tr -d '\n')
+          fi
+          echo "::add-mask::$TOKEN"
+          echo "TOKEN=$TOKEN" >> $GITHUB_ENV
+
+      - name: Install SSH client deps (if needed)
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+
+      - name: Write ADMIN_AUTH_TOKEN to remote .env and restart devil
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
+          key: ${{ env.DEPLOY_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            DEPLOY_DIR="${{ env.DEPLOY_PATH }}"
+            cd "$DEPLOY_DIR"
+            cp -f .env .env.bak.$(date +%s) || true
+            awk -F= 'BEGIN{OFS="="} $1!="ADMIN_AUTH_TOKEN"{print $0}' .env > .env.tmp || true
+            echo "ADMIN_AUTH_TOKEN=${TOKEN}" >> .env.tmp
+            mv .env.tmp .env
+            devil www restart gliwicka111.pl
+
+      - name: Wait for app
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 20); do
+            if curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
+              echo "App reachable"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "App not reachable"
+          exit 1
+
+      - name: Verify SMTP (secure)
+        id: verify_secure
+        run: |
+          set -euo pipefail
+          OUT=$(mktemp)
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" "$DEPLOY_URL/api/admin/smtp/verify?debug=1" || true)
+          echo "code=$code" >> $GITHUB_OUTPUT
+          echo "body=$(cat "$OUT" | tr -d '\n' | head -c 500)" >> $GITHUB_OUTPUT
+
+      - name: Verify SMTP (insecure TLS) if secure failed
+        id: verify_insecure
+        if: steps.verify_secure.outputs.code != '200'
+        run: |
+          set -euo pipefail
+          OUT=$(mktemp)
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" "$DEPLOY_URL/api/admin/smtp/verify?debug=1&insecureTLS=1" || true)
+          echo "code=$code" >> $GITHUB_OUTPUT
+          echo "body=$(cat "$OUT" | tr -d '\n' | head -c 500)" >> $GITHUB_OUTPUT
+
+      - name: Send test email if verify OK
+        if: steps.verify_secure.outputs.code == '200' || steps.verify_insecure.outputs.code == '200'
+        run: |
+          set -euo pipefail
+          OUT=$(mktemp)
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -X POST "$DEPLOY_URL/api/admin/smtp/send-test" || true)
+          echo "SEND_CODE=$code"
+          head -c 500 "$OUT"; echo
