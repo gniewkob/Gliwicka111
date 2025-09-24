@@ -39,9 +39,9 @@ export async function GET(request: NextRequest) {
     }
     const durationMs = Date.now() - started;
 
-    const host = String(opts as any).host;
-    const port = Number((opts as any).port);
-    const secure = Boolean((opts as any).secure);
+    const host = (opts as any).host as string | undefined;
+    const port = (opts as any).port as number | undefined;
+    const secure = (opts as any).secure as boolean | undefined;
     const authUser = (opts as any).auth?.user as string | undefined;
 
     return NextResponse.json(

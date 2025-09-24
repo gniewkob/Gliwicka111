@@ -1,14 +1,14 @@
 import nodemailer, {
   type SendMailOptions,
   type SentMessageInfo,
-  type TransportOptions,
-} from "nodemailer";
+  } from "nodemailer";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { getEnv } from "@/lib/env";
 
 export function buildTransportOptions(params?: {
   insecureTLS?: boolean;
   debug?: boolean;
-}): TransportOptions {
+}): SMTPTransport.Options {
   const smtpPort = Number(getEnv("SMTP_PORT", "587"));
   const smtpUser = getEnv("SMTP_USER", "");
   const smtpHost = getEnv("SMTP_HOST");
@@ -16,7 +16,7 @@ export function buildTransportOptions(params?: {
   const debugEnv = getEnv("SMTP_DEBUG", "false") === "true";
   const insecureEnv = getEnv("SMTP_TLS_INSECURE", "false") === "true";
 
-  const opts: TransportOptions = {
+  const opts: SMTPTransport.Options = {
     host: smtpHost,
     port: smtpPort,
     secure,
