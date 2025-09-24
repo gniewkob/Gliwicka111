@@ -95,15 +95,18 @@ jobs:
             rm -f deploy.tgz
 
             # Write env-loader used by app.js to load .env at runtime
-                        cat > env-loader.js << 'EOS'
+                                    cat > env-loader.js << 'EOS'
             const fs = require('fs');
             const path = require('path');
             const envPath = path.join(__dirname, '.env');
             try {
-              const txt = fs.readFileSync(envPath, 'utf8');
-              for (const rawLine of txt.split(/
-            ?
-            /)) {
+              let txt = fs.readFileSync(envPath, 'utf8');
+              // Normalize CRLF to LF to avoid regex issues in CI/SSH transport
+              txt = txt.replace(/
+            /g, '
+            ');
+              for (const rawLine of txt.split('
+            ')) {
                 const line = rawLine.trim();
                 if (!line || line.startsWith('#')) continue;
                 const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
