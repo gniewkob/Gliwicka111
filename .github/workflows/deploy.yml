@@ -92,6 +92,7 @@ jobs:
 
             # Bootstrap file for Passenger (starts Next standalone server)
             cat > app.js << 'EOS'
+            require('./env-loader');
             const path = require('path');
             // Passenger provides PORT; if missing, default to 3000
             if (!process.env.PORT) {
