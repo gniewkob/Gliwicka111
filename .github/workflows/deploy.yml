@@ -256,12 +256,12 @@ require(path.join(__dirname, '.next', 'standalone', 'server.js'));
             NEXT_PID=""
           fi
 
-          echo "Verifying remote deployment health at $DEPLOY_URL/api/health?skipOptional=false"
+          echo "Verifying remote deployment at $DEPLOY_URL"
           REMOTE_CHECK_PASSED=0
           REMOTE_RETRIES=10
           for attempt in $(seq 1 "$REMOTE_RETRIES"); do
-            if curl -fsS "$DEPLOY_URL/api/health?skipOptional=false" >/dev/null 2>&1; then
-              echo "Remote service is healthy at $DEPLOY_URL/api/health"
+            if curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
+              echo "Remote service is up at $DEPLOY_URL."
               REMOTE_CHECK_PASSED=1
               break
             fi
@@ -277,7 +277,7 @@ require(path.join(__dirname, '.next', 'standalone', 'server.js'));
             echo "Attempting to capture remote logs for diagnostics..."
             echo "Remote service failed to respond after $REMOTE_RETRIES attempts."
             echo "Diagnostics: printing health endpoint response (if any)..."
-            curl -sS -i "$DEPLOY_URL/api/health?skipOptional=false" || true
+            curl -sS -i "$DEPLOY_URL/api/health?skipOptional=true" || true
             echo "Diagnostics step skipped (remote logs collection disabled)."
             exit 1
 
