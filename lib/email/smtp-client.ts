@@ -8,7 +8,7 @@ import { getEnv } from "@/lib/env";
 export function buildTransportOptions(params?: {
   insecureTLS?: boolean;
   debug?: boolean;
-}): SMTPTransport.Options {
+}): any {
   const smtpPort = Number(getEnv("SMTP_PORT", "587"));
   const smtpUser = getEnv("SMTP_USER", "");
   const smtpHost = getEnv("SMTP_HOST");
@@ -16,7 +16,7 @@ export function buildTransportOptions(params?: {
   const debugEnv = getEnv("SMTP_DEBUG", "false") === "true";
   const insecureEnv = getEnv("SMTP_TLS_INSECURE", "false") === "true";
 
-  const opts: SMTPTransport.Options = {
+  const opts: any = {
     host: smtpHost,
     port: smtpPort,
     secure,
