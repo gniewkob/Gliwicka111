@@ -110,17 +110,13 @@ export async function handleFormSubmission<T>(
 
     const rateLimitCount = Number(getEnv("RATE_LIMIT_COUNT", "100"));
     const rateLimitWindow = Number(getEnv("RATE_LIMIT_WINDOW_MS", "60000"));
-    let db: Pool;
+    let db: Pool | null = null;
     try {
       db = (await getDb()) as Pool;
-    } catch {
-      return {
-        success: false,
-        message: messages.form.serverError[language],
-        status: 500,
-      };
+    } catch (e) {
+      console.warn("DB unavailable; proceeding without persistence & rate limit", e);
     }
-    if (!(await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow))) {
+    if (db && !(await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow))) {
       return {
         success: false,
         message: messages.form.tooManyRequests[language],
@@ -188,7 +184,9 @@ export async function handleFormSubmission<T>(
       sessionId,
     };
 
-    await db.query(
+    if (db) {
+      try {
+        await db.query(
       `INSERT INTO form_submissions (id, form_type, data, status, ip_hash, session_id, processing_time_ms, email_latency_ms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
       [
         submission.id,
@@ -201,13 +199,23 @@ export async function handleFormSubmission<T>(
         null,
       ],
     );
+      } catch (e) {
+        console.warn("Failed to persist submission; continuing", e);
+      }
+    }
 
     const processingEnd = Date.now();
     const processingTime = processingEnd - processingStart;
-    await db.query(
-      `UPDATE form_submissions SET processing_time_ms=$1 WHERE id=$2`,
-      [processingTime, submission.id],
-    );
+    if (db) {
+      try {
+        await db.query(
+          `UPDATE form_submissions SET processing_time_ms=$1 WHERE id=$2`,
+          [processingTime, submission.id],
+        );
+      } catch (e) {
+        console.warn("Failed to update processing_time_ms; continuing", e);
+      }
+    }
 
     const emailStart = Date.now();
     // Attempt to send emails without affecting user response
@@ -223,10 +231,16 @@ export async function handleFormSubmission<T>(
     const emailEnd = Date.now();
     const emailLatency = emailEnd - emailStart;
 
-    await db.query(
-      `UPDATE form_submissions SET email_latency_ms=$1 WHERE id=$2`,
-      [emailLatency, submission.id],
-    );
+    if (db) {
+      try {
+        await db.query(
+          `UPDATE form_submissions SET email_latency_ms=$1 WHERE id=$2`,
+          [emailLatency, submission.id],
+        );
+      } catch (e) {
+        console.warn("Failed to update email_latency_ms; continuing", e);
+      }
+    }
 
     emailResults.forEach((result, index) => {
       if (result.status === "rejected") {
