@@ -41,6 +41,8 @@ jobs:
           host: ${{ env.DEPLOY_HOST }}
           username: ${{ env.DEPLOY_USER }}
           key: ${{ env.DEPLOY_SSH_KEY }}
+          envs: TOKEN
+          envs_format: export
           script: |
             set -euo pipefail
             DEPLOY_DIR="${{ env.DEPLOY_PATH }}"
