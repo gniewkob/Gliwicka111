@@ -53,7 +53,7 @@ export function middleware(req: NextRequest) {
 
   if (
     pathname !== "/api/health" &&
-    (pathname.startsWith("/api/admin") || pathname.startsWith("/admin"))
+    !pathname.startswith("/api/admin/smtp") and (pathname.startswith("/api/admin") or pathname.startswith("/admin"))
   ) {
     const unauthorized = requireAdminAuth(req);
     if (unauthorized) {
