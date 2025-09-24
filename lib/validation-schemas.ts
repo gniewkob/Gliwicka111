@@ -145,6 +145,34 @@ export const specialDealsFormSchema = baseFormSchema.extend({
     .optional(),
 });
 
+// Contact Form Schema (simplified public contact form)
+export const contactFormSchema = z.object({
+  name: z
+    .string({ required_error: "Imię i nazwisko jest wymagane" })
+    .min(2, "Imię i nazwisko musi mieć co najmniej 2 znaki")
+    .max(100, "Imię i nazwisko nie może być dłuższy niż 100 znaków"),
+  email: z
+    .string({ required_error: "Adres email jest wymagany" })
+    .email("Nieprawidłowy format adresu email"),
+  phone: z
+    .string()
+    .regex(phoneRegex, "Nieprawidłowy format numeru telefonu")
+    .optional()
+    .or(z.literal("")).optional(),
+  subject: z
+    .string({ required_error: "Temat jest wymagany" })
+    .min(2, "Temat jest zbyt krótki")
+    .max(120, "Temat nie może być dłuższy niż 120 znaków"),
+  message: z
+    .string({ required_error: "Wiadomość jest wymagana" })
+    .min(5, "Wiadomość jest zbyt krótka")
+    .max(2000, "Wiadomość nie może być dłuższa niż 2000 znaków"),
+  gdprConsent: z
+    .boolean({ required_error: "Zgoda na przetwarzanie danych jest wymagana" })
+    .refine((v) => v === true, "Zgoda na przetwarzanie danych jest wymagana"),
+  marketingConsent: z.boolean().optional(),
+});
+
 // Export all schemas
 export { baseFormSchema, phoneRegex, nipRegex };
 
@@ -154,3 +182,4 @@ export type CoworkingFormData = z.infer<typeof coworkingFormSchema>;
 export type MeetingRoomFormData = z.infer<typeof meetingRoomFormSchema>;
 export type AdvertisingFormData = z.infer<typeof advertisingFormSchema>;
 export type SpecialDealsFormData = z.infer<typeof specialDealsFormSchema>;
+export type ContactFormData = z.infer<typeof contactFormSchema>;

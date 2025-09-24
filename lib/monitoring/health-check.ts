@@ -27,6 +27,7 @@ interface SystemHealth {
 
 interface HealthCheckOptions {
   skipOptionalChecks?: boolean;
+  baseOrigin?: string; // e.g. https://gliwicka111.pl
 }
 
 export class HealthCheckService {
@@ -45,6 +46,7 @@ export class HealthCheckService {
     options: HealthCheckOptions = {},
   ): Promise<SystemHealth> {
     const skipOptionalChecks = this.shouldSkipOptionalChecks(options);
+    const baseOrigin = options.baseOrigin || getEnv("NEXT_PUBLIC_APP_URL", "");
 
     const checks = await Promise.allSettled([
       this.checkDatabase(skipOptionalChecks),
@@ -52,8 +54,8 @@ export class HealthCheckService {
       this.checkFileSystem(skipOptionalChecks),
       this.checkMemoryUsage(),
       this.checkExternalDependencies(skipOptionalChecks),
-      this.checkFormSubmissionEndpoint(skipOptionalChecks),
-      this.checkAnalyticsService(skipOptionalChecks),
+      this.checkFormSubmissionEndpoint(skipOptionalChecks, baseOrigin),
+      this.checkAnalyticsService(skipOptionalChecks, baseOrigin),
     ]);
 
     const healthResults: HealthCheckResult[] = checks.map((result, index) => {
@@ -327,13 +329,14 @@ export class HealthCheckService {
 
   private async checkFormSubmissionEndpoint(
     skipOptionalChecks: boolean,
+    baseOrigin: string,
   ): Promise<HealthCheckResult> {
     if (skipOptionalChecks) {
       return this.createSkippedResult("form-submission");
     }
 
     const startTime = performance.now();
-    const baseUrl = getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
+    const baseUrl = baseOrigin || getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
     const endpoints = [
       "/api/forms/virtual-office",
       "/api/forms/coworking",
@@ -388,13 +391,14 @@ export class HealthCheckService {
 
   private async checkAnalyticsService(
     skipOptionalChecks: boolean,
+    baseOrigin: string,
   ): Promise<HealthCheckResult> {
     if (skipOptionalChecks) {
       return this.createSkippedResult("analytics");
     }
 
     const startTime = performance.now();
-    const baseUrl = getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
+    const baseUrl = baseOrigin || getEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
     const token = getEnv("ANALYTICS_AUTH_TOKEN", "dev-token");
 
     try {
@@ -469,6 +473,18 @@ export class HealthCheckService {
   ): Promise<NextResponse> {
     try {
       const resolvedOptions = { ...options };
+      // Determine base origin from request headers (prefer x-forwarded headers)
+      try {
+        const xfProto = request.headers.get("x-forwarded-proto");
+        const xfHost = request.headers.get("x-forwarded-host");
+        const host = xfHost || request.headers.get("host") || request.nextUrl.host;
+        const proto = xfProto || request.nextUrl.protocol.replace(":", "");
+        if (host && proto) {
+          (resolvedOptions as any).baseOrigin = `${proto}://${host}`;
+        }
+      } catch {
+        /* ignore */
+      }
       const skipParam = request.nextUrl.searchParams.get("skipOptional");
       if (skipParam !== null) {
         const normalized = skipParam.toLowerCase();

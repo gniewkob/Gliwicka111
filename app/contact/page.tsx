@@ -182,20 +182,47 @@ export default function ContactPage() {
 
     setFormStatus("sending");
 
-    // Simulate form submission
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setFormStatus("success");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-        rodo: false,
-        marketing: false,
+      const fd = new FormData();
+      fd.set("name", formData.name);
+      fd.set("email", formData.email);
+      if (formData.phone) fd.set("phone", formData.phone);
+      fd.set("subject", formData.subject);
+      fd.set("message", formData.message);
+      // Backend expects these names
+      fd.set("gdprConsent", String(Boolean(formData.rodo)));
+      fd.set("marketingConsent", String(Boolean(formData.marketing)));
+
+      const res = await fetch("/api/forms/contact", {
+        method: "POST",
+        body: fd,
+        headers: {
+          // Ensure server can detect lang
+          "Accept-Language": language,
+        },
       });
-      setTimeout(() => setFormStatus("idle"), 3000);
+
+      const data = (await res.json().catch(() => ({}))) as {
+        success?: boolean;
+        message?: string;
+      };
+
+      if (res.ok && data?.success) {
+        setFormStatus("success");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+          rodo: false,
+          marketing: false,
+        });
+        setTimeout(() => setFormStatus("idle"), 3000);
+      } else {
+        setFormStatus("error");
+        setTimeout(() => setFormStatus("idle"), 3000);
+      }
     } catch (error) {
       setFormStatus("error");
       setTimeout(() => setFormStatus("idle"), 3000);
