@@ -191,7 +191,6 @@ jobs:
       - name: Wait for service to start
         if: ${{ env.DEPLOY_URL != '' }}
         env:
-          PORT: ${{ env.PORT }}
           HOST: 127.0.0.1
           HOSTNAME: 127.0.0.1
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -199,14 +198,16 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           set -euo pipefail
-          export PORT HOST HOSTNAME
+          # Pick a free ephemeral port for the local readiness check
+          FREE_PORT=$(node scripts/free-port.js)
+          export PORT="$FREE_PORT" HOST HOSTNAME
           HEALTH_HOST="${HOST:-${HOSTNAME}}"
           HEALTHCHECK_URL="http://${HEALTH_HOST}:${PORT}"
           LOG_FILE=$(mktemp)
           LOCAL_CHECK_PASSED=0
 
           echo "Starting Next.js server in background on ${HEALTHCHECK_URL}..."
-          npm start >"$LOG_FILE" 2>&1 &
+          PORT="$PORT" npm start >"$LOG_FILE" 2>&1 &
           NEXT_PID=$!
 
           cleanup() {
@@ -218,8 +219,8 @@ jobs:
               wait "$NEXT_PID" 2>/dev/null || true
             fi
             if [ "$STATUS" -ne 0 ] && [ "${LOCAL_CHECK_PASSED}" -eq 0 ]; then
-              echo "---- Next.js server log (last 50 lines) ----"
-              tail -n 50 "$LOG_FILE" || true
+              echo "---- Next.js server log (last 80 lines) ----"
+              tail -n 80 "$LOG_FILE" || true
               echo "-------------------------------------------"
             fi
             exit "$STATUS"
@@ -256,12 +257,12 @@ jobs:
             NEXT_PID=""
           fi
 
-          echo "Verifying remote deployment at $DEPLOY_URL"
+          echo "Verifying remote deployment health at $DEPLOY_URL/api/health?skipOptional=false"
           REMOTE_CHECK_PASSED=0
           REMOTE_RETRIES=10
           for attempt in $(seq 1 "$REMOTE_RETRIES"); do
-            if curl -fsS "$DEPLOY_URL" >/dev/null 2>&1; then
-              echo "Remote service is up at $DEPLOY_URL."
+            if curl -fsS "$DEPLOY_URL/api/health?skipOptional=false" >/dev/null 2>&1; then
+              echo "Remote service is healthy at $DEPLOY_URL/api/health"
               REMOTE_CHECK_PASSED=1
               break
             fi
@@ -276,6 +277,8 @@ jobs:
             echo "Remote service failed to respond after $REMOTE_RETRIES attempts."
             echo "Attempting to capture remote logs for diagnostics..."
             echo "Remote service failed to respond after $REMOTE_RETRIES attempts."
+            echo "Diagnostics: printing health endpoint response (if any)..."
+            curl -sS -i "$DEPLOY_URL/api/health?skipOptional=false" || true
             echo "Diagnostics step skipped (remote logs collection disabled)."
             exit 1
 
