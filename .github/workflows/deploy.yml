@@ -79,8 +79,12 @@ jobs:
             mkdir -p "$DEPLOY_DIR"
             cd "$DEPLOY_DIR"
 
-            # Clean previous build artifacts
-            rm -rf .next
+            # Clean previous build artifacts (be permissive with perms)
+            if [ -d .next ]; then
+              chmod -R u+w .next 2>/dev/null || true
+              # if removal fails due to perms, move aside
+              rm -rf .next || mv .next ".next.old.$(date +%s)" || true
+            fi
 
             # Unpack new artifacts
             tar -xzf deploy.tgz
