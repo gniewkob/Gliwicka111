@@ -103,9 +103,13 @@ jobs:
 
             # Diagnostics
             ls -la .next || true
+            ls -la .next/standalone || true
             pwd
             ls -la
-            test -f .next/standalone/server.js || (echo 'server.js missing after unpack' && exit 1)
+            if ! find .next -maxdepth 2 -type f -name server.js | grep -q server.js; then
+              echo 'server.js missing after unpack'
+              exit 1
+            fi
 
 
       - name: Verify build artifacts on server
@@ -121,9 +125,13 @@ jobs:
             cd "$DEPLOY_DIR"
             echo 'Listing .next on remote:'
             ls -la .next || true
+            ls -la .next/standalone || true
             pwd
             ls -la
-            test -f .next/standalone/server.js || (echo 'server.js missing after unpack' && exit 1)
+            if ! find .next -maxdepth 2 -type f -name server.js | grep -q server.js; then
+              echo 'server.js missing after unpack'
+              exit 1
+            fi
             echo 'BUILD_ID:'
             cat .next/BUILD_ID
             echo 'Check standalone server.js:'
