@@ -54,7 +54,7 @@ jobs:
       - name: Create deployment archive
         run: |
           set -e
-          tar -czf deploy.tgz .next/standalone .next/static .next/BUILD_ID public
+          tar -czf deploy.tgz .next/standalone .next/static .next/BUILD_ID public migrations || tar -czf deploy.tgz .next/standalone .next/static .next/BUILD_ID public
 
       - name: Upload archive via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -151,6 +151,38 @@ require(path.join(__dirname, '.next', 'standalone', 'server.js'));
             echo "Misplaced standalone check:"
             [ -d .next/standalone ] && echo ".next/standalone OK" || echo ".next/standalone MISSING"
             [ -d standalone ] && echo "Found ./standalone (wrong)" || true
+
+      - name: Run DB migrations on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            DEPLOY_DIR="${{ secrets.DEPLOY_PATH }}"
+            if [ -z "$DEPLOY_DIR" ]; then DEPLOY_DIR="${DEFAULT_DEPLOY_PATH}"; fi
+            cd "$DEPLOY_DIR"
+            if [ ! -d migrations ]; then
+              echo 'No migrations directory found; skipping'
+            else
+              # Load env (quietly)
+              set -a; [ -f .env ] && . ./.env; set +a
+              # Build DATABASE_URL if missing from DB_*
+              if [ -z "${DATABASE_URL:-}" ]; then
+                if [ -n "${DB_HOST:-}" ] && [ -n "${DB_PORT:-}" ] && [ -n "${DB_NAME:-}" ] && [ -n "${DB_USER:-}" ] && [ -n "${DB_PASSWORD:-}" ]; then
+                  DATABASE_URL="postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+                else
+                  echo 'Missing DATABASE_URL and/or DB_*; skipping migrations'
+                  exit 0
+                fi
+              fi
+              # Apply .sql files in order
+              for f in $(ls -1 migrations/*.sql 2>/dev/null | sort); do
+                echo "Applying migration: $(basename "$f")"
+                PGPASSWORD='' psql -v ON_ERROR_STOP=1 "$DATABASE_URL" -f "$f" >/dev/null || { echo 'Migration failed'; exit 1; }
+              done
+            fi
 
       - name: Restart domain via devil (Passenger)
         uses: appleboy/ssh-action@v1.0.3
