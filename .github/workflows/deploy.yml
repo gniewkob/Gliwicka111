@@ -96,34 +96,34 @@ jobs:
 
             # Write env-loader used by app.js to load .env at runtime
                                                 cat > env-loader.js << 'EOS'
-const fs = require('fs');
-const path = require('path');
-const envPath = path.join(__dirname, '.env');
-try {
-  const txt = fs.readFileSync(envPath, 'utf8');
-  const lines = txt.split(/\r?\n/);
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith('#')) continue;
-    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
-    if (!m) continue;
-    let v = m[2];
-    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
-      v = v.slice(1, -1);
-    }
-    if (!(m[1] in process.env)) process.env[m[1]] = v;
-  }
-} catch (e) { /* no-op if .env missing */ }
+            const fs = require('fs');
+            const path = require('path');
+            const envPath = path.join(__dirname, '.env');
+            try {
+              const txt = fs.readFileSync(envPath, 'utf8');
+              const lines = txt.split(/\r?\n/);
+              for (const rawLine of lines) {
+                const line = rawLine.trim();
+                if (!line || line.startsWith('#')) continue;
+                const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+                if (!m) continue;
+                let v = m[2];
+                if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                  v = v.slice(1, -1);
+                }
+                if (!(m[1] in process.env)) process.env[m[1]] = v;
+              }
+            } catch (e) { /* no-op if .env missing */ }
 
             EOS
             chmod 644 env-loader.js
 
             # Bootstrap file for Passenger (starts Next standalone server)
             cat > app.js << 'EOS'
-require('./env-loader');
-const path = require('path');
-// Do not force PORT; Passenger manages the socket/port for Node apps.
-require(path.join(__dirname, '.next', 'standalone', 'server.js'));
+            require('./env-loader');
+            const path = require('path');
+            // Do not force PORT; Passenger manages the socket/port for Node apps.
+            require(path.join(__dirname, '.next', 'standalone', 'server.js'));
 
             EOS
             chmod 644 app.js
