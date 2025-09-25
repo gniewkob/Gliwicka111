@@ -41,6 +41,7 @@ jobs:
           host: ${{ env.DEPLOY_HOST }}
           username: ${{ env.DEPLOY_USER }}
           key: ${{ env.DEPLOY_SSH_KEY }}
+          envs: TOKEN
           allenvs: true
           script: |
             set -euo pipefail
