@@ -19,9 +19,7 @@ async function createPool(): Promise<Pool> {
     } as unknown as Pool;
   }
 
-  const needSSL =
-    DB_SSL ||
-    (DATABASE_URL && /[?&]sslmode=(require|verify-full|verify-ca)/i.test(DATABASE_URL));
+  const needSSL = DB_SSL;
 
   const instance = DATABASE_URL
     ? new Pool({
