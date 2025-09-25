@@ -65,12 +65,19 @@ async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
 
   try {
     const { transporter, smtpUser } = createTransporter();
-    const from = smtpUser
+    // Header From remains configurable (e.g., no-reply@...),
+    // but the SMTP envelope sender must be the authenticated SMTP_USER.
+    const headerFrom = smtpUser
       ? getEnv("SMTP_FROM", smtpUser)
       : getEnv("SMTP_FROM");
+    const envelopeFrom = smtpUser || headerFrom;
 
     const info = await transporter.sendMail({
-      from,
+      from: headerFrom,
+      envelope: {
+        from: envelopeFrom,
+        to: (options as any).to,
+      },
       ...options,
     });
     return info;
