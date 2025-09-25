@@ -116,7 +116,16 @@ export async function handleFormSubmission<T>(
     } catch (e) {
       console.warn("DB unavailable; proceeding without persistence & rate limit", e);
     }
-    if (db && !(await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow))) {
+    let allowed = true;
+    if (db) {
+      try {
+        allowed = await checkRateLimit(db, ipHash, rateLimitCount, rateLimitWindow);
+      } catch (e) {
+        console.warn("Rate limit check failed; allowing request", e);
+        allowed = true;
+      }
+    }
+    if (!allowed) {
       return {
         success: false,
         message: messages.form.tooManyRequests[language],
