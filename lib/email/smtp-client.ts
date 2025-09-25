@@ -81,11 +81,39 @@ async function sendEmail(options: SendMailOptions): Promise<SentMessageInfo> {
       ...options,
     });
     return info;
-  } catch (error) {
+  } catch (error: any) {
+    // If provider rejects the MAIL FROM / header From, retry once using SMTP_USER for header as well
+    const msg = String(error?.response || error?.message || "");
+    const code = Number(error?.responseCode || 0);
+    const isEnvelopeProblem = error?.code === "EENVELOPE" || code === 550 || code === 553 || /not allowed to send e-mails as the domain|Sender address rejected|From address not verified/i.test(msg);
+    try {
+      const { smtpUser } = createTransporter();
+      const retryAllowed = Boolean(smtpUser) && isEnvelopeProblem;
+      // Avoid infinite loops and only retry if header was different from smtpUser
+      const originalFrom = (options as any).from;
+      if (retryAllowed && originalFrom && smtpUser && originalFrom !== smtpUser) {
+        console.warn("Email send retry with header From fallback to SMTP_USER");
+        const retryOpts: any = {
+          ...options,
+          from: smtpUser,
+          envelope: { from: smtpUser, to: (options as any).to },
+        };
+        if (!(options as any).replyTo) {
+          retryOpts.replyTo = originalFrom;
+        }
+        const { transporter } = createTransporter();
+        const info2 = await transporter.sendMail(retryOpts);
+        return info2;
+      }
+    } catch (retryErr) {
+      console.error("Email retry failed", retryErr);
+      throw retryErr;
+    }
     console.error("Email sending failed", error);
     throw error;
   }
 }
+
 
 async function verifyConnection() {
   if (getEnv("MOCK_EMAIL", "false") === "true") {
