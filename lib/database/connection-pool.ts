@@ -11,6 +11,7 @@ async function createPool(): Promise<Pool> {
   const DB_PASSWORD = getEnv("DB_PASSWORD", "");
   const MOCK_DB = getEnv("MOCK_DB", "");
   const DATABASE_URL = getEnv("DATABASE_URL", "");
+  const DB_SSL = getEnv("DB_SSL", "").toLowerCase() === "true";
 
   if (MOCK_DB === "true" || (!DB_HOST && !DATABASE_URL)) {
     return {
@@ -18,10 +19,14 @@ async function createPool(): Promise<Pool> {
     } as unknown as Pool;
   }
 
+  const needSSL =
+    DB_SSL ||
+    (DATABASE_URL && /[?&]sslmode=(require|verify-full|verify-ca)/i.test(DATABASE_URL));
+
   const instance = DATABASE_URL
     ? new Pool({
         connectionString: DATABASE_URL,
-        ssl: { rejectUnauthorized: false },
+        ...(needSSL ? { ssl: { rejectUnauthorized: false } } : {}),
         max: 20,
       })
     : new Pool({
