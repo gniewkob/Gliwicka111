@@ -16,7 +16,7 @@ function getSecurityHeaders(
           "img-src 'self' data: blob: https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com",
           "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-          "font-src 'self' data: https://fonts.gstatic.com",
+          "font-src 'self' data: https://fonts.gstatic.com https://r2cdn.perplexity.ai",
           "connect-src 'self' ws: http://localhost:* https://stats0.mydevil.net https://maps.googleapis.com",
           "frame-src 'self' https://www.google.com",
         ].join("; ")
@@ -28,7 +28,7 @@ function getSecurityHeaders(
           `script-src 'self' https://stats0.mydevil.net https://maps.googleapis.com https://maps.gstatic.com 'nonce-${nonce}'`,
           // Permit inline styles used by UI libs / style attributes and Google Fonts
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-          "font-src 'self' data: https://fonts.gstatic.com",
+          "font-src 'self' data: https://fonts.gstatic.com https://r2cdn.perplexity.ai",
           "connect-src 'self' https://stats0.mydevil.net https://maps.googleapis.com",
           // Allow Google Maps iframe
           "frame-src 'self' https://www.google.com",
