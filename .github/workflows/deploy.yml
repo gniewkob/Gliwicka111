@@ -226,7 +226,7 @@ jobs:
             echo "
 == form_submissions (recent) =="
             psql -v ON_ERROR_STOP=1 -t -A -F $'	' "$DATABASE_URL" -c "SELECT id, form_type, status, to_char(created_at,'YYYY-MM-DD HH24:MI:SS') AS created_at FROM form_submissions WHERE created_at >= NOW() - ($LOOKBACK_MINUTES || ' minutes')::interval ORDER BY created_at DESC LIMIT 20;" || true
-- name: Preflight deployment configuration
+      - name: Preflight deployment configuration
         run: |
           set -euo pipefail
           DEPLOY_URL_VALUE="${DEPLOY_URL:-}"
