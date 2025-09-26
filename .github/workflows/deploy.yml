@@ -325,3 +325,19 @@ jobs:
         run: |
           set -e
           curl -fsSL "$DEPLOY_URL" | grep -qi "<html"
+
+      - name: Fetch Passenger logs on failure
+        if: failure()
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            LOG_DIR="/home/${{ secrets.DEPLOY_USER }}/domains/gliwicka111.pl/logs"
+            echo "-- Listing logs in $LOG_DIR --"
+            ls -la "$LOG_DIR" || true
+            echo "-- Tail passenger and error logs --"
+            tail -n 200 "$LOG_DIR"/*.log || true
+            echo "-- End of logs --"
