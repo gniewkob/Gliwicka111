@@ -101,3 +101,31 @@ jobs:
           code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -X POST "$URL" || true)
           echo "SEND_CODE=$code"
           head -c 500 "$OUT"; echo
+
+      - name: DB check (recent entries)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
+          key: ${{ env.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            DEPLOY_DIR="${{ env.DEPLOY_PATH }}"
+            if [ -z "$DEPLOY_DIR" ]; then DEPLOY_DIR="/home/vetternkraft/apps/nodejs/Gliwicka111"; fi
+            cd "$DEPLOY_DIR"
+            set -a; [ -f .env ] && . ./.env; set +a
+            if [ -z "${DATABASE_URL:-}" ]; then
+              if [ -n "${DB_HOST:-}" ] && [ -n "${DB_PORT:-}" ] && [ -n "${DB_NAME:-}" ] && [ -n "${DB_USER:-}" ] && [ -n "${DB_PASSWORD:-}" ]; then
+                DATABASE_URL="postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+              else
+                echo 'Missing DATABASE_URL and/or DB_*'; exit 1;
+              fi
+            fi
+            LOOKBACK_MINUTES="180"
+            echo "-- Checking last $LOOKBACK_MINUTES minutes --"
+            echo "
+== failed_emails (recent) =="
+            psql -v ON_ERROR_STOP=1 -t -A -F $'	' "$DATABASE_URL" -c "SELECT id, email_type, status, retry_count, to_char(created_at,'YYYY-MM-DD HH24:MI:SS') AS created_at FROM failed_emails WHERE created_at >= NOW() - ($LOOKBACK_MINUTES || ' minutes')::interval ORDER BY created_at DESC LIMIT 20;" || true
+            echo "
+== form_submissions (recent) =="
+            psql -v ON_ERROR_STOP=1 -t -A -F $'	' "$DATABASE_URL" -c "SELECT id, form_type, status, to_char(created_at,'YYYY-MM-DD HH24:MI:SS') AS created_at FROM form_submissions WHERE created_at >= NOW() - ($LOOKBACK_MINUTES || ' minutes')::interval ORDER BY created_at DESC LIMIT 20;" || true
