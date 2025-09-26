@@ -13,10 +13,14 @@ async function createPool(): Promise<Pool> {
   const DATABASE_URL = getEnv("DATABASE_URL", "");
   const DB_SSL = getEnv("DB_SSL", "").toLowerCase() === "true";
 
-  if (MOCK_DB === "true" || (!DB_HOST && !DATABASE_URL)) {
+  if (MOCK_DB === "true") {
     return {
       query: async () => ({ rows: [], rowCount: 0 }),
     } as unknown as Pool;
+  }
+
+  if (!DB_HOST && !DATABASE_URL) {
+    throw new Error("Missing database configuration (set DATABASE_URL or DB_* envs)");
   }
 
   const needSSL = DB_SSL;

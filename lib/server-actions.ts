@@ -251,6 +251,19 @@ export async function handleFormSubmission<T>(
       }
     }
 
+    
+    // Mark submission as completed
+    if (db) {
+      try {
+        await db.query(
+          `UPDATE form_submissions SET status=$1, updated_at=NOW() WHERE id=$2`,
+          ['completed', submission.id],
+        );
+      } catch (e) {
+        console.warn("Failed to update submission status; continuing", e);
+      }
+    }
+
     emailResults.forEach((result, index) => {
       if (result.status === "rejected") {
         const type = index === 0 ? "confirmation" : "admin";

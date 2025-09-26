@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       AVG(email_latency_ms)::float AS avg_email_latency_ms,
       MAX(email_latency_ms)::int AS max_email_latency_ms,
       COUNT(*)::int AS submissions,
-      SUM(CASE WHEN status != 'success' THEN 1 ELSE 0 END)::int AS errors
+      SUM(CASE WHEN status != 'completed' THEN 1 ELSE 0 END)::int AS errors
     FROM form_submissions
     WHERE created_at >= NOW() - $1 * INTERVAL '1 hour'
     GROUP BY hour
@@ -77,13 +77,10 @@ export async function GET(request: NextRequest) {
 
   const rateLimitsQuery = `
     SELECT
-      date_trunc('hour', created_at) AS hour,
-      AVG(count)::float AS avg_count,
-      MAX(count)::int AS max_count,
-      COUNT(*)::int AS hits,
-      SUM(count)::int AS total_count
-    FROM rate_limits
-    WHERE created_at >= NOW() - $1 * INTERVAL '1 hour'
+      date_trunc('hour', attempted_at) AS hour,
+      COUNT(*)::int AS hits
+    FROM duplicate_attempts
+    WHERE attempted_at >= NOW() - $1 * INTERVAL '1 hour'
     GROUP BY hour
     ORDER BY hour
   `;
@@ -165,8 +162,8 @@ export async function GET(request: NextRequest) {
     (r: any): RateLimitRow => ({
       hour: r.hour,
       count: Number(r.hits || 0),
-      avgCount: Number(r.avg_count || 0),
-      maxCount: Number(r.max_count || 0),
+      avgCount: Number(r.hits || 0),
+      maxCount: Number(r.hits || 0),
     }),
   );
 
