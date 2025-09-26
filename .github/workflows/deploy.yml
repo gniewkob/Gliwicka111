@@ -90,9 +90,13 @@ jobs:
               rm -rf .next || mv .next ".next.old.$(date +%s)" || true
             fi
 
-            # Unpack new artifacts
-            tar -xzf deploy.tgz
-            rm -f deploy.tgz
+            # Unpack new artifacts if archive present (scp-action may already extract)
+            if [ -f deploy.tgz ]; then
+              tar -xzf deploy.tgz
+              rm -f deploy.tgz
+            else
+              echo 'deploy.tgz not found; assuming files already extracted by scp action'
+            fi
 
             # Write env-loader used by app.js to load .env at runtime
                                                 cat > env-loader.js << 'EOS'
