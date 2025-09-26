@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       to:
-      description: "Recipient email (optional)"
-      required: false
-      default: ""
+        description: "Recipient email (optional)"
+        required: false
+        default: ""
 
 jobs:
   diag:
