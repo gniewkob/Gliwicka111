@@ -1,0 +1,52 @@
+
+name: DB Inspect
+
+on:
+  workflow_dispatch:
+    inputs:
+      lookback_minutes:
+        description: "How many minutes back to check"
+        required: false
+        default: "120"
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    env:
+      DEFAULT_DEPLOY_PATH: /home/vetternkraft/apps/nodejs/Gliwicka111
+    steps:
+      - name: Inspect DB via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            DEPLOY_DIR="${{ secrets.DEPLOY_PATH }}"
+            if [ -z "$DEPLOY_DIR" ]; then DEPLOY_DIR="${DEFAULT_DEPLOY_PATH}"; fi
+            cd "$DEPLOY_DIR"
+
+            # Load environment
+            set -a; [ -f .env ] && . ./.env; set +a
+
+            # Build DATABASE_URL if not set, from DB_* vars
+            if [ -z "${DATABASE_URL:-}" ]; then
+              if [ -n "${DB_HOST:-}" ] && [ -n "${DB_PORT:-}" ] && [ -n "${DB_NAME:-}" ] && [ -n "${DB_USER:-}" ] && [ -n "${DB_PASSWORD:-}" ]; then
+                DATABASE_URL="postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+              else
+                echo 'ERROR: Missing DATABASE_URL and/or DB_* envs.'
+                exit 1
+              fi
+            fi
+
+            LOOKBACK_MINUTES="${{ inputs.lookback_minutes }}"
+            echo "-- Checking last $LOOKBACK_MINUTES minutes --"
+
+            echo "
+== failed_emails (recent) =="
+            psql -v ON_ERROR_STOP=1 -t -A -F $'	' "$DATABASE_URL" -c               "SELECT id, email_type, status, retry_count, to_char(created_at,'YYYY-MM-DD HH24:MI:SS') AS created_at FROM failed_emails WHERE created_at >= NOW() - ($LOOKBACK_MINUTES || ' minutes')::interval ORDER BY created_at DESC LIMIT 20;" || true
+
+            echo "
+== form_submissions (recent) =="
+            psql -v ON_ERROR_STOP=1 -t -A -F $'	' "$DATABASE_URL" -c               "SELECT id, form_type, status, to_char(created_at,'YYYY-MM-DD HH24:MI:SS') AS created_at FROM form_submissions WHERE created_at >= NOW() - ($LOOKBACK_MINUTES || ' minutes')::interval ORDER BY created_at DESC LIMIT 20;" || true
