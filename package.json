@@ -39,7 +39,8 @@
     "test:unit": "vitest run --coverage",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
-    "retry:failed-emails": "ts-node scripts/retry-failed-emails.ts"
+    "retry:failed-emails": "ts-node scripts/retry-failed-emails.ts",
+    "db:retention:apply": "echo \"Run: psql \"$DATABASE_URL\" -f scripts/analytics-retention.sql\""
   },
   "husky": {
     "hooks": {
