@@ -2,6 +2,11 @@ name: SMTP Diag
 
 on:
   workflow_dispatch:
+  inputs:
+    to:
+      description: "Recipient email (optional)"
+      required: false
+      default: ""
 
 jobs:
   diag:
@@ -90,6 +95,9 @@ jobs:
         run: |
           set -euo pipefail
           OUT=$(mktemp)
-          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -X POST "$DEPLOY_URL/api/admin/smtp/send-test" || true)
+          TO="${{ inputs.to }}"
+          URL="$DEPLOY_URL/api/admin/smtp/send-test"
+          if [ -n "$TO" ]; then URL="$URL?to=$TO"; fi
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -X POST "$URL" || true)
           echo "SEND_CODE=$code"
           head -c 500 "$OUT"; echo
