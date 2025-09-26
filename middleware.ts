@@ -92,7 +92,11 @@ export function middleware(req: NextRequest) {
   }
 
   // Basic CSRF validation for API POST requests
-  if (req.method === "POST" && req.nextUrl.pathname.startsWith("/api")) {
+  const isAdminPath = req.nextUrl.pathname.startsWith("/api/admin");
+  const auth = req.headers.get("authorization") || "";
+  const hasBearer = /^Bearer\s+/i.test(auth);
+
+  if (req.method === "POST" && req.nextUrl.pathname.startsWith("/api") && !(isAdminPath && hasBearer)) {
     const headerToken = req.headers.get("x-csrf-token");
     if (!headerToken || headerToken !== csrfToken) {
       return new NextResponse("Invalid CSRF token", { status: 403 });
