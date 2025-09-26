@@ -2,7 +2,7 @@ name: SMTP Diag
 
 on:
   workflow_dispatch:
-  inputs:
+    inputs:
     to:
       description: "Recipient email (optional)"
       required: false
