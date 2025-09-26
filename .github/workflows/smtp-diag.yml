@@ -71,7 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           OUT=$(mktemp)
-          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" "$DEPLOY_URL/api/admin/smtp/verify?debug=1" || true)
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" "$DEPLOY_URL/api/admin/smtp/verify?debug=1" || true)
           echo "code=$code" >> $GITHUB_OUTPUT
           echo "body=$(cat "$OUT" | tr -d '\n' | head -c 500)" >> $GITHUB_OUTPUT
 
@@ -81,7 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           OUT=$(mktemp)
-          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" "$DEPLOY_URL/api/admin/smtp/verify?debug=1&insecureTLS=1" || true)
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" "$DEPLOY_URL/api/admin/smtp/verify?debug=1&insecureTLS=1" || true)
           echo "code=$code" >> $GITHUB_OUTPUT
           echo "body=$(cat "$OUT" | tr -d '\n' | head -c 500)" >> $GITHUB_OUTPUT
 
@@ -90,6 +90,6 @@ jobs:
         run: |
           set -euo pipefail
           OUT=$(mktemp)
-          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -X POST "$DEPLOY_URL/api/admin/smtp/send-test" || true)
+          code=$(curl -sS -o "$OUT" -w "%{http_code}" -H "Authorization: Bearer ${TOKEN}" -H "X-Admin-Token: ${TOKEN}" -X POST "$DEPLOY_URL/api/admin/smtp/send-test" || true)
           echo "SEND_CODE=$code"
           head -c 500 "$OUT"; echo
