@@ -122,7 +122,7 @@ jobs:
               fi
             fi
             LOOKBACK_MINUTES="180"
-            echo "-- Checking last $LOOKBACK_MINUTES minutes --"
+            echo "-- Checking last ${LOOKBACK_MINUTES} minutes --"
             echo "== failed_emails (recent) =="
             psql -v ON_ERROR_STOP=1 -t -A -F $'	' "$DATABASE_URL" -c "SELECT id, email_type, status, retry_count, to_char(created_at,'YYYY-MM-DD HH24:MI:SS') AS created_at FROM failed_emails WHERE created_at >= NOW() - ($LOOKBACK_MINUTES || ' minutes')::interval ORDER BY created_at DESC LIMIT 20;" || true
             echo "== form_submissions (recent) =="
