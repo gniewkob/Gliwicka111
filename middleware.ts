@@ -95,8 +95,9 @@ export function middleware(req: NextRequest) {
   const isAdminPath = req.nextUrl.pathname.startsWith("/api/admin");
   const auth = req.headers.get("authorization") || "";
   const hasBearer = /^Bearer\s+/i.test(auth);
+  const hasXAdmin = Boolean(req.headers.get("x-admin-token"));
 
-  if (req.method === "POST" && req.nextUrl.pathname.startsWith("/api") && !(isAdminPath && hasBearer)) {
+  if (req.method === "POST" && req.nextUrl.pathname.startsWith("/api") && !(isAdminPath && (hasBearer || hasXAdmin))) {
     const headerToken = req.headers.get("x-csrf-token");
     if (!headerToken || headerToken !== csrfToken) {
       return new NextResponse("Invalid CSRF token", { status: 403 });

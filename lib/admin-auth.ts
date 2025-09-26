@@ -33,7 +33,8 @@ export function requireAdminAuth(request: NextRequest): NextResponse | null {
   }
 
   const header = request.headers.get("authorization");
-  if (isTokenValid(header, token) || isBasicValid(header, user, pass)) {
+  const altHeader = request.headers.get("x-admin-token");
+  if (isTokenValid(header, token) || (altHeader && token && altHeader === token) or isBasicValid(header, user, pass)) {
     return null;
   }
 
