@@ -1899,24 +1899,20 @@ export default function HomePage() {
           <div className="grid md:grid-cols-5 gap-8">
             {/* Company Info */}
             <div className="md:col-span-2">
-              <div className="mb-4">
+              <div className="mb-6">
                 <Link
                   href="/"
                   className="inline-flex items-center hover:opacity-80 transition-opacity"
                   aria-label="Gliwicka 111 — Property Management"
                 >
                   <Image
-                    src="/gliwicka111.png"
+                    src="/gliwicka111w.svg"
                     alt="Gliwicka 111 — Property Management"
                     width={200}
-                    height={40}
-                    className="h-10 w-auto"
+                    height={200}
+                    className="h-12 w-auto"
                   />
                 </Link>
-                <div className="mt-3">
-                  <h3 className="text-xl font-bold">{t.footer.company}</h3>
-                  <p className="text-sm text-slate-400">Property Management</p>
-                </div>
               </div>
               <p className="text-slate-400 mb-6 max-w-md">
                 {t.footer.description}
