@@ -349,12 +349,7 @@ export default async function AboutPage() {
                   className="inline-flex items-center hover:opacity-80 transition-opacity"
                   aria-label="Gliwicka 111 — Property Management"
                 >
-                  <Image
-                    src="/gliwicka111w.svg"
-                    alt="Gliwicka 111 — Property Management"
-                    width={200}
-                    height={200}
-                  />
+                  <Image src="/gliwicka111w.svg" alt="Gliwicka 111 — Property Management" width={200} height={200} />
                 </Link>
               </div>
               <p className="text-slate-400 mb-6 max-w-md">
