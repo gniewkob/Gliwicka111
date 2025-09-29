@@ -1910,7 +1910,6 @@ export default function HomePage() {
                     alt="Gliwicka 111 — Property Management"
                     width={200}
                     height={200}
-                    className="h-12 w-auto"
                   />
                 </Link>
               </div>
