@@ -72,7 +72,6 @@ export function PageNav({ nav, current }: PageNavProps) {
               alt="Gliwicka 111 — Property Management"
               width={200}
               height={200}
-              className="h-10 w-auto"
               priority
             />
           </Link>
