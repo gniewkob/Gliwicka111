@@ -68,10 +68,10 @@ export function PageNav({ nav, current }: PageNavProps) {
             aria-label="Gliwicka 111 — Property Management"
           >
             <Image
-              src="/gliwicka111.png"
+              src="/gliwicka111.svg"
               alt="Gliwicka 111 — Property Management"
               width={200}
-              height={40}
+              height={200}
               priority
             />
           </Link>

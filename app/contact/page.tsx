@@ -5,7 +5,6 @@ import type React from "react";
 import { useState } from "react";
 import { useLanguage } from "@/components/language-provider";
 import {
-  Building2,
   MapPin,
   Phone,
   Mail,
@@ -28,6 +27,7 @@ import {
   Label,
 } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 import { navTranslations, backTranslations } from "@/lib/i18n";
 import PageNav from "@/components/page-nav";
 
@@ -555,14 +555,14 @@ export default function ContactPage() {
           <div className="grid md:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Gliwicka 111</h3>
-                  <p className="text-sm text-slate-400">Property Management</p>
-                </div>
+              <div className="mb-6">
+                <Link
+                  href="/"
+                  className="inline-flex items-center hover:opacity-80 transition-opacity"
+                  aria-label="Gliwicka 111 — Property Management"
+                >
+                  <Image src="/gliwicka111w.svg" alt="Gliwicka 111 — Property Management" width={200} height={200} />
+                </Link>
               </div>
               <p className="text-slate-400 mb-6 max-w-md">
                 {language === "pl"
