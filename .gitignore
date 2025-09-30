@@ -63,3 +63,6 @@ yarn.lock
 .DS_Store
 *.swp
 *.swo
+
+.gemini/
+gha-creds-*.json
